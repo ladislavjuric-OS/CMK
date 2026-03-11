@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campaign Audit — The Architect · $499</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#080807;--surface:#0f0e0c;--surface2:#161410;--border:#2a2620;
+  --amber:#d4820a;--amber-bright:#f0a020;--amber-dim:rgba(212,130,10,0.12);
+  --green:#52b788;--text:#d4cfc8;--muted:#6b6560;
+  --mono:'IBM Plex Mono',monospace;--display:'Barlow Condensed',sans-serif;--body:'Barlow',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--text);font-family:var(--body);overflow-x:hidden;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(212,130,10,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(212,130,10,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5}
+nav,section,.hero,footer,.classified{position:relative;z-index:1}
+
+nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 2.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(8,8,7,0.95);backdrop-filter:blur(10px);z-index:100}
+.nav-brand{display:flex;align-items:center;gap:0.75rem}
+.nav-icon{width:32px;height:32px;border:1px solid var(--amber);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.7rem;color:var(--amber);font-weight:700}
+.nav-name{font-family:var(--display);font-size:1rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase}
+.nav-name span{color:var(--amber)}
+.nav-stat{font-family:var(--mono);font-size:0.7rem;color:var(--muted)}
+.nav-stat b{color:var(--amber)}
+.btn-nav{background:var(--amber);color:#000;padding:0.5rem 1.25rem;font-family:var(--mono);font-size:0.75rem;font-weight:700;text-decoration:none;transition:background 0.2s}
+.btn-nav:hover{background:var(--amber-bright)}
+
+.classified{background:var(--amber);color:#000;text-align:center;padding:0.4rem;font-family:var(--mono);font-size:0.7rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase}
+
+.hero{max-width:1100px;margin:0 auto;padding:5rem 2.5rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+@media(max-width:900px){.hero{grid-template-columns:1fr;padding:3rem 1.5rem}}
+
+.tag{display:inline-flex;align-items:center;gap:0.5rem;border:1px solid var(--amber);padding:0.3rem 0.75rem;font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.5rem;background:var(--amber-dim)}
+.tag::before{content:'';width:5px;height:5px;background:var(--amber);border-radius:50%;animation:blink 1.5s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+h1{font-family:var(--display);font-size:clamp(2.8rem,5.5vw,5rem);font-weight:900;line-height:0.95;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:1.5rem}
+h1 .amber{color:var(--amber);display:block}
+h1 .sub{display:block;font-size:0.5em;font-weight:400;font-style:italic;text-transform:none;color:var(--muted);letter-spacing:0.02em;margin-top:0.4rem;line-height:1.4}
+.hero-desc{font-size:1rem;color:var(--text);line-height:1.7;border-left:2px solid var(--amber);padding-left:1rem;margin-bottom:2rem;max-width:500px}
+.price-big{font-family:var(--display);font-size:4rem;font-weight:900;color:var(--amber);line-height:1;letter-spacing:-0.03em;margin-bottom:0.3rem}
+.price-big sup{font-size:1.5rem;vertical-align:super}
+.price-note{font-family:var(--mono);font-size:0.7rem;color:var(--muted);margin-bottom:1.5rem}
+.btn-primary{display:inline-block;background:var(--amber);color:#000;padding:1rem 2.5rem;font-family:var(--display);font-size:1.15rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none;transition:background 0.2s,transform 0.15s;box-shadow:0 0 40px rgba(212,130,10,0.25)}
+.btn-primary:hover{background:var(--amber-bright);transform:translateY(-2px)}
+.btn-guarantee{font-family:var(--mono);font-size:0.68rem;color:var(--muted);margin-top:0.75rem;display:block}
+
+.score-mockup{background:var(--surface);border:1px solid var(--border);position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.6)}
+.score-mockup::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--amber)}
+.sm-header{background:var(--surface2);padding:0.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
+.sm-title{font-family:var(--mono);font-size:0.68rem;color:var(--amber);letter-spacing:0.08em;text-transform:uppercase}
+.sm-ref{font-family:var(--mono);font-size:0.65rem;color:var(--muted)}
+.sm-body{padding:1.25rem}
+.sm-section{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.12em;text-transform:uppercase;margin:0.75rem 0 0.4rem;border-bottom:1px solid var(--border);padding-bottom:0.25rem}
+.sm-section:first-child{margin-top:0}
+.sm-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.7rem;padding:0.18rem 0}
+.sm-row span:first-child{color:var(--text)}
+.ok{color:var(--green)}.warn{color:var(--amber)}.fail{color:#e74c3c}
+.sm-hr{border:none;border-top:1px dashed var(--border);margin:0.5rem 0}
+.sm-score{display:flex;justify-content:space-between;align-items:center;background:rgba(212,130,10,0.08);border:1px solid rgba(212,130,10,0.3);padding:0.6rem 1rem;margin-top:0.75rem}
+.sm-score-label{font-family:var(--mono);font-size:0.68rem;color:var(--amber)}
+
+.section{padding:4.5rem 2.5rem;max-width:1100px;margin:0 auto}
+.section-full{padding:4.5rem 2.5rem;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.section-full .inner{max-width:1100px;margin:0 auto}
+.divider{border:none;border-top:1px solid var(--border);margin:0;position:relative;z-index:1}
+
+.eyebrow{font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
+.eyebrow::before{content:'▸';color:var(--amber)}
+h2{font-family:var(--display);font-size:clamp(2rem,4vw,3.2rem);font-weight:900;text-transform:uppercase;letter-spacing:-0.01em;line-height:1;margin-bottom:1rem}
+h2 em{font-style:normal;color:var(--amber)}
+.section-sub{font-size:1rem;color:var(--muted);max-width:580px;line-height:1.7;margin-bottom:3rem}
+
+.deliverables-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-top:3rem}
+.del-cell{background:var(--surface);padding:1.5rem;transition:background 0.2s}
+.del-cell:hover{background:var(--surface2)}
+.del-num{font-family:var(--display);font-size:2rem;font-weight:900;color:var(--amber);opacity:0.25;line-height:1;margin-bottom:0.5rem}
+.del-title{font-family:var(--display);font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.4rem}
+.del-desc{font-size:0.83rem;color:var(--muted);line-height:1.6}
+
+.for-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:3rem}
+.for-card{border:1px solid var(--border);padding:1.5rem;transition:border-color 0.2s}
+.for-card:hover{border-color:rgba(212,130,10,0.3)}
+.for-icon{font-size:1.3rem;margin-bottom:0.75rem}
+.for-title{font-family:var(--display);font-size:1rem;font-weight:700;text-transform:uppercase;margin-bottom:0.35rem}
+.for-desc{font-size:0.82rem;color:var(--muted);line-height:1.5}
+
+.process-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-top:3rem}
+.p-step{background:var(--surface);padding:2rem}
+.p-num{font-family:var(--display);font-size:3rem;font-weight:900;color:var(--amber);opacity:0.2;line-height:1;margin-bottom:0.75rem}
+.p-title{font-family:var(--display);font-size:1.05rem;font-weight:700;text-transform:uppercase;margin-bottom:0.5rem}
+.p-desc{font-size:0.85rem;color:var(--muted);line-height:1.6}
+
+.guarantee-block{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--green);padding:2rem 2.5rem;margin-top:3rem}
+.g-label{font-family:var(--mono);font-size:0.65rem;color:var(--green);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem}
+.g-title{font-family:var(--display);font-size:1.6rem;font-weight:900;text-transform:uppercase;margin-bottom:0.75rem}
+.g-text{font-size:0.9rem;color:var(--muted);line-height:1.7;max-width:650px}
+
+.upsell-block{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);padding:2rem 2.5rem;margin-top:1.5rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center}
+@media(max-width:700px){.upsell-block{grid-template-columns:1fr}}
+.u-label{font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem}
+.u-title{font-family:var(--display);font-size:1.4rem;font-weight:900;text-transform:uppercase;margin-bottom:0.4rem}
+.u-desc{font-size:0.85rem;color:var(--muted);line-height:1.6}
+.u-price{text-align:center;white-space:nowrap}
+.u-price-num{font-family:var(--display);font-size:2.2rem;font-weight:900;color:var(--amber);line-height:1}
+.u-price-num sup{font-size:1rem;vertical-align:super}
+.u-price-note{font-family:var(--mono);font-size:0.62rem;color:var(--muted);margin-top:0.2rem;margin-bottom:0.75rem}
+.btn-secondary{display:inline-block;border:1px solid var(--border);color:var(--text);padding:0.6rem 1.25rem;font-family:var(--mono);font-size:0.75rem;text-decoration:none;transition:border-color 0.2s,color 0.2s}
+.btn-secondary:hover{border-color:var(--amber);color:var(--amber)}
+
+.faq-list{max-width:750px;margin:3rem auto 0}
+details{border:1px solid var(--border);margin-bottom:0.75rem;transition:border-color 0.2s}
+details:hover,details[open]{border-color:rgba(212,130,10,0.3)}
+details[open]{background:rgba(212,130,10,0.02)}
+summary{padding:1.1rem 1.25rem;cursor:pointer;list-style:none;font-family:var(--display);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.02em;display:flex;justify-content:space-between;align-items:center;gap:1rem;transition:color 0.2s}
+summary:hover{color:var(--amber)}
+summary::after{content:'+';font-family:var(--mono);font-size:1.2rem;color:var(--amber);transition:transform 0.2s;flex-shrink:0}
+details[open] summary::after{transform:rotate(45deg)}
+.faq-answer{padding:1rem 1.25rem 1.25rem;font-size:0.88rem;color:var(--muted);line-height:1.7;border-top:1px solid var(--border)}
+
+.cta-bottom{text-align:center;padding:5rem 2.5rem;border-top:1px solid var(--border);position:relative;z-index:1}
+.cta-bottom h2{margin:0 auto 1.5rem}
+
+footer{border-top:1px solid var(--border);padding:1.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-family:var(--mono);font-size:0.7rem;color:var(--muted);position:relative;z-index:1}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--amber)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-left{animation:fadeUp 0.7s ease both}
+.hero-right{animation:fadeUp 0.7s 0.15s ease both}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:600px){
+  nav{padding:0.75rem 1rem}
+  .nav-stat{display:none}
+  .section,.section-full{padding:3rem 1.25rem}
+  .upsell-block,.guarantee-block{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<div class="classified">⚠ CLASSIFIED OPERATIONAL DOCUMENT — THE ARCHITECT · CAMPAIGN AUDIT ⚠</div>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-icon">TA</div>
+    <div class="nav-name">The <span>Architect</span></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    <div class="nav-stat"><b>$890K</b> raised · 5 campaigns</div>
+    <a href="https://ladijuric.gumroad.com/l/ehxfhx" class="btn-nav">Order Audit — $499</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-left">
+    <div class="tag">Campaign Intelligence · $499 · 72h Delivery</div>
+    <h1>
+      Your Campaign.<br>
+      <span class="amber">My Blueprint.</span>
+      <span class="sub">"I'll tell you exactly what's killing your campaign — and what to do about it. No fluff. No theory. Dollar amounts attached to every gap."</span>
+    </h1>
+    <p class="hero-desc">Whether you're pre-launch, live and struggling, or rebuilding after a failure — I run your numbers, page, and strategy through the full Architect framework. You get a Go/NO-GO verdict and a clear path forward.</p>
+    <div class="price-big"><sup>$</sup>499</div>
+    <div class="price-note">One-time · Delivered within 72 hours · 30-day improvement guarantee</div>
+    <a href="https://ladijuric.gumroad.com/l/ehxfhx" class="btn-primary">Order Your Audit Now</a>
+    <span class="btn-guarantee">🛡 If your campaign doesn't improve 15%+ in 30 days — I re-audit for free.</span>
+  </div>
+
+  <div class="hero-right">
+    <div class="score-mockup">
+      <div class="sm-header">
+        <span class="sm-title">Campaign Intelligence Report</span>
+        <span class="sm-ref">REF: AUDIT-SAMPLE</span>
+      </div>
+      <div class="sm-body">
+        <div class="sm-section">Pre-Launch Assessment</div>
+        <div class="sm-row"><span>Email list size</span><span class="warn">847 / min. 2,000</span></div>
+        <div class="sm-row"><span>Day 1 army status</span><span class="fail">NOT BUILT</span></div>
+        <div class="sm-row"><span>Super-backer outreach</span><span class="fail">0 / 50 target</span></div>
+        <div class="sm-row"><span>Pre-launch survey done</span><span class="ok">✓ COMPLETE</span></div>
+        <hr class="sm-hr">
+        <div class="sm-section">Financial Readiness</div>
+        <div class="sm-row"><span>Budget w/ stupidity tax</span><span class="warn">$42 est / $58 real</span></div>
+        <div class="sm-row"><span>Shipping cost accuracy</span><span class="fail">23% underestimated</span></div>
+        <div class="sm-row"><span>Refund reserve (5%)</span><span class="fail">NOT ALLOCATED</span></div>
+        <hr class="sm-hr">
+        <div class="sm-section">Campaign Page</div>
+        <div class="sm-row"><span>Video length</span><span class="fail">4:12 / max 1:30</span></div>
+        <div class="sm-row"><span>Perk structure</span><span class="warn">2 tiers / need 4</span></div>
+        <div class="sm-row"><span>Social proof</span><span class="ok">✓ STRONG</span></div>
+        <div class="sm-score">
+          <span class="sm-score-label">⬡ GO / NO-GO SCORE</span>
+          <span style="font-family:var(--display);font-size:1.3rem;font-weight:900;color:#e74c3c">4.1 / 10 — NO-GO</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section-full">
+  <div class="inner reveal">
+    <div class="eyebrow">Audit Deliverables</div>
+    <h2>What's Inside<br><em>Your Report.</em></h2>
+    <p class="section-sub">Not a generic checklist. A custom analysis of YOUR campaign with dollar amounts attached to every gap identified.</p>
+    <div class="deliverables-grid">
+      <div class="del-cell"><div class="del-num">01</div><div class="del-title">Go / NO-GO Score</div><div class="del-desc">A clear binary verdict on your campaign's readiness. Scored across pre-launch, financials, page, and strategy. No ambiguity.</div></div>
+      <div class="del-cell"><div class="del-num">02</div><div class="del-title">5 Critical Gaps</div><div class="del-desc">The five issues most likely to kill your campaign — each with a dollar amount showing what it costs you if unaddressed.</div></div>
+      <div class="del-cell"><div class="del-num">03</div><div class="del-title">Fix Priority Matrix</div><div class="del-desc">What to fix first, what can wait, what doesn't matter. Ranked by impact and effort so you don't waste time on the wrong things.</div></div>
+      <div class="del-cell"><div class="del-num">04</div><div class="del-title">Budget Reality Check</div><div class="del-desc">Your actual cost per unit vs. what you think it is. Hidden fees, surcharges, and the 23 touchpoints from factory to doorstep — mapped.</div></div>
+      <div class="del-cell"><div class="del-num">05</div><div class="del-title">Competitive Landscape</div><div class="del-desc">3–5 similar campaigns benchmarked against yours. What they're doing better, what you're doing better, and where the gap is.</div></div>
+      <div class="del-cell"><div class="del-num">06</div><div class="del-title">Restart Plan</div><div class="del-desc">If your campaign is failing or cancelled — a full restart playbook. Timeline, messaging pivot, audience reset, and relaunch sequence.</div></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<section class="section reveal">
+  <div class="eyebrow">Target Profile</div>
+  <h2>Who Needs<br><em>This Audit.</em></h2>
+  <p class="section-sub">If your campaign is approaching a critical moment — this is the fastest way to know if you're ready or not.</p>
+  <div class="for-grid">
+    <div class="for-card"><div class="for-icon">🎯</div><div class="for-title">Pre-Launch Founders</div><div class="for-desc">30–60 days out. Need to know if your prep is solid or if you're about to launch to silence.</div></div>
+    <div class="for-card"><div class="for-icon">📉</div><div class="for-title">Struggling Live Campaigns</div><div class="for-desc">Live at 30–70% with days remaining. You need a diagnosis and a surge plan — fast.</div></div>
+    <div class="for-card"><div class="for-icon">💀</div><div class="for-title">Failed / Cancelled Campaigns</div><div class="for-desc">Before you relaunch, you need to know exactly what went wrong and how to fix it.</div></div>
+    <div class="for-card"><div class="for-icon">🔁</div><div class="for-title">Repeat Founders</div><div class="for-desc">You've launched before but want a second set of eyes from someone who's raised $890K across 5 campaigns.</div></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<div class="section-full">
+  <div class="inner reveal">
+    <div class="eyebrow">How It Works</div>
+    <h2>From Payment<br><em>to Report.</em></h2>
+    <div class="process-steps">
+      <div class="p-step"><div class="p-num">01</div><div class="p-title">You Order</div><div class="p-desc">Pay $499. You'll receive a confirmation and intake questionnaire within 1 hour. Fill it out completely — quality in, quality out.</div></div>
+      <div class="p-step"><div class="p-num">02</div><div class="p-title">I Analyze</div><div class="p-desc">Your campaign goes through the full 111-bullet framework. Every number benchmarked against real campaign data. Every gap quantified.</div></div>
+      <div class="p-step"><div class="p-num">03</div><div class="p-title">Report Delivered</div><div class="p-desc">Within 72 hours: Go/NO-GO verdict, 5 gaps, fix matrix, budget check, competitive landscape, and a clear path forward.</div></div>
+      <div class="p-step"><div class="p-num">04</div><div class="p-title">You Execute</div><div class="p-desc">The report tells you exactly what to fix. CMK gives you the tools, or I can be in the room as your Co-Pilot.</div></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<section class="section reveal">
+  <div class="eyebrow">Risk Reversal</div>
+  <h2>The Architect's<br><em>Guarantee.</em></h2>
+  <div class="guarantee-block">
+    <div class="g-label">✓ 30-Day Improvement Guarantee</div>
+    <div class="g-title">If It Doesn't Work — I Re-Audit for Free.</div>
+    <p class="g-text">If your campaign doesn't improve by at least 15% within 30 days of implementing my recommendations — I'll re-audit you at no cost and personally build your restart plan. No hoops. You just need to show me you implemented at least 3 of the 5 recommendations.</p>
+    <p class="g-text" style="margin-top:0.75rem;">Nobody else in crowdfunding consulting offers this. I do because I know the framework works.</p>
+  </div>
+
+  <div style="margin-top:3rem;">
+    <div class="eyebrow">After Your Audit</div>
+    <h2>Need to <em>Execute</em> the Fixes?</h2>
+    <p class="section-sub">The audit tells you what's broken. The Crowdfunding Momentum Kit gives you the tools to fix it.</p>
+    <div class="upsell-block">
+      <div>
+        <div class="u-label">▸ Crowdfunding Momentum Kit</div>
+        <div class="u-title">The Full Operational System.</div>
+        <p class="u-desc">111 bullets · 70 Plugin Tools · 12 Calculators · 10 Playbooks · 6 Email Sequences · 300+ Media Contacts. From $299 one-time.</p>
+      </div>
+      <div class="u-price">
+        <div class="u-price-num">From <sup>$</sup>299</div>
+        <div class="u-price-note">One-time · Instant access</div>
+        <a href="https://cmk.elitegrowth.pro/#pricing" class="btn-secondary">View CMK Tiers →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="section reveal">
+  <div class="eyebrow">Intel Briefing</div>
+  <h2>Questions.<br><em>Answered.</em></h2>
+  <div class="faq-list">
+    <details><summary>What do I need to provide?</summary><p class="faq-answer">After payment you'll receive an intake questionnaire. You'll need your campaign URL or draft, target amount, unit cost estimate, shipping plan, email list size, and any existing materials. The more detail you provide, the sharper the audit.</p></details>
+    <details><summary>My campaign isn't live yet — can I still get an audit?</summary><p class="faq-answer">Yes — pre-launch audits are often the most valuable. I'll assess your readiness across pre-launch prep, financials, page structure, and launch strategy. You'll know exactly what to fix before you go live.</p></details>
+    <details><summary>My campaign failed / was cancelled. Can you help?</summary><p class="faq-answer">This is one of the most common requests. A failed campaign audit includes a full post-mortem, a restart playbook, messaging pivot recommendations, and a relaunch timeline. Campaigns that cancelled at 30% can relaunch and fully fund — if the root causes are addressed.</p></details>
+    <details><summary>How is this different from generic crowdfunding advice?</summary><p class="faq-answer">Every gap in your audit has a dollar amount attached. Every recommendation references specific tactics from 5 real campaigns that raised $890K combined. This isn't theory — it's the same framework I use on campaigns I personally run.</p></details>
+    <details><summary>What if I need more than just the report?</summary><p class="faq-answer">Every audit ends with three options: DIY with CMK ($299–$1,299), Co-Pilot consulting ($2,500 + 12% success fee), or Full Architecture ($12,500 flat). The report will tell you which level your situation requires.</p></details>
+    <details><summary>How does the 30-day guarantee work?</summary><p class="faq-answer">Implement at least 3 of the 5 recommendations. If your campaign metrics don't improve by 15%+ within 30 days — email me with proof of implementation and I'll re-audit for free and build your restart plan personally.</p></details>
+  </div>
+</section>
+
+<div class="cta-bottom reveal">
+  <div class="eyebrow" style="justify-content:center">Deploy the Audit</div>
+  <h2>Stop Guessing.<br><em>Get the Verdict.</em></h2>
+  <p style="color:var(--muted);max-width:500px;margin:0 auto 2.5rem;font-size:0.95rem;line-height:1.7;">72 hours from now you'll know exactly what's killing your campaign — and exactly what to do about it. Dollar amounts attached to every gap.</p>
+  <a href="https://ladijuric.gumroad.com/l/ehxfhx" class="btn-primary">Order Your Audit — $499</a>
+  <p style="font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:1rem;">One-time · 72h delivery · 30-day improvement guarantee</p>
+</div>
+
+<footer>
+  <span>© 2026 The Architect™ · Elitegrowth d.o.o.</span>
+  <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+    <a href="/data/privacy.html">Privacy Policy</a>
+    <a href="/data/terms.html">Terms</a>
+    <a href="/data/refund.html">Refund Policy</a>
+    <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
