@@ -845,6 +845,7 @@ footer a:hover { color: var(--amber); }
   .section-full { padding: 3rem 1.25rem; }
   .audit-block { padding: 1.5rem; }
   .faq-grid { grid-template-columns: 1fr; }
+  .audit-bullets { grid-template-columns: 1fr !important; }
 }
 </style>
 </head>
@@ -1115,13 +1116,13 @@ footer a:hover { color: var(--amber); }
       <p class="audit-desc mt-sm" style="margin-top:0.75rem;">If CMK can fix it yourself — I'll tell you which tier. If you need me in the room — I'll tell you that too.</p>
       <div style="margin-top:1.25rem;border-top:1px solid var(--border);padding-top:1.25rem;">
         <div style="font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;">What's in the report:</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.25rem 1.5rem;">
-          <div style="font-size:0.8rem;color:var(--muted);display:flex;gap:0.4rem;">✓ <span>Go / NO-GO Score</span></div>
-          <div style="font-size:0.8rem;color:var(--muted);display:flex;gap:0.4rem;">✓ <span>Budget Reality Check</span></div>
-          <div style="font-size:0.8rem;color:var(--muted);display:flex;gap:0.4rem;">✓ <span>5 Critical Gaps + dollar amounts</span></div>
-          <div style="font-size:0.8rem;color:var(--muted);display:flex;gap:0.4rem;">✓ <span>Competitive Landscape</span></div>
-          <div style="font-size:0.8rem;color:var(--muted);display:flex;gap:0.4rem;">✓ <span>Fix Priority Matrix</span></div>
-          <div style="font-size:0.8rem;color:var(--muted);display:flex;gap:0.4rem;">✓ <span>Restart Plan (if needed)</span></div>
+        <div class="audit-bullets" style="display:grid;grid-template-columns:1fr 1fr;gap:0.35rem 1.5rem;">
+          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--amber);flex-shrink:0;">✓</span><span>Go / NO-GO Score</span></div>
+          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--amber);flex-shrink:0;">✓</span><span>Budget Reality Check</span></div>
+          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--amber);flex-shrink:0;">✓</span><span>5 Critical Gaps + dollar amounts</span></div>
+          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--amber);flex-shrink:0;">✓</span><span>Competitive Landscape</span></div>
+          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--amber);flex-shrink:0;">✓</span><span>Fix Priority Matrix</span></div>
+          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--amber);flex-shrink:0;">✓</span><span>Restart Plan (if needed)</span></div>
         </div>
         <a href="/audit.html" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.72rem;color:var(--amber);text-decoration:none;margin-top:0.9rem;border-bottom:1px solid rgba(212,130,10,0.3);padding-bottom:0.1rem;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">▸ Full breakdown + 30-day guarantee →</a>
       </div>
