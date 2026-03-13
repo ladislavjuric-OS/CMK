@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Campaign Audit — The Architect · $499</title>
+<title>Campaign Intelligence Report — The Architect · $499</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -76,31 +76,57 @@ h2{font-family:var(--display);font-size:clamp(2rem,4vw,3.2rem);font-weight:900;t
 h2 em{font-style:normal;color:var(--amber)}
 .section-sub{font-size:1rem;color:var(--muted);max-width:580px;line-height:1.7;margin-bottom:3rem}
 
+/* WHAT YOU GET — module grid */
 .deliverables-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-top:3rem}
 .del-cell{background:var(--surface);padding:1.5rem;transition:background 0.2s}
 .del-cell:hover{background:var(--surface2)}
 .del-num{font-family:var(--display);font-size:2rem;font-weight:900;color:var(--amber);opacity:0.25;line-height:1;margin-bottom:0.5rem}
 .del-title{font-family:var(--display);font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.4rem}
 .del-desc{font-size:0.83rem;color:var(--muted);line-height:1.6}
+.del-tag{display:inline-block;font-family:var(--mono);font-size:0.58rem;background:var(--amber-dim);border:1px solid rgba(212,130,10,0.3);color:var(--amber);padding:0.15rem 0.45rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem}
 
-.for-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:3rem}
-.for-card{border:1px solid var(--border);padding:1.5rem;transition:border-color 0.2s}
-.for-card:hover{border-color:rgba(212,130,10,0.3)}
-.for-icon{font-size:1.3rem;margin-bottom:0.75rem}
-.for-title{font-family:var(--display);font-size:1rem;font-weight:700;text-transform:uppercase;margin-bottom:0.35rem}
-.for-desc{font-size:0.82rem;color:var(--muted);line-height:1.5}
+/* WHO IS THIS FOR — two-track */
+.track-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:3rem}
+@media(max-width:700px){.track-grid{grid-template-columns:1fr}}
+.track-card{border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;transition:border-color 0.2s}
+.track-card:hover{border-color:rgba(212,130,10,0.4)}
+.track-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--amber)}
+.track-label{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.75rem}
+.track-title{font-family:var(--display);font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:0.75rem;line-height:1.1}
+.track-desc{font-size:0.85rem;color:var(--muted);line-height:1.65;margin-bottom:1rem}
+.track-bullets{list-style:none;display:flex;flex-direction:column;gap:0.35rem}
+.track-bullets li{font-family:var(--mono);font-size:0.72rem;color:var(--text);display:flex;align-items:flex-start;gap:0.5rem}
+.track-bullets li::before{content:'→';color:var(--amber);flex-shrink:0}
 
+/* PROCESS */
 .process-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-top:3rem}
 .p-step{background:var(--surface);padding:2rem}
 .p-num{font-family:var(--display);font-size:3rem;font-weight:900;color:var(--amber);opacity:0.2;line-height:1;margin-bottom:0.75rem}
 .p-title{font-family:var(--display);font-size:1.05rem;font-weight:700;text-transform:uppercase;margin-bottom:0.5rem}
 .p-desc{font-size:0.85rem;color:var(--muted);line-height:1.6}
 
+/* CASE STUDY BLOCK */
+.case-block{background:var(--surface2);border:1px solid var(--border);margin-top:3rem;overflow:hidden}
+.case-header{background:rgba(212,130,10,0.08);border-bottom:1px solid var(--border);padding:0.75rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem}
+.case-label{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase}
+.case-verdict{font-family:var(--display);font-size:1rem;font-weight:900;color:#e74c3c;letter-spacing:0.05em}
+.case-body{padding:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+@media(max-width:650px){.case-body{grid-template-columns:1fr}}
+.case-col-title{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;border-bottom:1px solid var(--border);padding-bottom:0.4rem}
+.case-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.7rem;padding:0.22rem 0;border-bottom:1px solid rgba(42,38,32,0.5)}
+.case-row span:first-child{color:var(--muted)}
+.case-finding{font-size:0.82rem;color:var(--text);line-height:1.6;padding:0.3rem 0;border-bottom:1px solid rgba(42,38,32,0.5)}
+.case-finding strong{color:var(--amber);font-family:var(--mono);font-size:0.68rem;display:block;margin-bottom:0.2rem}
+.case-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);background:rgba(231,76,60,0.04);font-family:var(--mono);font-size:0.72rem;color:var(--muted)}
+.case-footer b{color:var(--text)}
+
+/* GUARANTEE */
 .guarantee-block{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--green);padding:2rem 2.5rem;margin-top:3rem}
 .g-label{font-family:var(--mono);font-size:0.65rem;color:var(--green);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem}
 .g-title{font-family:var(--display);font-size:1.6rem;font-weight:900;text-transform:uppercase;margin-bottom:0.75rem}
 .g-text{font-size:0.9rem;color:var(--muted);line-height:1.7;max-width:650px}
 
+/* UPSELL */
 .upsell-block{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);padding:2rem 2.5rem;margin-top:1.5rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center}
 @media(max-width:700px){.upsell-block{grid-template-columns:1fr}}
 .u-label{font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem}
@@ -113,6 +139,7 @@ h2 em{font-style:normal;color:var(--amber)}
 .btn-secondary{display:inline-block;border:1px solid var(--border);color:var(--text);padding:0.6rem 1.25rem;font-family:var(--mono);font-size:0.75rem;text-decoration:none;transition:border-color 0.2s,color 0.2s}
 .btn-secondary:hover{border-color:var(--amber);color:var(--amber)}
 
+/* FAQ */
 .faq-list{max-width:750px;margin:3rem auto 0}
 details{border:1px solid var(--border);margin-bottom:0.75rem;transition:border-color 0.2s}
 details:hover,details[open]{border-color:rgba(212,130,10,0.3)}
@@ -123,6 +150,7 @@ summary::after{content:'+';font-family:var(--mono);font-size:1.2rem;color:var(--
 details[open] summary::after{transform:rotate(45deg)}
 .faq-answer{padding:1rem 1.25rem 1.25rem;font-size:0.88rem;color:var(--muted);line-height:1.7;border-top:1px solid var(--border)}
 
+/* CTA BOTTOM */
 .cta-bottom{text-align:center;padding:5rem 2.5rem;border-top:1px solid var(--border);position:relative;z-index:1}
 .cta-bottom h2{margin:0 auto 1.5rem}
 
@@ -146,7 +174,7 @@ footer a:hover{color:var(--amber)}
 </head>
 <body>
 
-<div class="classified">⚠ CLASSIFIED OPERATIONAL DOCUMENT — THE ARCHITECT · CAMPAIGN AUDIT ⚠</div>
+<div class="classified">⚠ CAMPAIGN INTELLIGENCE REPORT — THE ARCHITECT · LAUNCH ENGINEERING ⚠</div>
 
 <nav>
   <div class="nav-brand">
@@ -154,23 +182,23 @@ footer a:hover{color:var(--amber)}
     <div class="nav-name">The <span>Architect</span></div>
   </div>
   <div style="display:flex;align-items:center;gap:1.5rem;">
-    <div class="nav-stat"><b>$890K</b> raised · 5 campaigns</div>
-    <a href="https://payhip.com/b/FP7Aq" class="btn-nav">Order Audit — $499</a>
+    <div class="nav-stat"><b>$890K+</b> raised · 5 campaigns</div>
+    <a href="https://payhip.com/b/FP7Aq" class="btn-nav">Get Your Report — $499</a>
   </div>
 </nav>
 
 <div class="hero">
   <div class="hero-left">
-    <div class="tag">Campaign Intelligence · $499 · 72h Delivery</div>
+    <div class="tag">Campaign Intelligence Report · $499 · 72h Delivery</div>
     <h1>
-      Your Campaign.<br>
-      <span class="amber">My Blueprint.</span>
-      <span class="sub">"I'll tell you exactly what's killing your campaign — and what to do about it. No fluff. No theory. Dollar amounts attached to every gap."</span>
+      Before You Launch —<br>
+      <span class="amber">Know The Verdict.</span>
+      <span class="sub">"I run your campaign through 8 intelligence modules. You get a GO / NO-GO score, every critical gap quantified in dollars, and an exact fix sequence. Not theory. Operator math."</span>
     </h1>
-    <p class="hero-desc">Whether you're pre-launch, live and struggling, or rebuilding after a failure — I run your numbers, page, and strategy through the full Architect framework. You get a Go/NO-GO verdict and a clear path forward.</p>
+    <p class="hero-desc">Most campaigns fail in the preparation phase — not on launch day. The Campaign Intelligence Report tells you exactly where you stand, what will kill your campaign, and what to fix first. Before you spend a dollar on ads.</p>
     <div class="price-big"><sup>$</sup>499</div>
     <div class="price-note">One-time · Delivered within 72 hours · 30-day improvement guarantee · <span style="font-family:var(--mono);font-size:0.62rem;color:var(--muted);opacity:0.75;">VAT may apply for EU customers</span></div>
-    <a href="https://payhip.com/b/FP7Aq" class="btn-primary">Order Your Audit Now</a>
+    <a href="https://payhip.com/b/FP7Aq" class="btn-primary">Order Your Intelligence Report</a>
     <span class="btn-guarantee">🛡 If your campaign doesn't improve 15%+ in 30 days — I re-audit for free.</span>
   </div>
 
@@ -178,27 +206,27 @@ footer a:hover{color:var(--amber)}
     <div class="score-mockup">
       <div class="sm-header">
         <span class="sm-title">Campaign Intelligence Report</span>
-        <span class="sm-ref">REF: AUDIT-SAMPLE</span>
+        <span class="sm-ref">REF: CIR-SAMPLE-001</span>
       </div>
       <div class="sm-body">
-        <div class="sm-section">Pre-Launch Assessment</div>
-        <div class="sm-row"><span>Email list size</span><span class="warn">847 / min. 2,000</span></div>
-        <div class="sm-row"><span>Day 1 army status</span><span class="fail">NOT BUILT</span></div>
-        <div class="sm-row"><span>Super-backer outreach</span><span class="fail">0 / 50 target</span></div>
-        <div class="sm-row"><span>Pre-launch survey done</span><span class="ok">✓ COMPLETE</span></div>
+        <div class="sm-section">Pre-Launch Infrastructure</div>
+        <div class="sm-row"><span>Email list (30% rule target)</span><span class="warn">847 / min. 2,000</span></div>
+        <div class="sm-row"><span>Day 1 backer pipeline</span><span class="fail">NOT BUILT</span></div>
+        <div class="sm-row"><span>VIP reservation funnel</span><span class="fail">0 / 50 target</span></div>
+        <div class="sm-row"><span>Demand validation done</span><span class="ok">✓ CONFIRMED</span></div>
         <hr class="sm-hr">
         <div class="sm-section">Financial Readiness</div>
-        <div class="sm-row"><span>Budget w/ stupidity tax</span><span class="warn">$42 est / $58 real</span></div>
-        <div class="sm-row"><span>Shipping cost accuracy</span><span class="fail">23% underestimated</span></div>
+        <div class="sm-row"><span>COGS accuracy</span><span class="fail">23% underestimated</span></div>
         <div class="sm-row"><span>Refund reserve (5%)</span><span class="fail">NOT ALLOCATED</span></div>
+        <div class="sm-row"><span>Break-even math</span><span class="warn">Incomplete</span></div>
         <hr class="sm-hr">
         <div class="sm-section">Campaign Page</div>
         <div class="sm-row"><span>Video length</span><span class="fail">4:12 / max 1:30</span></div>
-        <div class="sm-row"><span>Perk structure</span><span class="warn">2 tiers / need 4</span></div>
+        <div class="sm-row"><span>Perk tiers</span><span class="warn">2 built / 4 needed</span></div>
         <div class="sm-row"><span>Social proof</span><span class="ok">✓ STRONG</span></div>
         <div class="sm-score">
-          <span class="sm-score-label">⬡ GO / NO-GO SCORE</span>
-          <span style="font-family:var(--display);font-size:1.3rem;font-weight:900;color:#e74c3c">4.1 / 10 — NO-GO</span>
+          <span class="sm-score-label">⬡ READINESS SCORE</span>
+          <span style="font-family:var(--display);font-size:1.3rem;font-weight:900;color:#e74c3c">28 / 100 — NO-GO</span>
         </div>
       </div>
     </div>
@@ -207,72 +235,183 @@ footer a:hover{color:var(--amber)}
 
 <hr class="divider">
 
+<!-- WHAT YOU GET -->
 <div class="section-full">
   <div class="inner reveal">
-    <div class="eyebrow">Audit Deliverables</div>
-    <h2>What's Inside<br><em>Your Report.</em></h2>
-    <p class="section-sub">Not a generic checklist. A custom analysis of YOUR campaign with dollar amounts attached to every gap identified.</p>
+    <div class="eyebrow">Report Deliverables</div>
+    <h2>8 Intelligence<br><em>Modules.</em></h2>
+    <p class="section-sub">Not a checklist. A custom campaign dossier built on your numbers, your page, your market — with dollar amounts attached to every gap found.</p>
     <div class="deliverables-grid">
-      <div class="del-cell"><div class="del-num">01</div><div class="del-title">Go / NO-GO Score</div><div class="del-desc">A clear binary verdict on your campaign's readiness. Scored across pre-launch, financials, page, and strategy. No ambiguity.</div></div>
-      <div class="del-cell"><div class="del-num">02</div><div class="del-title">5 Critical Gaps</div><div class="del-desc">The five issues most likely to kill your campaign — each with a dollar amount showing what it costs you if unaddressed.</div></div>
-      <div class="del-cell"><div class="del-num">03</div><div class="del-title">Fix Priority Matrix</div><div class="del-desc">What to fix first, what can wait, what doesn't matter. Ranked by impact and effort so you don't waste time on the wrong things.</div></div>
-      <div class="del-cell"><div class="del-num">04</div><div class="del-title">Budget Reality Check</div><div class="del-desc">Your actual cost per unit vs. what you think it is. Hidden fees, surcharges, and the 23 touchpoints from factory to doorstep — mapped.</div></div>
-      <div class="del-cell"><div class="del-num">05</div><div class="del-title">Competitive Landscape</div><div class="del-desc">3–5 similar campaigns benchmarked against yours. What they're doing better, what you're doing better, and where the gap is.</div></div>
-      <div class="del-cell"><div class="del-num">06</div><div class="del-title">Restart Plan</div><div class="del-desc">If your campaign is failing or cancelled — a full restart playbook. Timeline, messaging pivot, audience reset, and relaunch sequence.</div></div>
+      <div class="del-cell">
+        <div class="del-num">01</div>
+        <div class="del-title">GO / NO-GO Verdict</div>
+        <div class="del-desc">A binary readiness score across pre-launch infrastructure, financials, page quality, and market positioning. One clear answer — with the reasoning behind it.</div>
+      </div>
+      <div class="del-cell">
+        <div class="del-num">02</div>
+        <div class="del-title">Win-Before-Launch Math</div>
+        <div class="del-desc">The 30% Rule applied to your campaign. How many backers you need on Day 1, what email list size that requires, and whether your current pipeline can hit it.</div>
+      </div>
+      <div class="del-cell">
+        <div class="del-num">03</div>
+        <div class="del-title">Critical Gap Analysis</div>
+        <div class="del-desc">The specific issues most likely to kill your campaign — each with a dollar amount showing the cost of leaving it unaddressed. No filler. Only what matters.</div>
+      </div>
+      <div class="del-cell">
+        <div class="del-num">04</div>
+        <div class="del-title">Competitive Intelligence</div>
+        <div class="del-desc">3–5 similar campaigns benchmarked against yours. Where you're stronger. Where you're exposed. What their numbers actually mean for your positioning.</div>
+      </div>
+      <div class="del-cell">
+        <div class="del-num">05</div>
+        <div class="del-title">Financial Reality Check</div>
+        <div class="del-desc">Your actual unit economics vs. what you think they are. COGS, shipping, platform fees, refund reserves — mapped against your funding goal and perk structure.</div>
+      </div>
+      <div class="del-cell">
+        <div class="del-num">06</div>
+        <div class="del-title">Platform Risk Assessment</div>
+        <div class="del-desc">Kickstarter and Indiegogo compliance flags, fund hold triggers, Trust & Safety red zones — identified before they shut you down mid-campaign.</div>
+      </div>
+      <div class="del-cell">
+        <div class="del-num">07</div>
+        <div class="del-title">Fix Priority Matrix</div>
+        <div class="del-desc">What to fix first, what can wait, what doesn't move the needle. Ranked by impact and effort. So you spend the next 30 days on the right things.</div>
+      </div>
+      <div class="del-cell">
+        <div class="del-num">08</div>
+        <div class="del-title">Launch Path or Restart Plan</div>
+        <div class="del-desc">For GO campaigns: a phased launch sequence. For NO-GO campaigns: the exact rebuild roadmap — what to fix, in what order, before you spend another dollar.</div>
+      </div>
     </div>
   </div>
 </div>
 
 <hr class="divider">
 
+<!-- WHO IS THIS FOR -->
 <section class="section reveal">
-  <div class="eyebrow">Target Profile</div>
-  <h2>Who Needs<br><em>This Audit.</em></h2>
-  <p class="section-sub">If your campaign is approaching a critical moment — this is the fastest way to know if you're ready or not.</p>
-  <div class="for-grid">
-    <div class="for-card"><div class="for-icon">🎯</div><div class="for-title">Pre-Launch Founders</div><div class="for-desc">30–60 days out. Need to know if your prep is solid or if you're about to launch to silence.</div></div>
-    <div class="for-card"><div class="for-icon">📉</div><div class="for-title">Struggling Live Campaigns</div><div class="for-desc">Live at 30–70% with days remaining. You need a diagnosis and a surge plan — fast.</div></div>
-    <div class="for-card"><div class="for-icon">💀</div><div class="for-title">Failed / Cancelled Campaigns</div><div class="for-desc">Before you relaunch, you need to know exactly what went wrong and how to fix it.</div></div>
-    <div class="for-card"><div class="for-icon">🔁</div><div class="for-title">Repeat Founders</div><div class="for-desc">You've launched before but want a second set of eyes from someone who's raised $890K across 5 campaigns.</div></div>
+  <div class="eyebrow">Who This Is For</div>
+  <h2>Two Moments.<br><em>One Report.</em></h2>
+  <p class="section-sub">The Campaign Intelligence Report was built for founders at a decision point — either about to launch, or trying to understand why it went wrong.</p>
+  <div class="track-grid">
+    <div class="track-card">
+      <div class="track-label">▸ Track 01 — Pre-Launch</div>
+      <div class="track-title">You're about to launch. You need to know if you're ready.</div>
+      <p class="track-desc">You have a campaign in preparation. Maybe 30–60 days out. You've done work — but you don't know what you don't know. The CIR gives you an operator's eyes on your campaign before you go live.</p>
+      <ul class="track-bullets">
+        <li>Find out if your email list is large enough for Day 1 momentum</li>
+        <li>Know if your perk pricing will hit your funding goal</li>
+        <li>Identify platform compliance risks before they freeze your funds</li>
+        <li>Get a GO / NO-GO score with a clear fix sequence</li>
+      </ul>
+    </div>
+    <div class="track-card">
+      <div class="track-label">▸ Track 02 — Post-Failure</div>
+      <div class="track-title">Your campaign failed. You need to know exactly why.</div>
+      <p class="track-desc">You launched. It didn't work — or it's live and struggling. Before you rebuild, you need a post-mortem that tells you the real cause, not just the symptom. Most founders guess wrong and repeat the same mistakes.</p>
+      <ul class="track-bullets">
+        <li>Full post-mortem across all 8 intelligence modules</li>
+        <li>Identify the root cause — not just "not enough traffic"</li>
+        <li>Get a restart roadmap with exact sequencing</li>
+        <li>Know what to change and what actually worked</li>
+      </ul>
+    </div>
   </div>
 </section>
 
 <hr class="divider">
 
+<!-- CASE STUDY -->
 <div class="section-full">
   <div class="inner reveal">
-    <div class="eyebrow">How It Works</div>
-    <h2>From Payment<br><em>to Report.</em></h2>
-    <div class="process-steps">
-      <div class="p-step"><div class="p-num">01</div><div class="p-title">You Order</div><div class="p-desc">Pay $499. You'll receive a confirmation and intake questionnaire within 1 hour. Fill it out completely — quality in, quality out.</div></div>
-      <div class="p-step"><div class="p-num">02</div><div class="p-title">I Analyze</div><div class="p-desc">Your campaign goes through the full 111-bullet framework. Every number benchmarked against real campaign data. Every gap quantified.</div></div>
-      <div class="p-step"><div class="p-num">03</div><div class="p-title">Report Delivered</div><div class="p-desc">Within 72 hours: Go/NO-GO verdict, 5 gaps, fix matrix, budget check, competitive landscape, and a clear path forward.</div></div>
-      <div class="p-step"><div class="p-num">04</div><div class="p-title">You Execute</div><div class="p-desc">The report tells you exactly what to fix. CMK gives you the tools, or I can be in the room as your Co-Pilot.</div></div>
+    <div class="eyebrow">Real Report · Redacted</div>
+    <h2>What a CIR<br><em>Looks Like.</em></h2>
+    <p class="section-sub">This is a real Campaign Intelligence Report — client and product details redacted. Fashion & wearables category. Pre-launch assessment. February 2026.</p>
+    <div class="case-block">
+      <div class="case-header">
+        <span class="case-label">CIR · Fashion & Wearables · Indiegogo · Pre-Launch · February 2026</span>
+        <span class="case-verdict">⬡ VERDICT: 28/100 — NO-GO</span>
+      </div>
+      <div class="case-body">
+        <div>
+          <div class="case-col-title">Readiness Scorecard</div>
+          <div class="case-row"><span>Market & Competitive Intel</span><span class="warn">45/100</span></div>
+          <div class="case-row"><span>Product & Prototype Readiness</span><span class="fail">25/100</span></div>
+          <div class="case-row"><span>Campaign Page & Messaging</span><span class="warn">55/100</span></div>
+          <div class="case-row"><span>Pre-Launch Marketing</span><span class="fail">15/100</span></div>
+          <div class="case-row"><span>Audience & Community</span><span class="fail">40/100</span></div>
+          <div class="case-row"><span>Financial & Logistics</span><span class="fail">30/100</span></div>
+          <div class="case-row"><span>Risk & Compliance</span><span class="fail">20/100</span></div>
+          <div class="case-row"><span>Technical & Platform Setup</span><span class="fail">30/100</span></div>
+          <div style="margin-top:1rem;padding:0.6rem 0.75rem;background:rgba(212,130,10,0.06);border:1px solid rgba(212,130,10,0.2);font-family:var(--mono);font-size:0.68rem;color:var(--amber)">Win-Before-Launch gap: $0 pipeline vs. $10,500 Day 1 target</div>
+        </div>
+        <div>
+          <div class="case-col-title">Top Findings</div>
+          <div class="case-finding"><strong>Critical Gap #1</strong>Email list: 0 contacts. Minimum 1,500 needed for 30% Day 1 rule. Without this — no momentum, no algorithm boost, campaign dies in 72h.</div>
+          <div class="case-finding"><strong>Critical Gap #2</strong>Zero demand validation. No surveys, no ad tests, no VIP deposits. Every pricing and volume assumption is unvalidated.</div>
+          <div class="case-finding"><strong>Platform Risk</strong>Product category flagged as compliance risk. Fund hold probability: HIGH without pre-submission Trust & Safety package.</div>
+          <div class="case-finding"><strong>Conditional GO Path</strong>6–8 weeks of MVL preparation identified. Specific sequence, budget, and milestones provided.</div>
+        </div>
+      </div>
+      <div class="case-footer">
+        <b>Outcome:</b> Client received full 8-module report + service proposal within 72h. Campaign launch delayed to implement MVL plan. Potential loss avoided: estimated $5,000–$15,000 in failed campaign spend + reputational damage.
+      </div>
     </div>
   </div>
 </div>
 
 <hr class="divider">
 
+<!-- PROCESS -->
+<section class="section reveal">
+  <div class="eyebrow">How It Works</div>
+  <h2>From Order<br><em>to Report.</em></h2>
+  <div class="process-steps">
+    <div class="p-step">
+      <div class="p-num">01</div>
+      <div class="p-title">You Order</div>
+      <p class="p-desc">Pay $499. Within 1 hour you receive a confirmation and intake brief — 15 targeted questions about your campaign, product, financials, and current prep status.</p>
+    </div>
+    <div class="p-step">
+      <div class="p-num">02</div>
+      <div class="p-title">I Analyze</div>
+      <p class="p-desc">Your campaign goes through all 8 intelligence modules. Every number is benchmarked against real campaign data. Every gap is quantified. No assumptions left unchallenged.</p>
+    </div>
+    <div class="p-step">
+      <div class="p-num">03</div>
+      <div class="p-title">Report Delivered</div>
+      <p class="p-desc">Within 72 hours: GO / NO-GO verdict, full scorecard, critical gaps with dollar amounts, competitive benchmark, and your fix priority matrix or restart plan.</p>
+    </div>
+    <div class="p-step">
+      <div class="p-num">04</div>
+      <div class="p-title">You Execute</div>
+      <p class="p-desc">The report tells you exactly what to fix. CMK gives you the tools, or I step in as your Co-Pilot. Either way — you're not guessing anymore.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- GUARANTEE -->
 <section class="section reveal">
   <div class="eyebrow">Risk Reversal</div>
   <h2>The Architect's<br><em>Guarantee.</em></h2>
   <div class="guarantee-block">
     <div class="g-label">✓ 30-Day Improvement Guarantee</div>
     <div class="g-title">If It Doesn't Work — I Re-Audit for Free.</div>
-    <p class="g-text">If your campaign doesn't improve by at least 15% within 30 days of implementing my recommendations — I'll re-audit you at no cost and personally build your restart plan. No hoops. You just need to show me you implemented at least 3 of the 5 recommendations.</p>
-    <p class="g-text" style="margin-top:0.75rem;">Nobody else in crowdfunding consulting offers this. I do because I know the framework works.</p>
+    <p class="g-text">Implement at least 3 of the critical fixes from your report. If your campaign metrics don't improve by 15%+ within 30 days — email me proof of implementation and I'll re-audit at no cost and personally build your restart plan.</p>
+    <p class="g-text" style="margin-top:0.75rem;">Nobody else in crowdfunding consulting offers this. I do because I know the framework works — and I want to be accountable to it.</p>
   </div>
 
   <div style="margin-top:3rem;">
-    <div class="eyebrow">After Your Audit</div>
+    <div class="eyebrow">After Your Report</div>
     <h2>Need to <em>Execute</em> the Fixes?</h2>
-    <p class="section-sub">The audit tells you what's broken. The Crowdfunding Momentum Kit gives you the tools to fix it.</p>
+    <p class="section-sub">The CIR tells you what's broken. The Crowdfunding Momentum Kit gives you the tools to fix it — or I can be in the room with you.</p>
     <div class="upsell-block">
       <div>
         <div class="u-label">▸ Crowdfunding Momentum Kit</div>
         <div class="u-title">The Full Operational System.</div>
-        <p class="u-desc">111 bullets · 70 Plugin Tools · 12 Calculators · 10 Playbooks · 6 Email Sequences · 300+ Media Contacts. From $299 one-time.</p>
+        <p class="u-desc">111 bullets · 70 Plugin Tools · 12 Calculators · 10 Playbooks · 6 Email Sequences · 300+ Media Contacts. Built for founders who want to execute — not just read about it.</p>
       </div>
       <div class="u-price">
         <div class="u-price-num">From <sup>$</sup>299</div>
@@ -285,25 +424,44 @@ footer a:hover{color:var(--amber)}
 
 <hr class="divider">
 
+<!-- FAQ -->
 <section class="section reveal">
   <div class="eyebrow">Intel Briefing</div>
   <h2>Questions.<br><em>Answered.</em></h2>
   <div class="faq-list">
-    <details><summary>What do I need to provide?</summary><p class="faq-answer">After payment you'll receive an intake questionnaire. You'll need your campaign URL or draft, target amount, unit cost estimate, shipping plan, email list size, and any existing materials. The more detail you provide, the sharper the audit.</p></details>
-    <details><summary>My campaign isn't live yet — can I still get an audit?</summary><p class="faq-answer">Yes — pre-launch audits are often the most valuable. I'll assess your readiness across pre-launch prep, financials, page structure, and launch strategy. You'll know exactly what to fix before you go live.</p></details>
-    <details><summary>My campaign failed / was cancelled. Can you help?</summary><p class="faq-answer">This is one of the most common requests. A failed campaign audit includes a full post-mortem, a restart playbook, messaging pivot recommendations, and a relaunch timeline. Campaigns that cancelled at 30% can relaunch and fully fund — if the root causes are addressed.</p></details>
-    <details><summary>How is this different from generic crowdfunding advice?</summary><p class="faq-answer">Every gap in your audit has a dollar amount attached. Every recommendation references specific tactics from 5 real campaigns that raised $890K combined. This isn't theory — it's the same framework I use on campaigns I personally run.</p></details>
-    <details><summary>What if I need more than just the report?</summary><p class="faq-answer">Every audit ends with three options: DIY with CMK ($299–$1,299), Co-Pilot consulting ($2,500 + 12% success fee), or Full Architecture ($12,500 flat). The report will tell you which level your situation requires.</p></details>
-    <details><summary>How does the 30-day guarantee work?</summary><p class="faq-answer">Implement at least 3 of the 5 recommendations. If your campaign metrics don't improve by 15%+ within 30 days — email me with proof of implementation and I'll re-audit for free and build your restart plan personally.</p></details>
+    <details>
+      <summary>What do I need to provide?</summary>
+      <p class="faq-answer">After payment you'll receive a 15-question intake brief. You'll need your campaign URL or draft, funding goal, unit cost estimate, shipping plan, email list size, and current prep status. The more complete your answers — the sharper the report. Quality in, quality out.</p>
+    </details>
+    <details>
+      <summary>My campaign isn't live yet — is this still relevant?</summary>
+      <p class="faq-answer">Pre-launch is where the CIR delivers the most value. I'll assess your readiness across all 8 modules — pre-launch infrastructure, financials, page, platform compliance, competitive positioning. You'll know exactly what to fix before you go live and before you spend on ads.</p>
+    </details>
+    <details>
+      <summary>My campaign failed or was cancelled. Can this help?</summary>
+      <p class="faq-answer">Yes — and this is one of the most common requests. A post-failure CIR includes a full post-mortem across all 8 modules, root cause identification (not just "you didn't have enough traffic"), and a detailed restart roadmap with exact sequencing. Campaigns that cancelled at 30–40% funded have relaunched and fully funded after implementing the fixes. But only if you diagnose the real problem first.</p>
+    </details>
+    <details>
+      <summary>How is this different from generic crowdfunding advice?</summary>
+      <p class="faq-answer">Every gap in your report has a dollar amount attached. Every recommendation references benchmarks from real campaigns. The framework is the same one I use on campaigns I personally run — not theory extracted from blog posts. And unlike generic advice, this is built on your specific numbers, your product category, and your platform.</p>
+    </details>
+    <details>
+      <summary>What if I need more than just the report?</summary>
+      <p class="faq-answer">Every CIR ends with a clear path forward — three options depending on your situation: execute independently with CMK ($299–$1,299), work with me directly as Co-Pilot ($2,500 + 12% success fee), or full campaign architecture ($12,500 flat). The report will tell you which level your situation actually requires.</p>
+    </details>
+    <details>
+      <summary>How does the 30-day guarantee work?</summary>
+      <p class="faq-answer">Implement at least 3 of the critical recommendations from your report. If your campaign metrics don't improve by 15%+ within 30 days — email me with proof of implementation and I'll re-audit for free and build your restart plan personally. No hoops. The condition is that you actually implement.</p>
+    </details>
   </div>
 </section>
 
 <div class="cta-bottom reveal">
-  <div class="eyebrow" style="justify-content:center">Deploy the Audit</div>
+  <div class="eyebrow" style="justify-content:center">Deploy Intelligence</div>
   <h2>Stop Guessing.<br><em>Get the Verdict.</em></h2>
-  <p style="color:var(--muted);max-width:500px;margin:0 auto 2.5rem;font-size:0.95rem;line-height:1.7;">72 hours from now you'll know exactly what's killing your campaign — and exactly what to do about it. Dollar amounts attached to every gap.</p>
-  <a href="https://payhip.com/b/FP7Aq" class="btn-primary">Order Your Audit — $499</a>
-  <p style="font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:1rem;">One-time · 72h delivery · 30-day improvement guarantee · <span style="font-family:var(--mono);font-size:0.62rem;color:var(--muted);opacity:0.75;">VAT may apply for EU customers</span></p>
+  <p style="color:var(--muted);max-width:520px;margin:0 auto 2.5rem;font-size:0.95rem;line-height:1.7;">72 hours from now you'll know exactly where your campaign stands, what will kill it if left unfixed, and the exact sequence to fix it. Dollar amounts on every gap. One clear verdict.</p>
+  <a href="https://payhip.com/b/FP7Aq" class="btn-primary">Order Your Intelligence Report — $499</a>
+  <p style="font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:1rem;">One-time · 72h delivery · 30-day improvement guarantee · <span style="opacity:0.75;">VAT may apply for EU customers</span></p>
 </div>
 
 <footer>
@@ -312,7 +470,7 @@ footer a:hover{color:var(--amber)}
     <a href="/data/privacy.html">Privacy Policy</a>
     <a href="/data/terms.html">Terms</a>
     <a href="/data/refund.html">Refund Policy</a>
-    <a href="/cdn-cgi/l/email-protection#721a171e1e1d32171e1b061715001d05061a5c02001d"><span class="__cf_email__" data-cfemail="056d6069696a4560696c716062776a72716d2b75776a">[email&#160;protected]</span></a>
+    <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
   </div>
 </footer>
 
