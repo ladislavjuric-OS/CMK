@@ -155,7 +155,7 @@ footer a:hover{color:var(--amber)}
   </div>
   <div style="display:flex;align-items:center;gap:1.5rem;">
     <div class="nav-stat"><b>$890K</b> raised · 5 campaigns</div>
-    <a href="https://payhip.com/b/FP7Aq" class="btn-nav">Order Audit — $499</a>
+    <a href="href="https://payhip.com/b/FP7Aq" class="btn-nav">Order Audit — $499</a>
   </div>
 </nav>
 
@@ -170,7 +170,7 @@ footer a:hover{color:var(--amber)}
     <p class="hero-desc">Whether you're pre-launch, live and struggling, or rebuilding after a failure — I run your numbers, page, and strategy through the full Architect framework. You get a Go/NO-GO verdict and a clear path forward.</p>
     <div class="price-big"><sup>$</sup>499</div>
     <div class="price-note">One-time · Delivered within 72 hours · 30-day improvement guarantee · <span style="font-family:var(--mono);font-size:0.62rem;color:var(--muted);opacity:0.75;">VAT may apply for EU customers</span></div>
-    <a href="https://payhip.com/b/FP7Aq" class="btn-primary">Order Your Audit Now</a>
+    <a href="href="https://payhip.com/b/FP7Aq" class="btn-primary">Order Your Audit Now</a>
     <span class="btn-guarantee">🛡 If your campaign doesn't improve 15%+ in 30 days — I re-audit for free.</span>
   </div>
 
@@ -302,7 +302,7 @@ footer a:hover{color:var(--amber)}
   <div class="eyebrow" style="justify-content:center">Deploy the Audit</div>
   <h2>Stop Guessing.<br><em>Get the Verdict.</em></h2>
   <p style="color:var(--muted);max-width:500px;margin:0 auto 2.5rem;font-size:0.95rem;line-height:1.7;">72 hours from now you'll know exactly what's killing your campaign — and exactly what to do about it. Dollar amounts attached to every gap.</p>
-  <a href="https://ladijuric.gumroad.com/l/ehxfhx" class="btn-primary">Order Your Audit — $499</a>
+  <a href="href="https://payhip.com/b/FP7Aq" class="btn-primary">Order Your Audit — $499</a>
   <p style="font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:1rem;">One-time · 72h delivery · 30-day improvement guarantee · <span style="font-family:var(--mono);font-size:0.62rem;color:var(--muted);opacity:0.75;">VAT may apply for EU customers</span></p>
 </div>
 
@@ -316,5 +316,16 @@ footer a:hover{color:var(--amber)}
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-const observer =
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
