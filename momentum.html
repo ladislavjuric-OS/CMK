@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Momentum Services — The Architect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --black: #080807;
+  --surface: #0f0e0c;
+  --surface2: #161410;
+  --border: #2a2620;
+  --amber: #d4820a;
+  --amber-bright: #f0a020;
+  --amber-dim: rgba(212,130,10,0.12);
+  --red: #c0392b;
+  --green: #2d6a4f;
+  --green-bright: #52b788;
+  --text: #d4cfc8;
+  --muted: #6b6560;
+  --mono: 'IBM Plex Mono', monospace;
+  --display: 'Barlow Condensed', sans-serif;
+  --body: 'Barlow', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: var(--body);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(212,130,10,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,130,10,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none; z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.5;
+}
+
+nav, section, footer, .hero, .classified, .tier-section { position: relative; z-index: 1; }
+
+/* NAV */
+nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 2.5rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0;
+  background: rgba(8,8,7,0.95);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+}
+
+.nav-brand { display: flex; align-items: center; gap: 0.75rem; }
+.nav-icon {
+  width: 32px; height: 32px;
+  border: 1px solid var(--amber);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 0.7rem; color: var(--amber); font-weight: 700;
+}
+.nav-name { font-family: var(--display); font-size: 1rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); }
+.nav-name span { color: var(--amber); }
+.nav-right { display: flex; align-items: center; gap: 1.5rem; }
+.nav-stat { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
+.nav-stat b { color: var(--amber); }
+.btn-nav {
+  background: var(--amber); color: #000;
+  padding: 0.5rem 1.25rem;
+  font-family: var(--mono); font-size: 0.75rem; font-weight: 700;
+  text-decoration: none; letter-spacing: 0.05em; transition: background 0.2s;
+}
+.btn-nav:hover { background: var(--amber-bright); }
+
+.classified-bar {
+  background: var(--amber); color: #000;
+  text-align: center; padding: 0.4rem;
+  font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  position: relative; z-index: 1;
+}
+
+/* HERO */
+.hero {
+  max-width: 1100px; margin: 0 auto;
+  padding: 5rem 2.5rem 4rem;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 4rem; align-items: center;
+}
+@media(max-width:900px){ .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem; } }
+
+.hero-left { animation: fadeUp 0.7s ease both; }
+
+.classified-tag {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  border: 1px solid var(--amber);
+  padding: 0.3rem 0.75rem;
+  font-family: var(--mono); font-size: 0.65rem;
+  color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase;
+  margin-bottom: 1.5rem; background: var(--amber-dim);
+}
+.classified-tag::before {
+  content: ''; width: 5px; height: 5px;
+  background: var(--amber); border-radius: 50%;
+  animation: blink 1.5s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+h1 {
+  font-family: var(--display);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 900; line-height: 0.95;
+  letter-spacing: -0.01em; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+h1 .line-amber { color: var(--amber); display: block; }
+h1 .line-dim { color: var(--muted); font-weight: 400; font-size: 0.5em; display: block; font-style: italic; text-transform: none; letter-spacing: 0.02em; margin-top: 0.4rem; line-height: 1.4; }
+
+.hero-desc {
+  font-size: 1.05rem; color: var(--text);
+  max-width: 520px; margin-bottom: 2.5rem; line-height: 1.7;
+  border-left: 2px solid var(--amber); padding-left: 1rem;
+}
+
+/* QUALIFIER */
+.qualifier {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  font-size: 0.88rem;
+}
+.qualifier-label {
+  font-family: var(--mono); font-size: 0.62rem; color: var(--amber);
+  letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.75rem;
+}
+.qual-row { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem; }
+.qual-row:last-child { margin-bottom: 0; }
+.qual-check { color: var(--green-bright); flex-shrink: 0; font-weight: 700; }
+.qual-cross { color: #e74c3c; flex-shrink: 0; font-weight: 700; }
+.qual-text { color: var(--text); line-height: 1.5; }
+
+/* HERO RIGHT — FLOW DIAGRAM */
+.hero-right { animation: fadeUp 0.7s 0.15s ease both; }
+
+.flow-diagram {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+}
+.flow-diagram::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: var(--amber);
+}
+
+.flow-header {
+  background: var(--surface2);
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono); font-size: 0.68rem; color: var(--amber);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  display: flex; justify-content: space-between; align-items: center;
+}
+
+.flow-body { padding: 1.5rem; }
+
+.flow-step {
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 0.75rem; position: relative;
+}
+
+.flow-node {
+  width: 36px; height: 36px; flex-shrink: 0;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 0.65rem; color: var(--muted);
+  background: var(--surface2);
+  position: relative; z-index: 1;
+}
+.flow-node.active { border-color: var(--amber); color: var(--amber); background: var(--amber-dim); }
+.flow-node.done { border-color: var(--green-bright); color: var(--green-bright); }
+
+.flow-connector {
+  width: 1px; height: 20px; background: var(--border);
+  margin-left: 17px; margin-bottom: 0;
+}
+
+.flow-label { font-size: 0.82rem; color: var(--text); }
+.flow-label span { font-family: var(--mono); font-size: 0.68rem; color: var(--amber); margin-left: 0.5rem; }
+.flow-label .muted { color: var(--muted); font-size: 0.75rem; display: block; }
+
+/* SECTION SHARED */
+.section-divider { border: none; border-top: 1px solid var(--border); margin: 0; position: relative; z-index: 1; }
+.section { padding: 5rem 2.5rem; max-width: 1100px; margin: 0 auto; }
+.section-full { padding: 5rem 2.5rem; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); position: relative; z-index: 1; }
+.section-full .inner { max-width: 1100px; margin: 0 auto; }
+
+.section-eyebrow {
+  font-family: var(--mono); font-size: 0.65rem; color: var(--amber);
+  letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.section-eyebrow::before { content: '▸'; color: var(--amber); }
+
+h2 {
+  font-family: var(--display); font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-weight: 900; text-transform: uppercase; letter-spacing: -0.01em;
+  line-height: 1; margin-bottom: 1rem;
+}
+h2 em { font-style: normal; color: var(--amber); }
+
+.section-sub { font-size: 1.05rem; color: var(--muted); max-width: 600px; line-height: 1.7; margin-bottom: 3rem; }
+
+/* TIER CARDS */
+.tiers-stack { display: flex; flex-direction: column; gap: 2px; margin-top: 3rem; }
+
+.tier-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.tier-card:hover { border-color: rgba(212,130,10,0.4); }
+.tier-card.featured { border-color: rgba(212,130,10,0.5); background: var(--surface2); }
+
+.tier-inner {
+  display: grid;
+  grid-template-columns: 280px 1fr auto;
+  gap: 0;
+}
+@media(max-width:900px){ .tier-inner { grid-template-columns: 1fr; } }
+
+.tier-left {
+  padding: 2.5rem 2rem;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+.tier-left::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--border);
+}
+.tier-card.featured .tier-left::before { background: var(--amber); }
+
+.tier-badge {
+  font-family: var(--mono); font-size: 0.6rem; color: var(--amber);
+  letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.tier-badge::before {
+  content: ''; width: 4px; height: 4px;
+  background: var(--amber); border-radius: 50%;
+  animation: blink 1.5s step-end infinite;
+}
+
+.tier-name {
+  font-family: var(--display); font-size: 2rem; font-weight: 900;
+  text-transform: uppercase; line-height: 1; margin-bottom: 0.4rem;
+}
+
+.tier-mode {
+  font-family: var(--mono); font-size: 0.65rem; color: var(--muted);
+  letter-spacing: 0.08em; margin-bottom: 1.25rem;
+}
+
+.tier-tagline {
+  font-size: 0.88rem; color: var(--muted); line-height: 1.6;
+  font-style: italic; border-left: 2px solid var(--border);
+  padding-left: 0.75rem;
+}
+
+.tier-middle {
+  padding: 2.5rem 2rem;
+  border-right: 1px solid var(--border);
+}
+@media(max-width:900px){ .tier-middle { border-right: none; border-top: 1px solid var(--border); } }
+
+.tier-includes {
+  font-family: var(--mono); font-size: 0.6rem; color: var(--muted);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem;
+}
+
+.tier-feature {
+  display: flex; gap: 0.6rem; margin-bottom: 0.6rem;
+  font-size: 0.83rem; align-items: flex-start;
+}
+.tier-feature .check { color: var(--green-bright); flex-shrink: 0; margin-top: 0.1rem; }
+.tier-feature .label { color: var(--text); line-height: 1.5; }
+
+.tier-right {
+  padding: 2.5rem 2rem;
+  display: flex; flex-direction: column;
+  align-items: flex-end; justify-content: space-between;
+  min-width: 200px;
+}
+@media(max-width:900px){ .tier-right { align-items: flex-start; border-top: 1px solid var(--border); } }
+
+.tier-price {
+  font-family: var(--display); font-size: 3rem; font-weight: 900;
+  color: var(--amber); line-height: 1; text-align: right;
+}
+.tier-price sup { font-size: 1.2rem; vertical-align: super; }
+.tier-price-note {
+  font-family: var(--mono); font-size: 0.62rem; color: var(--muted);
+  margin-top: 0.3rem; text-align: right;
+}
+
+.btn-tier {
+  display: block; width: 100%; text-align: center; padding: 0.85rem;
+  font-family: var(--display); font-size: 0.95rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em; text-decoration: none;
+  margin-top: 1.5rem; transition: background 0.2s, color 0.2s;
+}
+.btn-primary-tier { background: var(--amber); color: #000; }
+.btn-primary-tier:hover { background: var(--amber-bright); }
+.btn-secondary-tier { border: 1px solid var(--border); color: var(--text); }
+.btn-secondary-tier:hover { border-color: var(--amber); color: var(--amber); }
+
+/* FEATURED BADGE */
+.featured-label {
+  background: var(--amber); color: #000;
+  font-family: var(--mono); font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.2rem 0.75rem;
+  position: absolute; top: 0; right: 0;
+}
+
+/* COMMAND CARD */
+.command-card {
+  border: 1px solid rgba(212,130,10,0.3);
+  background: var(--surface2);
+  margin-top: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.command-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+@media(max-width:768px){ .command-inner { grid-template-columns: 1fr; } }
+
+.command-left { padding: 3rem 2.5rem; border-right: 1px solid var(--border); }
+@media(max-width:768px){ .command-left { border-right: none; } }
+
+.command-eyebrow {
+  font-family: var(--mono); font-size: 0.62rem; color: var(--amber);
+  letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.command-name {
+  font-family: var(--display); font-size: 3rem; font-weight: 900;
+  text-transform: uppercase; line-height: 0.95; margin-bottom: 0.5rem;
+}
+.command-mode {
+  font-family: var(--mono); font-size: 0.68rem; color: var(--amber);
+  letter-spacing: 0.08em; margin-bottom: 1.5rem;
+}
+.command-desc { font-size: 0.95rem; color: var(--text); line-height: 1.7; max-width: 420px; }
+
+.command-right { padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+
+.command-features { margin-bottom: 2rem; }
+.command-feature {
+  display: flex; gap: 0.75rem; margin-bottom: 0.75rem;
+  font-size: 0.88rem; align-items: flex-start;
+}
+.command-feature .check { color: var(--amber); flex-shrink: 0; margin-top: 0.1rem; }
+
+.command-price-area { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
+
+.command-price {
+  font-family: var(--display); font-size: 3.5rem; font-weight: 900;
+  color: var(--amber); line-height: 1;
+}
+.command-price-note { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-top: 0.25rem; }
+.command-price-rev { font-family: var(--mono); font-size: 0.72rem; color: var(--text); margin-top: 0.25rem; }
+
+.btn-command {
+  display: inline-block; background: var(--amber); color: #000;
+  padding: 1rem 2rem;
+  font-family: var(--display); font-size: 1rem; font-weight: 800;
+  letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-command:hover { background: var(--amber-bright); }
+
+/* BRIDGE BLOCK */
+.bridge-block {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--amber);
+  padding: 2.5rem;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 3rem; align-items: center;
+}
+@media(max-width:768px){ .bridge-block { grid-template-columns: 1fr; } }
+
+.bridge-tag { font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.75rem; }
+.bridge-title { font-family: var(--display); font-size: 2rem; font-weight: 900; text-transform: uppercase; margin-bottom: 0.75rem; }
+.bridge-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; max-width: 500px; }
+
+.bridge-price-block { text-align: center; white-space: nowrap; }
+.bridge-price { font-family: var(--display); font-size: 3rem; font-weight: 900; color: var(--amber); line-height: 1; }
+.bridge-price sup { font-size: 1.2rem; vertical-align: super; }
+.bridge-price-note { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-top: 0.3rem; margin-bottom: 1rem; }
+
+/* CASE STUDY */
+.case-strip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 2rem 2.5rem;
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: 2rem; align-items: center;
+  margin-top: 3rem;
+}
+@media(max-width:768px){ .case-strip { grid-template-columns: 1fr; } }
+
+.case-verdict {
+  font-family: var(--display); font-size: 1rem; font-weight: 900;
+  color: #e74c3c; letter-spacing: 0.08em;
+}
+.case-label { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.case-title { font-family: var(--display); font-size: 1.4rem; font-weight: 900; text-transform: uppercase; margin-bottom: 0.4rem; }
+.case-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+.case-numbers { display: flex; gap: 2rem; flex-wrap: wrap; }
+.case-num .n { font-family: var(--display); font-size: 2rem; font-weight: 900; color: var(--amber); line-height: 1; }
+.case-num .l { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.2rem; }
+
+/* BIO */
+.bio-block {
+  display: grid; grid-template-columns: auto 1fr;
+  gap: 2.5rem; align-items: start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--amber);
+  padding: 2.5rem;
+  margin-top: 4rem;
+}
+@media(max-width:700px){ .bio-block { grid-template-columns: 1fr; } }
+
+.bio-thumb {
+  width: 96px; height: 96px;
+  border: 2px solid var(--amber);
+  overflow: hidden; flex-shrink: 0;
+  background: var(--surface2);
+}
+.bio-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+.bio-thumb-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display); font-size: 2.5rem; font-weight: 900;
+  color: var(--amber); opacity: 0.4;
+}
+
+.bio-label { font-family: var(--mono); font-size: 0.62rem; color: var(--amber); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.bio-name { font-family: var(--display); font-size: 1.8rem; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 0.25rem; }
+.bio-title-line { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-bottom: 1rem; letter-spacing: 0.05em; }
+
+.bio-numbers {
+  display: flex; gap: 2rem; margin-bottom: 1.25rem; flex-wrap: wrap;
+  padding: 0.75rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.bio-num-item .num { font-family: var(--display); font-size: 1.5rem; font-weight: 900; color: var(--amber); line-height: 1; }
+.bio-num-item .lbl { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.15rem; }
+
+.bio-text { font-size: 0.88rem; color: var(--muted); line-height: 1.75; max-width: 580px; }
+.bio-text strong { color: var(--text); }
+
+/* FAQ */
+.faq-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border);
+  margin-top: 3rem; border: 1px solid var(--border);
+}
+@media(max-width:768px){ .faq-grid { grid-template-columns: 1fr; } }
+
+details { background: var(--surface); padding: 0; }
+summary {
+  padding: 1.25rem 1.5rem; cursor: pointer; list-style: none;
+  font-family: var(--display); font-size: 1rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.02em;
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  transition: color 0.2s;
+}
+summary:hover { color: var(--amber); }
+summary::after { content: '+'; font-family: var(--mono); font-size: 1.2rem; color: var(--amber); flex-shrink: 0; transition: transform 0.2s; }
+details[open] summary::after { transform: rotate(45deg); }
+details[open] { background: var(--surface2); }
+.faq-answer { padding: 0 1.5rem 1.25rem; font-size: 0.88rem; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--border); padding-top: 1rem; margin-top: -0.1rem; }
+
+/* FINAL CTA */
+.final-cta {
+  text-align: center; padding: 6rem 2.5rem;
+  border-top: 1px solid var(--border); position: relative; z-index: 1;
+}
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border); padding: 2rem 2.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 1rem;
+  font-family: var(--mono); font-size: 0.7rem; color: var(--muted);
+  position: relative; z-index: 1;
+}
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--amber); }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+.btn-primary {
+  background: var(--amber); color: #000; padding: 0.9rem 2rem;
+  font-family: var(--display); font-size: 1.1rem; font-weight: 800;
+  letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none;
+  transition: background 0.2s, transform 0.15s; display: inline-block;
+}
+.btn-primary:hover { background: var(--amber-bright); transform: translateY(-1px); }
+
+.btn-secondary {
+  border: 1px solid var(--border); color: var(--text); padding: 0.9rem 1.5rem;
+  font-family: var(--mono); font-size: 0.8rem; text-decoration: none;
+  transition: border-color 0.2s, color 0.2s; display: inline-block;
+}
+.btn-secondary:hover { border-color: var(--amber); color: var(--amber); }
+
+/* PROGRESS BAR */
+.progress-bar {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: var(--mono); font-size: 0.62rem; color: var(--muted);
+  margin-bottom: 2rem;
+}
+.progress-step { display: flex; align-items: center; gap: 0.4rem; }
+.progress-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); }
+.progress-dot.done { background: var(--green-bright); }
+.progress-dot.active { background: var(--amber); }
+.progress-line { width: 24px; height: 1px; background: var(--border); }
+.progress-line.done { background: var(--green-bright); }
+
+@media(max-width:600px){
+  nav { padding: 0.75rem 1rem; }
+  .nav-stat { display: none; }
+  .section { padding: 3rem 1.25rem; }
+  .section-full { padding: 3rem 1.25rem; }
+  .tier-inner { grid-template-columns: 1fr; }
+  .tier-left { border-right: none; }
+  .tier-middle { border-right: none; border-top: 1px solid var(--border); }
+  .tier-right { border-top: 1px solid var(--border); align-items: flex-start; }
+  .tier-price { text-align: left; }
+  .tier-price-note { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<div class="classified-bar">⚠ MOMENTUM SERVICES — THE ARCHITECT · POST-AUDIT ENGAGEMENT OPTIONS ⚠</div>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-icon">TA</div>
+    <div class="nav-name">The <span>Architect</span></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-stat"><b>$890K+</b> raised · 5 campaigns</div>
+    <a href="https://cmk.elitegrowth.pro/audit.html" class="btn-nav">Get the Audit First</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="classified-tag">Post-Audit Engagement · The Architect</div>
+    <h1>
+      You Read<br>
+      <span class="line-amber">The Report.</span><br>
+      Now Let's<br>
+      Execute It.
+      <span class="line-dim">"The audit tells you what's broken. This is where we fix it — together, or I take the wheel entirely."</span>
+    </h1>
+    <p class="hero-desc">
+      Three engagement levels. The difference isn't what you get — it's how much of my time and brain is in the room with you.
+    </p>
+
+    <!-- QUALIFIER -->
+    <div class="qualifier">
+      <div class="qualifier-label">▸ This is for you if:</div>
+      <div class="qual-row"><span class="qual-check">✓</span><span class="qual-text">You've completed an Audit or already know what's blocking you</span></div>
+      <div class="qual-row"><span class="qual-check">✓</span><span class="qual-text">You have a product, prototype, or campaign in preparation</span></div>
+      <div class="qual-row"><span class="qual-check">✓</span><span class="qual-text">You need a system and execution — not more information</span></div>
+      <div class="qual-row" style="margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--border);">
+        <span class="qual-cross">✕</span><span class="qual-text" style="color:var(--muted);">Not sure where you stand yet? <a href="https://readinesschecker.elitegrowth.pro" style="color:var(--amber);text-decoration:none;">Take the free Readiness Check →</a></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW DIAGRAM -->
+  <div class="hero-right">
+    <div class="flow-diagram">
+      <div class="flow-header">
+        <span>Your Path Forward</span>
+        <span style="color:var(--muted);">Select your level</span>
+      </div>
+      <div class="flow-body">
+
+        <div class="flow-step">
+          <div class="flow-node done">✓</div>
+          <div class="flow-label">
+            Readiness Checker
+            <span style="color:var(--green-bright);">FREE</span>
+            <span class="muted">Where you stand before you start</span>
+          </div>
+        </div>
+        <div class="flow-connector"></div>
+
+        <div class="flow-step">
+          <div class="flow-node done">✓</div>
+          <div class="flow-label">
+            Campaign Audit — CIR
+            <span style="color:var(--green-bright);">$499</span>
+            <span class="muted">GO/NO-GO · gaps quantified · path forward</span>
+          </div>
+        </div>
+        <div class="flow-connector"></div>
+
+        <div class="flow-step">
+          <div class="flow-node active">→</div>
+          <div class="flow-label">
+            The Blueprint
+            <span>$999</span>
+            <span class="muted">System + CMK materials. You drive.</span>
+          </div>
+        </div>
+        <div class="flow-connector"></div>
+
+        <div class="flow-step">
+          <div class="flow-node active">→</div>
+          <div class="flow-label">
+            CMK Elite
+            <span>$1,997</span>
+            <span class="muted">Blueprint + 2h with The Architect</span>
+          </div>
+        </div>
+        <div class="flow-connector"></div>
+
+        <div class="flow-step">
+          <div class="flow-node active">→</div>
+          <div class="flow-label">
+            The Campaign
+            <span>$2,500</span>
+            <span class="muted">Done-With-You · 4 strategic calls</span>
+          </div>
+        </div>
+        <div class="flow-connector"></div>
+
+        <div class="flow-step">
+          <div class="flow-node active">→</div>
+          <div class="flow-label">
+            The Command
+            <span>$10K+</span>
+            <span class="muted">Done-For-You · I take the wheel</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- TIERS SECTION -->
+<section class="section" id="tiers">
+  <div class="section-eyebrow">Engagement Options</div>
+  <h2>Three Levels.<br><em>One Mission.</em></h2>
+  <p class="section-sub">Choose based on how much of my time you need in the room. The system is the same. The difference is execution depth.</p>
+
+  <div class="tiers-stack reveal">
+
+    <!-- THE BLUEPRINT -->
+    <div class="tier-card">
+      <div class="tier-inner">
+        <div class="tier-left">
+          <div class="tier-badge">DIY · Tier 01</div>
+          <div class="tier-name">The Blueprint</div>
+          <div class="tier-mode">// You build. I give you the plan.</div>
+          <div class="tier-tagline">"The complete operational system for founders who are ready to execute — and just need the right framework to do it right."</div>
+        </div>
+
+        <div class="tier-middle">
+          <div class="tier-includes">What you get:</div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Complete Crowdfunding Momentum OS — all 11 SOPs, playbooks, calculators</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Email sequences + influencer scripts + ad-spend calculators</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Landing page review via Loom — my eyes on your copy and structure</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">One kickoff call — I orient you to the system and flag your top 3 risks</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Baggizmo Case Study — $890K campaign, real numbers, real mistakes</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Instant access · Notion workspace ready to duplicate</span></div>
+        </div>
+
+        <div class="tier-right">
+          <div>
+            <div class="tier-price"><sup>$</sup>999</div>
+            <div class="tier-price-note">One-time · Instant access<br>VAT may apply for EU</div>
+          </div>
+          <a href="#" class="btn-tier btn-secondary-tier">Get The Blueprint</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CMK ELITE -->
+    <div class="tier-card featured">
+      <div style="position:relative;">
+        <span class="featured-label">Recommended Post-Audit</span>
+      </div>
+      <div class="tier-inner">
+        <div class="tier-left">
+          <div class="tier-badge">DIY + Architect · Tier 02</div>
+          <div class="tier-name">CMK Elite</div>
+          <div class="tier-mode">// The Blueprint + my brain on your campaign.</div>
+          <div class="tier-tagline">"Everything in the Blueprint, plus two hours of direct engagement with The Architect — oriented to your specific situation, your specific gaps."</div>
+        </div>
+
+        <div class="tier-middle">
+          <div class="tier-includes">Everything in Blueprint, plus:</div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">2 hours of dedicated consulting time — we work through your specific audit findings</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Strategic session on your campaign page, perk structure, and Day 1 army plan</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Personalized fix sequence — not generic advice, your exact P0/P1/P2 priorities</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">My review of your landing page, ad copy, and email funnel before you go live</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Access to my private media contacts database — 300+ journalists, editors, press</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Lifetime updates as new campaigns generate new war stories and tools</span></div>
+        </div>
+
+        <div class="tier-right">
+          <div>
+            <div class="tier-price"><sup>$</sup>1,997</div>
+            <div class="tier-price-note">One-time · Includes 2h consulting<br>VAT may apply for EU</div>
+          </div>
+          <a href="#" class="btn-tier btn-primary-tier">Get CMK Elite</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE CAMPAIGN -->
+    <div class="tier-card">
+      <div class="tier-inner">
+        <div class="tier-left">
+          <div class="tier-badge">DWY · Tier 03</div>
+          <div class="tier-name">The Campaign</div>
+          <div class="tier-mode">// We execute together.</div>
+          <div class="tier-tagline">"Four strategic calls — one for each critical phase. I review every major decision before you make it. For founders who want guidance through the fire."</div>
+        </div>
+
+        <div class="tier-middle">
+          <div class="tier-includes">What you get:</div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">4 strategic calls — Validation, Pre-Launch, Launch, Post-Launch</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">My review of every major decision before you execute it</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Full CMK Elite access included — all materials and tools</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Campaign page audit — copy, video, perks, social proof, structure</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Ad copy review + email sequence review before sending</span></div>
+          <div class="tier-feature"><span class="check">✓</span><span class="label">Async access via email between calls — no waiting 2 weeks to get unstuck</span></div>
+        </div>
+
+        <div class="tier-right">
+          <div>
+            <div class="tier-price"><sup>$</sup>2,500</div>
+            <div class="tier-price-note">One-time · 4 strategic calls<br>Spans 2–3 months</div>
+          </div>
+          <a href="#" class="btn-tier btn-secondary-tier">Apply for The Campaign</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- THE COMMAND -->
+  <div class="command-card reveal" id="command">
+    <div class="command-inner">
+      <div class="command-left">
+        <div class="command-eyebrow">
+          <span style="width:4px;height:4px;background:var(--amber);border-radius:50%;"></span>
+          DFY · Tier 04
+        </div>
+        <div class="command-name">The<br>Command</div>
+        <div class="command-mode">// I take the wheel. Entirely.</div>
+        <p class="command-desc">Full-service campaign implementation. Landing page, ads, email sequences, factory communications, influencer pipeline. You have the capital and the product. I have the system and the track record. We split the upside.</p>
+      </div>
+
+      <div class="command-right">
+        <div class="command-features">
+          <div class="command-feature"><span class="check">✓</span><span>Full landing page architecture and copy</span></div>
+          <div class="command-feature"><span class="check">✓</span><span>Ad campaign setup + management (media buyer not included)</span></div>
+          <div class="command-feature"><span class="check">✓</span><span>Complete email funnel — pre-launch through post-campaign</span></div>
+          <div class="command-feature"><span class="check">✓</span><span>Factory communication, influencer pipeline, PR outreach</span></div>
+          <div class="command-feature"><span class="check">✓</span><span>Launch day operations — hour-by-hour execution</span></div>
+          <div class="command-feature"><span class="check">✓</span><span>Weekly strategy calls throughout campaign</span></div>
+          <div class="command-feature"><span class="check">✓</span><span>Success fee model — I earn when you earn</span></div>
+        </div>
+
+        <div class="command-price-area">
+          <div>
+            <div class="command-price"><sup style="font-size:1.4rem;vertical-align:super;">$</sup>10,000<span style="font-size:1.5rem;color:var(--muted);">+</span></div>
+            <div class="command-price-note">Setup fee + revenue share</div>
+            <div class="command-price-rev">+ % of total raised · aligned incentives</div>
+          </div>
+          <a href="mailto:hello@elitegrowth.pro?subject=The Command — Inquiry" class="btn-command">Apply for The Command</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- BRIDGE TO AUDIT -->
+<div class="section-full">
+  <div class="inner reveal">
+    <div class="section-eyebrow">Not there yet?</div>
+    <h2>Start with the<br><em>Diagnosis.</em></h2>
+    <p class="section-sub">Before you choose an engagement level — the Audit tells you exactly which tier your situation requires. No guessing.</p>
+
+    <div class="bridge-block">
+      <div>
+        <div class="bridge-tag">▸ Campaign Intelligence Report</div>
+        <div class="bridge-title">Get Your GO/NO-GO Verdict First.</div>
+        <p class="bridge-desc">I run your numbers, your page, and your strategy through the full 8-module framework. You get a clear verdict, every critical gap quantified in dollars, and a fix sequence with exact priorities. The report tells you which Momentum tier your campaign needs.</p>
+        <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;gap:1rem;flex-wrap:wrap;">
+          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:center;"><span style="color:var(--amber);">✓</span>GO / NO-GO Verdict</div>
+          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:center;"><span style="color:var(--amber);">✓</span>Win-Before-Launch Math</div>
+          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:center;"><span style="color:var(--amber);">✓</span>Critical Gap Analysis</div>
+          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:center;"><span style="color:var(--amber);">✓</span>Platform Risk Assessment</div>
+          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:center;"><span style="color:var(--amber);">✓</span>Fix Priority Matrix</div>
+          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:center;"><span style="color:var(--amber);">✓</span>72h delivery</div>
+        </div>
+      </div>
+      <div class="bridge-price-block">
+        <div class="bridge-price"><sup>$</sup>499</div>
+        <div class="bridge-price-note">One-time · 72h delivery · 30-day guarantee</div>
+        <a href="https://cmk.elitegrowth.pro/audit.html" class="btn-primary">Order the Audit — $499</a>
+      </div>
+    </div>
+
+    <!-- FLUIDE CASE STUDY STRIP -->
+    <div class="case-strip">
+      <div>
+        <div class="case-label">Proof of Work · Redacted</div>
+        <div class="case-verdict">⬡ 28/100 — NO-GO</div>
+      </div>
+      <div>
+        <div class="case-title">Fashion & Wearables · Indiegogo · Pre-Launch · Feb 2026</div>
+        <p class="case-desc">Client received full 8-module intelligence report in 72 hours. Campaign launch delayed to implement MVL plan. Estimated loss avoided: $5,000–$15,000. Upwork 5★ review received immediately after delivery.</p>
+      </div>
+      <div class="case-numbers">
+        <div class="case-num"><div class="n">$499</div><div class="l">Audit cost</div></div>
+        <div class="case-num"><div class="n">$15K</div><div class="l">Loss avoided</div></div>
+        <div class="case-num"><div class="n">15 pg</div><div class="l">Report delivered</div></div>
+        <div class="case-num"><div class="n">5★</div><div class="l">Upwork review</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- BIO -->
+<section class="section reveal">
+  <div class="section-eyebrow">The Operator</div>
+  <h2>Not a Consultant.<br><em>An Operator.</em></h2>
+  <p class="section-sub">Every tactic in every tier came from money I personally risked. There is no theory in this system.</p>
+
+  <div class="bio-block">
+    <div>
+      <div class="bio-thumb">
+        <img src="/assets/ladislav.jpg" alt="Ladislav Jurić — The Architect"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="bio-thumb-placeholder" style="display:none;">LJ</div>
+      </div>
+    </div>
+    <div>
+      <div class="bio-label">▸ The Architect</div>
+      <div class="bio-name">Ladislav Jurić</div>
+      <div class="bio-title-line">Crowdfunding Operator · Launch Engineer · Operations Architect</div>
+      <div class="bio-numbers">
+        <div class="bio-num-item"><div class="num">$890K+</div><div class="lbl">Raised across campaigns</div></div>
+        <div class="bio-num-item"><div class="num">5</div><div class="lbl">Successful campaigns</div></div>
+        <div class="bio-num-item"><div class="num">800+</div><div class="lbl">Units shipped globally</div></div>
+        <div class="bio-num-item"><div class="num">2</div><div class="lbl">Brands built from zero</div></div>
+      </div>
+      <p class="bio-text">
+        He isn't a "guru" who read a book and decided to teach. He's the guy who bled for every millimeter — international manufacturing, 3PL logistics, platform compliance, and the psychological warfare of crowdfunding across five campaigns. <strong>Baggizmo. Wiseward. Real campaigns. Real scars.</strong>
+      </p>
+      <p class="bio-text" style="margin-top:0.75rem;">
+        He shipped pallets to America without ever having been there. He handled factory renegotiations at 3 AM. He watched his margin disappear on a single shipping surcharge he hadn't budgeted. <strong>Everything in this system happened to him first.</strong> The Momentum tiers are what he would have bought if they'd existed on campaign one.
+      </p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- FAQ -->
+<section class="section reveal">
+  <div class="section-eyebrow">Intel Briefing</div>
+  <h2>Questions.<br><em>Answered.</em></h2>
+
+  <div class="faq-grid">
+    <details>
+      <summary>Do I need the Audit before engaging?</summary>
+      <p class="faq-answer">For Blueprint and CMK Elite — no. If you already know what's blocking you, you can proceed directly. For The Campaign and The Command, an Audit is required first. I need to know exactly where you stand before I commit my time to an engagement.</p>
+    </details>
+    <details>
+      <summary>What's the difference between Blueprint and CMK Elite?</summary>
+      <p class="faq-answer">Blueprint is the system alone — materials, tools, kickoff call, and LP review. CMK Elite adds 2 direct hours with me, oriented specifically to your audit findings. If you've had the audit and want my brain on your specific situation, Elite is the answer. The $998 difference buys direct access, not more materials.</p>
+    </details>
+    <details>
+      <summary>Can Blueprint credits apply toward Elite?</summary>
+      <p class="faq-answer">Yes. If you purchase Blueprint and decide within 7 days that you need the Elite level, the $999 is credited toward Elite. You pay only the $998 difference. This is a one-time upgrade path — not available after 7 days.</p>
+    </details>
+    <details>
+      <summary>What does "The Campaign" look like in practice?</summary>
+      <p class="faq-answer">Four calls over 2-3 months — one at each critical phase: Validation, Pre-Launch, Launch, and Post-Launch. Between calls, you have async email access. Before you make any major decision — campaign page goes live, ads turn on, pricing locks — I review it first. You drive. I co-pilot.</p>
+    </details>
+    <details>
+      <summary>How does The Command success fee work?</summary>
+      <p class="faq-answer">The setup fee ($10,000+) covers full implementation — page, email, ads structure, factory comm, influencer pipeline. The success fee percentage is agreed upfront and applied to total funds raised. If your campaign raises $100K, my total compensation is setup fee plus the agreed percentage. If the campaign fails to fund, I earned only the setup fee. Aligned incentives.</p>
+    </details>
+    <details>
+      <summary>What if I need something between tiers?</summary>
+      <p class="faq-answer">Email hello@elitegrowth.pro. Describe your situation. I'll tell you honestly which tier fits or whether a custom scope makes more sense. I don't push people into engagements they don't need.</p>
+    </details>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<div class="final-cta reveal">
+  <div class="section-eyebrow" style="justify-content:center;">Deploy the System</div>
+  <h2 style="margin:0 auto 1.5rem;max-width:700px;">Your Campaign.<br><em>The Architect's Execution.</em></h2>
+  <p style="color:var(--muted);max-width:480px;margin:0 auto 2.5rem;font-size:0.95rem;line-height:1.7;">
+    The system is built. The war stories are documented. The only variable is how much of my time you want in the room.
+  </p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <a href="#tiers" class="btn-primary">Choose Your Level</a>
+    <a href="https://cmk.elitegrowth.pro/audit.html" class="btn-secondary">Start with the Audit — $499</a>
+  </div>
+  <p style="font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:1.25rem;">Built from $890K in real campaigns · Elitegrowth d.o.o.</p>
+</div>
+
+<footer>
+  <span>© 2026 The Architect™ · Elitegrowth d.o.o.</span>
+  <div style="display:flex;gap:1.5rem;">
+    <a href="/data/privacy.html">Privacy Policy</a>
+    <a href="/data/terms.html">Terms</a>
+    <a href="/data/refund.html">Refund Policy</a>
+    <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) { e.target.classList.add('visible'); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
