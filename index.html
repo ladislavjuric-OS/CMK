@@ -8,871 +8,336 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-:root {
-  --black: #080807;
-  --surface: #0f0e0c;
-  --surface2: #161410;
-  --border: #2a2620;
-  --amber: #d4820a;
-  --amber-bright: #f0a020;
-  --amber-dim: rgba(212,130,10,0.15);
-  --red: #c0392b;
-  --green: #2d6a4f;
-  --green-bright: #52b788;
-  --text: #d4cfc8;
-  --muted: #6b6560;
-  --mono: 'IBM Plex Mono', monospace;
-  --display: 'Barlow Condensed', sans-serif;
-  --body: 'Barlow', sans-serif;
+:root{
+  --black:#080807;--surface:#0f0e0c;--surface2:#161410;--border:#2a2620;
+  --amber:#d4820a;--amber-bright:#f0a020;--amber-dim:rgba(212,130,10,0.12);
+  --red:#c0392b;--green:#2d6a4f;--green-bright:#52b788;
+  --text:#d4cfc8;--muted:#6b6560;
+  --mono:'IBM Plex Mono',monospace;--display:'Barlow Condensed',sans-serif;--body:'Barlow',sans-serif;
 }
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--black);
-  color: var(--text);
-  font-family: var(--body);
-  overflow-x: hidden;
-  line-height: 1.6;
-}
-
-/* BLUEPRINT GRID BACKGROUND */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(212,130,10,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(212,130,10,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* NOISE */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.5;
-}
-
-section, nav, footer, .hero { position: relative; z-index: 1; }
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--text);font-family:var(--body);overflow-x:hidden;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(212,130,10,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(212,130,10,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5}
+section,nav,footer,.hero,.classified-bar{position:relative;z-index:1}
 
 /* NAV */
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2.5rem;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: rgba(8,8,7,0.95);
-  backdrop-filter: blur(10px);
-  z-index: 100;
-}
-
-.nav-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.nav-icon {
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--amber);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--amber);
-  font-weight: 700;
-}
-
-.nav-name {
-  font-family: var(--display);
-  font-size: 1rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text);
-}
-
-.nav-name span { color: var(--amber); }
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.nav-stat {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.nav-stat b { color: var(--amber); }
-
-.btn-nav {
-  background: var(--amber);
-  color: #000;
-  padding: 0.5rem 1.25rem;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-decoration: none;
-  letter-spacing: 0.05em;
-  transition: background 0.2s;
-}
-
-.btn-nav:hover { background: var(--amber-bright); }
-
-/* CLASSIFIED BANNER */
-.classified {
-  background: var(--amber);
-  color: #000;
-  text-align: center;
-  padding: 0.4rem;
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
+nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 2.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(8,8,7,0.95);backdrop-filter:blur(10px);z-index:100}
+.nav-brand{display:flex;align-items:center;gap:0.75rem}
+.nav-icon{width:32px;height:32px;border:1px solid var(--amber);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.7rem;color:var(--amber);font-weight:700}
+.nav-name{font-family:var(--display);font-size:1rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--text)}
+.nav-name span{color:var(--amber)}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-stat{font-family:var(--mono);font-size:0.7rem;color:var(--muted)}
+.nav-stat b{color:var(--amber)}
+.btn-nav{background:var(--amber);color:#000;padding:0.5rem 1.25rem;font-family:var(--mono);font-size:0.75rem;font-weight:700;text-decoration:none;letter-spacing:0.05em;transition:background 0.2s}
+.btn-nav:hover{background:var(--amber-bright)}
+.classified-bar{background:var(--amber);color:#000;text-align:center;padding:0.4rem;font-family:var(--mono);font-size:0.7rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase}
 
 /* HERO */
-.hero {
-  min-height: 92vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 4rem;
-  padding: 5rem 2.5rem 4rem;
-  max-width: 1200px;
-  margin: 0 auto;
+.hero{min-height:92vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:4rem;padding:5rem 2.5rem 4rem;max-width:1200px;margin:0 auto}
+@media(max-width:900px){.hero{grid-template-columns:1fr;padding:3rem 1.5rem}}
+.hero-left{animation:fadeUp 0.8s ease both}
+.hero-right{animation:fadeUp 0.8s 0.15s ease both}
+.classified-tag{display:inline-flex;align-items:center;gap:0.5rem;border:1px solid var(--amber);padding:0.3rem 0.75rem;font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.5rem;background:var(--amber-dim)}
+.classified-tag::before{content:'';width:5px;height:5px;background:var(--amber);border-radius:50%;animation:blink 1.5s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+h1{font-family:var(--display);font-size:clamp(3rem,6vw,5.5rem);font-weight:900;line-height:0.95;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:1.5rem}
+h1 .line-amber{color:var(--amber);display:block}
+h1 .line-dim{color:var(--muted);font-weight:400;font-size:0.55em;display:block;font-style:italic;text-transform:none;letter-spacing:0.02em;margin-top:0.3rem}
+.hero-desc{font-size:1.05rem;color:var(--text);max-width:520px;margin-bottom:2rem;line-height:1.7;border-left:2px solid var(--amber);padding-left:1rem}
+.hero-stats{display:flex;gap:2rem;margin-bottom:2.5rem;flex-wrap:wrap}
+.stat-num{font-family:var(--display);font-size:2.2rem;font-weight:900;color:var(--amber);line-height:1;letter-spacing:-0.02em}
+.stat-label{font-family:var(--mono);font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:0.2rem}
+
+/* PATH GATE */
+.path-gate{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+@media(max-width:600px){.path-gate{grid-template-columns:1fr}}
+.path-card{border:1px solid var(--border);padding:1.25rem 1.5rem;text-decoration:none;display:block;position:relative;overflow:hidden;transition:border-color 0.2s,background 0.2s}
+.path-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--amber);opacity:0;transition:opacity 0.2s}
+.path-card:hover{border-color:rgba(212,130,10,0.5);background:rgba(212,130,10,0.04)}
+.path-card:hover::before,.path-card.active::before{opacity:1}
+.path-card.active{border-color:rgba(212,130,10,0.4);background:rgba(212,130,10,0.06)}
+.path-label{font-family:var(--mono);font-size:0.6rem;color:var(--amber);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.4rem}
+.path-dot{width:4px;height:4px;background:var(--amber);border-radius:50%;animation:blink 1.5s step-end infinite}
+.path-title{font-family:var(--display);font-size:1rem;font-weight:700;text-transform:uppercase;color:var(--text);margin-bottom:0.3rem;line-height:1.1}
+.path-desc{font-size:0.78rem;color:var(--muted);line-height:1.5;margin-bottom:0.6rem}
+.path-cta{font-family:var(--mono);font-size:0.68rem;color:var(--amber)}
+
+/* DOC MOCKUP */
+.doc-mockup{background:var(--surface);border:1px solid var(--border);font-family:var(--mono);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.6);position:relative}
+.doc-mockup::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--amber)}
+.doc-header{background:var(--surface2);padding:0.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.doc-title{color:var(--amber);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase}
+.doc-ref{color:var(--muted);font-size:0.65rem}
+.doc-body{padding:1.25rem;line-height:1.9}
+.doc-st{color:var(--amber);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem;margin-top:1rem;border-bottom:1px solid var(--border);padding-bottom:0.3rem}
+.doc-st:first-child{margin-top:0}
+.doc-row{display:flex;justify-content:space-between;color:var(--muted);font-size:0.72rem;padding:0.15rem 0}
+.doc-row span:first-child{color:var(--text)}
+.ok{color:var(--green-bright)}.warn{color:var(--amber)}.fail{color:#e74c3c}
+.doc-div{border:none;border-top:1px dashed var(--border);margin:0.75rem 0}
+.doc-score{display:flex;justify-content:space-between;align-items:center;background:rgba(212,130,10,0.08);border:1px solid rgba(212,130,10,0.3);padding:0.6rem 1rem;margin-top:0.75rem}
+.doc-score-label{color:var(--amber);font-size:0.72rem;letter-spacing:0.08em}
+.doc-score-val{font-family:var(--display);font-size:1.4rem;font-weight:900;color:#e74c3c}
+
+/* SHARED SECTION */
+.section-divider{border:none;border-top:1px solid var(--border);margin:0;position:relative;z-index:1}
+.section{padding:5rem 2.5rem;max-width:1200px;margin:0 auto}
+.section-full{padding:5rem 2.5rem;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);position:relative;z-index:1}
+.section-full .inner{max-width:1200px;margin:0 auto}
+.section-eyebrow{font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
+.section-eyebrow::before{content:'▸';color:var(--amber)}
+h2{font-family:var(--display);font-size:clamp(2rem,4.5vw,3.5rem);font-weight:900;text-transform:uppercase;letter-spacing:-0.01em;line-height:1;margin-bottom:1rem}
+h2 em{font-style:normal;color:var(--amber)}
+.section-sub{font-size:1.05rem;color:var(--muted);max-width:600px;line-height:1.7;margin-bottom:3rem}
+
+/* READINESS STRIP */
+.readiness-strip{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-top:2px solid var(--amber);
+  padding:1.5rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:2rem;flex-wrap:wrap;
+  margin-bottom:3rem;
 }
-
-@media(max-width:900px){ .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem; } }
-
-.hero-left { animation: fadeUp 0.8s ease both; }
-
-.classified-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: 1px solid var(--amber);
-  padding: 0.3rem 0.75rem;
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--amber);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
-  background: var(--amber-dim);
+.rs-left{display:flex;align-items:center;gap:1.25rem}
+.rs-icon{
+  width:44px;height:44px;border:1px solid var(--amber);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:0.65rem;font-weight:700;color:var(--amber);
+  flex-shrink:0;
 }
-
-.classified-tag::before {
-  content: '';
-  width: 5px; height: 5px;
-  background: var(--amber);
-  border-radius: 50%;
-  animation: blink 1.5s step-end infinite;
+.rs-label{font-family:var(--mono);font-size:0.6rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.3rem}
+.rs-title{font-family:var(--display);font-size:1.1rem;font-weight:800;text-transform:uppercase;line-height:1}
+.rs-desc{font-size:0.8rem;color:var(--muted);margin-top:0.25rem}
+.rs-cta{
+  display:flex;align-items:center;gap:0.5rem;
+  font-family:var(--mono);font-size:0.72rem;font-weight:700;
+  color:#000;background:var(--amber);
+  padding:0.6rem 1.25rem;text-decoration:none;
+  white-space:nowrap;transition:background 0.2s;flex-shrink:0;
 }
-
-@keyframes blink { 50% { opacity: 0; } }
-
-h1 {
-  font-family: var(--display);
-  font-size: clamp(3rem, 6vw, 5.5rem);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
+.rs-cta:hover{background:var(--amber-bright)}
+.rs-score-demo{
+  display:flex;gap:1rem;align-items:center;
+  font-family:var(--mono);font-size:0.68rem;
 }
+.rs-score-item{text-align:center}
+.rs-score-num{font-family:var(--display);font-size:1.4rem;font-weight:900;line-height:1}
+.rs-score-num.green{color:var(--green-bright)}
+.rs-score-num.amber{color:var(--amber)}
+.rs-score-num.red{color:#e74c3c}
+.rs-score-lbl{font-size:0.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.2rem}
 
-h1 .line-amber { color: var(--amber); display: block; }
-h1 .line-dim { color: var(--muted); font-weight: 400; font-size: 0.55em; display: block; font-style: italic; text-transform: none; letter-spacing: 0.02em; margin-top: 0.3rem; }
-
-.hero-desc {
-  font-size: 1.05rem;
-  color: var(--text);
-  max-width: 520px;
-  margin-bottom: 2rem;
-  line-height: 1.7;
-  border-left: 2px solid var(--amber);
-  padding-left: 1rem;
+/* CMK PRICING GRID */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:3rem;background:var(--border)}
+@media(max-width:900px){.pricing-grid{grid-template-columns:1fr}}
+.price-card{background:var(--surface);padding:2rem;position:relative;transition:background 0.2s}
+.price-card:hover{background:var(--surface2)}
+.price-card.featured{background:var(--surface2);border-top:2px solid var(--amber)}
+.price-card.featured::before{
+  content:'MOST COMPLETE';
+  position:absolute;top:-1px;right:1.5rem;
+  background:var(--amber);color:#000;
+  font-family:var(--mono);font-size:0.58rem;font-weight:700;letter-spacing:0.1em;
+  padding:0.2rem 0.6rem;
 }
+.price-tier{font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem}
+.price-name{font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;margin-bottom:0.5rem}
+.price-desc{font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.5}
+.price-amount{font-family:var(--display);font-size:3.5rem;font-weight:900;color:var(--amber);line-height:1;margin-bottom:0.25rem}
+.price-amount sup{font-size:1.4rem;vertical-align:super}
+.price-note{font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-bottom:1.5rem}
+.price-divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+.price-includes{font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem}
+.price-feature{display:flex;gap:0.6rem;margin-bottom:0.65rem;font-size:0.83rem;align-items:flex-start}
+.price-feature .check{color:var(--green-bright);flex-shrink:0;margin-top:0.1rem}
+.price-feature .cross{color:var(--muted);flex-shrink:0;margin-top:0.1rem}
+.price-feature .label{color:var(--text)}
+.price-feature .label.dim{color:var(--muted)}
+.btn-tier{display:block;width:100%;text-align:center;padding:0.85rem;font-family:var(--display);font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;text-decoration:none;margin-top:1.5rem;transition:background 0.2s,color 0.2s}
+.btn-tp{background:var(--amber);color:#000}
+.btn-tp:hover{background:var(--amber-bright)}
+.btn-ts{border:1px solid var(--border);color:var(--text)}
+.btn-ts:hover{border-color:var(--amber);color:var(--amber)}
 
-.hero-stats {
-  display: flex;
-  gap: 2rem;
-  margin-bottom: 2.5rem;
-  flex-wrap: wrap;
+/* AUDIT HOOK */
+.audit-hook{
+  background:var(--surface2);border:1px solid var(--border);
+  border-left:3px solid var(--amber);
+  padding:2.5rem;margin-top:4rem;
+  display:grid;grid-template-columns:1fr auto;
+  gap:3rem;align-items:center;
 }
+@media(max-width:768px){.audit-hook{grid-template-columns:1fr}}
+.ah-tag{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.75rem}
+.ah-title{font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;margin-bottom:0.75rem}
+.ah-desc{font-size:0.9rem;color:var(--muted);line-height:1.7;max-width:480px}
+.ah-items{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+.ah-item{font-size:0.82rem;color:var(--text);display:flex;gap:0.4rem;align-items:center}
+.ah-item span:first-child{color:var(--amber)}
+.ah-price-block{text-align:center;white-space:nowrap}
+.ah-price{font-family:var(--display);font-size:3rem;font-weight:900;color:var(--amber);line-height:1}
+.ah-price sup{font-size:1.2rem;vertical-align:super}
+.ah-price-note{font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin:0.3rem 0 1rem}
 
-.stat-item { text-align: left; }
-
-.stat-num {
-  font-family: var(--display);
-  font-size: 2.2rem;
-  font-weight: 900;
-  color: var(--amber);
-  line-height: 1;
-  letter-spacing: -0.02em;
+/* MOMENTUM BRIDGE */
+.momentum-bridge{
+  background:var(--black);
+  border:1px solid var(--border);
+  border-top:2px solid rgba(212,130,10,0.4);
+  padding:3rem;
+  margin-top:4rem;
+  position:relative;
+  overflow:hidden;
 }
-
-.stat-label {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-top: 0.2rem;
+.momentum-bridge::before{
+  content:'';
+  position:absolute;top:0;right:0;
+  width:300px;height:100%;
+  background:linear-gradient(to left,rgba(212,130,10,0.04),transparent);
+  pointer-events:none;
 }
-
-.hero-cta-group {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  flex-wrap: wrap;
+.mb-eyebrow{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
+.mb-eyebrow::before{content:'▸';color:var(--amber)}
+.mb-title{font-family:var(--display);font-size:clamp(1.5rem,3vw,2.5rem);font-weight:900;text-transform:uppercase;line-height:1;margin-bottom:1rem}
+.mb-desc{font-size:0.95rem;color:var(--muted);line-height:1.7;max-width:580px;margin-bottom:2rem}
+.mb-tiers{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:2rem}
+.mb-tier{
+  border:1px solid var(--border);
+  padding:1rem 1.25rem;
+  font-size:0.82rem;
+  transition:border-color 0.2s;
 }
-
-.btn-primary {
-  background: var(--amber);
-  color: #000;
-  padding: 0.9rem 2rem;
-  font-family: var(--display);
-  font-size: 1.1rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: background 0.2s, transform 0.15s;
-  display: inline-block;
+.mb-tier-name{font-family:var(--display);font-size:1.1rem;font-weight:800;text-transform:uppercase;line-height:1;margin-bottom:0.2rem}
+.mb-tier-mode{font-family:var(--mono);font-size:0.58rem;color:var(--amber);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem}
+.mb-tier-price{font-family:var(--display);font-size:1.3rem;font-weight:900;color:var(--amber);line-height:1}
+.mb-cta{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:var(--amber);color:#000;
+  padding:0.85rem 2rem;
+  font-family:var(--display);font-size:1rem;font-weight:800;
+  letter-spacing:0.05em;text-transform:uppercase;
+  text-decoration:none;transition:background 0.2s;
 }
+.mb-cta:hover{background:var(--amber-bright)}
+.mb-cta-note{font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:0.75rem}
 
-.btn-primary:hover { background: var(--amber-bright); transform: translateY(-1px); }
+/* PROBLEM SECTION */
+.gap-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:1.5rem;align-items:start;margin-top:3rem}
+@media(max-width:768px){.gap-grid{grid-template-columns:1fr}.gap-vs{display:none}}
+.gap-col{border:1px solid var(--border);padding:2rem}
+.gap-col.bad{border-color:rgba(192,57,43,0.4)}
+.gap-col.good{border-color:rgba(82,183,136,0.4)}
+.gap-col-title{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border)}
+.gap-col.bad .gap-col-title{color:#e74c3c}
+.gap-col.good .gap-col-title{color:var(--green-bright)}
+.gap-item{display:flex;gap:0.75rem;margin-bottom:0.9rem;font-size:0.88rem;line-height:1.5}
+.gap-vs{display:flex;align-items:center;justify-content:center}
+.vs-badge{width:48px;height:48px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:1rem;font-weight:900;color:var(--muted)}
+.text-amber{color:var(--amber)}
 
-.btn-secondary {
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 0.9rem 1.5rem;
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  text-decoration: none;
-  transition: border-color 0.2s, color 0.2s;
-  display: inline-block;
-}
-
-.btn-secondary:hover { border-color: var(--amber); color: var(--amber); }
-
-/* HERO RIGHT — DOCUMENT MOCKUP */
-.hero-right {
-  animation: fadeUp 0.8s 0.15s ease both;
-}
-
-.doc-mockup {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  overflow: hidden;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 0 60px rgba(212,130,10,0.02);
-  position: relative;
-}
-
-.doc-mockup::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--amber);
-}
-
-.doc-header {
-  background: var(--surface2);
-  padding: 0.75rem 1.25rem;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.doc-title { color: var(--amber); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; }
-.doc-ref { color: var(--muted); font-size: 0.65rem; }
-
-.doc-body { padding: 1.25rem; line-height: 1.9; }
-
-.doc-section-title {
-  color: var(--amber);
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-  margin-top: 1rem;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0.3rem;
-}
-
-.doc-section-title:first-child { margin-top: 0; }
-
-.doc-row {
-  display: flex;
-  justify-content: space-between;
-  color: var(--muted);
-  font-size: 0.72rem;
-  padding: 0.15rem 0;
-}
-
-.doc-row span:first-child { color: var(--text); }
-.doc-row .ok { color: var(--green-bright); }
-.doc-row .warn { color: var(--amber); }
-.doc-row .fail { color: #e74c3c; }
-
-.doc-divider {
-  border: none;
-  border-top: 1px dashed var(--border);
-  margin: 0.75rem 0;
-}
-
-.doc-score {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(212,130,10,0.08);
-  border: 1px solid rgba(212,130,10,0.3);
-  padding: 0.6rem 1rem;
-  margin-top: 0.75rem;
-}
-
-.doc-score-label { color: var(--amber); font-size: 0.72rem; letter-spacing: 0.08em; }
-.doc-score-val {
-  font-family: var(--display);
-  font-size: 1.4rem;
-  font-weight: 900;
-  color: var(--green-bright);
-}
-
-/* DIVIDER */
-.section-divider {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 0;
-}
-
-/* SECTIONS */
-.section { padding: 5rem 2.5rem; max-width: 1200px; margin: 0 auto; }
-.section-full { padding: 5rem 2.5rem; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.section-full .inner { max-width: 1200px; margin: 0 auto; }
-
-.section-eyebrow {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--amber);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.section-eyebrow::before {
-  content: '▸';
-  color: var(--amber);
-}
-
-h2 {
-  font-family: var(--display);
-  font-size: clamp(2rem, 4.5vw, 3.5rem);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  line-height: 1;
-  margin-bottom: 1rem;
-}
-
-h2 em { font-style: normal; color: var(--amber); }
-
-.section-sub {
-  font-size: 1.05rem;
-  color: var(--muted);
-  max-width: 600px;
-  line-height: 1.7;
-  margin-bottom: 3rem;
-}
-
-/* THE GAP — COMPARISON */
-.gap-grid {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 1.5rem;
-  align-items: start;
-  margin-top: 3rem;
-}
-
-@media(max-width:768px){ .gap-grid { grid-template-columns: 1fr; } .gap-vs { display: none; } }
-
-.gap-col {
-  border: 1px solid var(--border);
-  padding: 2rem;
-}
-
-.gap-col.bad { border-color: rgba(192,57,43,0.4); }
-.gap-col.good { border-color: rgba(82,183,136,0.4); }
-
-.gap-col-title {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.gap-col.bad .gap-col-title { color: #e74c3c; }
-.gap-col.good .gap-col-title { color: var(--green-bright); }
-
-.gap-item {
-  display: flex;
-  gap: 0.75rem;
-  margin-bottom: 0.9rem;
-  font-size: 0.88rem;
-  line-height: 1.5;
-}
-
-.gap-icon { flex-shrink: 0; margin-top: 0.1rem; }
-
-.gap-vs {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.vs-badge {
-  width: 48px;
-  height: 48px;
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--display);
-  font-size: 1rem;
-  font-weight: 900;
-  color: var(--muted);
-}
-
-/* WAR STORY */
-.war-story {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--amber);
-  padding: 2rem 2.5rem;
-  margin-top: 3rem;
-  position: relative;
-}
-
-.ws-label {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--amber);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-
-.ws-text {
-  font-size: 1.05rem;
-  line-height: 1.8;
-  color: var(--text);
-  font-style: italic;
-}
-
-.ws-numbers {
-  display: flex;
-  gap: 2.5rem;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-  flex-wrap: wrap;
-}
-
-.ws-num { font-family: var(--display); font-size: 2rem; font-weight: 900; color: var(--amber); line-height: 1; }
-.ws-desc { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.war-story{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);padding:2rem 2.5rem;margin-top:3rem}
+.ws-label{font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem}
+.ws-text{font-size:1.05rem;line-height:1.8;color:var(--text);font-style:italic}
+.ws-numbers{display:flex;gap:2.5rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);flex-wrap:wrap}
+.ws-num{font-family:var(--display);font-size:2rem;font-weight:900;color:var(--amber);line-height:1}
+.ws-desc{font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:0.2rem;text-transform:uppercase;letter-spacing:0.08em}
 
 /* CONTENTS */
-.contents-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1px;
-  border: 1px solid var(--border);
-  margin-top: 3rem;
-  background: var(--border);
-}
+.contents-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;border:1px solid var(--border);margin-top:3rem;background:var(--border)}
+.content-cell{background:var(--surface);padding:1.5rem;transition:background 0.2s}
+.content-cell:hover{background:var(--surface2)}
+.content-cell-icon{font-size:1.2rem;margin-bottom:0.75rem}
+.content-cell-title{font-family:var(--display);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.4rem}
+.content-cell-desc{font-size:0.82rem;color:var(--muted);line-height:1.6}
+.content-cell-count{display:inline-block;font-family:var(--mono);font-size:0.65rem;color:var(--amber);border:1px solid rgba(212,130,10,0.3);padding:0.15rem 0.4rem;margin-top:0.5rem}
 
-.content-cell {
-  background: var(--surface);
-  padding: 1.5rem;
-  transition: background 0.2s;
-}
+/* CASE STUDY */
+.case-preview{margin-top:3rem;border:1px solid var(--border);overflow:hidden}
+.case-preview-header{background:rgba(212,130,10,0.08);border-bottom:1px solid var(--border);padding:0.75rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem}
+.case-preview-label{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase}
+.case-preview-verdict{font-family:var(--display);font-size:1rem;font-weight:900;color:#e74c3c;letter-spacing:0.05em}
+.case-preview-body{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
+@media(max-width:700px){.case-preview-body{grid-template-columns:repeat(2,1fr)}}
+.case-page{background:var(--surface2);padding:1.25rem 1rem;position:relative;min-height:140px}
+.case-page-num{font-family:var(--mono);font-size:0.58rem;color:var(--amber);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;opacity:0.7}
+.case-page-title{font-family:var(--display);font-size:0.85rem;font-weight:700;text-transform:uppercase;color:var(--text);line-height:1.2;margin-bottom:0.4rem}
+.case-page-lines{display:flex;flex-direction:column;gap:0.2rem}
+.case-line{height:6px;background:var(--border);border-radius:2px}
+.case-line.amber{background:rgba(212,130,10,0.3);width:60%}
+.case-line.short{width:75%}.case-line.med{width:90%}.case-line.long{width:100%}
+.case-page-key{position:absolute;bottom:0.75rem;left:1rem;right:1rem;font-family:var(--mono);font-size:0.62rem;color:var(--amber);background:rgba(8,8,7,0.85);padding:0.3rem 0.5rem;border-left:2px solid var(--amber)}
+.case-preview-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);background:rgba(231,76,60,0.04);font-family:var(--mono);font-size:0.72rem;color:var(--muted);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem}
+.case-preview-footer b{color:var(--text)}
 
-.content-cell:hover { background: var(--surface2); }
-
-.content-cell-icon { font-size: 1.2rem; margin-bottom: 0.75rem; }
-.content-cell-title {
-  font-family: var(--display);
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  margin-bottom: 0.4rem;
-}
-
-.content-cell-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
-
-.content-cell-count {
-  display: inline-block;
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--amber);
-  border: 1px solid rgba(212,130,10,0.3);
-  padding: 0.15rem 0.4rem;
-  margin-top: 0.5rem;
-}
-
-/* PRICING */
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  margin-top: 3rem;
-  background: var(--border);
-}
-
-@media(max-width:900px){ .pricing-grid { grid-template-columns: 1fr; } }
-
-.price-card {
-  background: var(--surface);
-  padding: 2rem;
-  position: relative;
-  transition: background 0.2s;
-}
-
-.price-card.featured {
-  background: var(--surface2);
-  border-top: 2px solid var(--amber);
-}
-
-.price-card.featured::before {
-  content: 'MOST POPULAR';
-  position: absolute;
-  top: -1px;
-  right: 1.5rem;
-  background: var(--amber);
-  color: #000;
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  padding: 0.2rem 0.6rem;
-}
-
-.price-tier {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--amber);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-
-.price-name {
-  font-family: var(--display);
-  font-size: 1.8rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-}
-
-.price-desc { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.5; }
-
-.price-amount {
-  font-family: var(--display);
-  font-size: 3.5rem;
-  font-weight: 900;
-  color: var(--amber);
-  line-height: 1;
-  margin-bottom: 0.25rem;
-}
-
-.price-amount sup { font-size: 1.4rem; vertical-align: super; }
-
-.price-note {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--muted);
-  margin-bottom: 1.5rem;
-}
-
-.price-divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
-
-.price-includes {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--muted);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-
-.price-feature {
-  display: flex;
-  gap: 0.6rem;
-  margin-bottom: 0.65rem;
-  font-size: 0.83rem;
-  align-items: flex-start;
-}
-
-.price-feature .check { color: var(--green-bright); flex-shrink: 0; margin-top: 0.1rem; }
-.price-feature .cross { color: var(--muted); flex-shrink: 0; margin-top: 0.1rem; }
-.price-feature .label { color: var(--text); }
-.price-feature .label.dim { color: var(--muted); }
-
-.btn-tier {
-  display: block;
-  width: 100%;
-  text-align: center;
-  padding: 0.85rem;
-  font-family: var(--display);
-  font-size: 1rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  text-decoration: none;
-  margin-top: 1.5rem;
-  transition: background 0.2s, color 0.2s;
-}
-
-.btn-tier-primary { background: var(--amber); color: #000; }
-.btn-tier-primary:hover { background: var(--amber-bright); }
-.btn-tier-secondary { border: 1px solid var(--border); color: var(--text); }
-.btn-tier-secondary:hover { border-color: var(--amber); color: var(--amber); }
-
-/* AUDIT CTA */
-.audit-block {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--amber);
-  padding: 3rem;
-  margin-top: 4rem;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 3rem;
-  align-items: center;
-}
-
-@media(max-width:768px){ .audit-block { grid-template-columns: 1fr; } }
-
-.audit-tag {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--amber);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
-}
-
-.audit-title {
-  font-family: var(--display);
-  font-size: 2rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
-}
-
-.audit-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; max-width: 500px; }
-
-.audit-price-block { text-align: center; white-space: nowrap; }
-.audit-price {
-  font-family: var(--display);
-  font-size: 3rem;
-  font-weight: 900;
-  color: var(--amber);
-  line-height: 1;
-}
-
-.audit-price sup { font-size: 1.2rem; vertical-align: super; }
-.audit-price-note { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-top: 0.3rem; margin-bottom: 1rem; }
+/* BIO */
+.bio-block{display:grid;grid-template-columns:auto 1fr;gap:2.5rem;align-items:start;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);padding:2.5rem;margin-top:4rem}
+@media(max-width:700px){.bio-block{grid-template-columns:1fr}}
+.bio-thumb{width:96px;height:96px;border:2px solid var(--amber);overflow:hidden;background:var(--surface2)}
+.bio-thumb img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.bio-thumb-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:2.5rem;font-weight:900;color:var(--amber);opacity:0.4}
+.bio-label{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.5rem}
+.bio-name{font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;line-height:1;margin-bottom:0.25rem}
+.bio-title{font-family:var(--mono);font-size:0.7rem;color:var(--muted);margin-bottom:1rem;letter-spacing:0.05em}
+.bio-numbers{display:flex;gap:2rem;margin-bottom:1.25rem;flex-wrap:wrap;padding:0.75rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.bio-num-item .num{font-family:var(--display);font-size:1.5rem;font-weight:900;color:var(--amber);line-height:1}
+.bio-num-item .lbl{font-family:var(--mono);font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.15rem}
+.bio-text{font-size:0.88rem;color:var(--muted);line-height:1.75;max-width:580px}
+.bio-text strong{color:var(--text)}
 
 /* FAQ */
-.faq-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: var(--border);
-  margin-top: 3rem;
-  border: 1px solid var(--border);
-}
-
-@media(max-width:768px){ .faq-grid { grid-template-columns: 1fr; } }
-
-details {
-  background: var(--surface);
-  padding: 0;
-}
-
-summary {
-  padding: 1.25rem 1.5rem;
-  cursor: pointer;
-  list-style: none;
-  font-family: var(--display);
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  transition: color 0.2s;
-}
-
-summary:hover { color: var(--amber); }
-
-summary::after {
-  content: '+';
-  font-family: var(--mono);
-  font-size: 1.2rem;
-  color: var(--amber);
-  flex-shrink: 0;
-  transition: transform 0.2s;
-}
-
-details[open] summary::after { transform: rotate(45deg); }
-details[open] { background: var(--surface2); }
-
-.faq-answer {
-  padding: 0 1.5rem 1.25rem;
-  font-size: 0.88rem;
-  color: var(--muted);
-  line-height: 1.7;
-  border-top: 1px solid var(--border);
-  padding-top: 1rem;
-  margin-top: -0.1rem;
-}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:3rem;border:1px solid var(--border)}
+@media(max-width:768px){.faq-grid{grid-template-columns:1fr}}
+details{background:var(--surface);padding:0}
+summary{padding:1.25rem 1.5rem;cursor:pointer;list-style:none;font-family:var(--display);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.02em;display:flex;justify-content:space-between;align-items:center;gap:1rem;transition:color 0.2s}
+summary:hover{color:var(--amber)}
+summary::after{content:'+';font-family:var(--mono);font-size:1.2rem;color:var(--amber);flex-shrink:0;transition:transform 0.2s}
+details[open] summary::after{transform:rotate(45deg)}
+details[open]{background:var(--surface2)}
+.faq-answer{padding:0 1.5rem 1.25rem;font-size:0.88rem;color:var(--muted);line-height:1.7;border-top:1px solid var(--border);padding-top:1rem;margin-top:-0.1rem}
 
 /* FINAL CTA */
-.final-cta {
-  text-align: center;
-  padding: 6rem 2.5rem;
-  border-top: 1px solid var(--border);
-  position: relative;
-}
-
-.final-cta::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 50%; transform: translateX(-50%);
-  width: 1px; height: 100%;
-  background: linear-gradient(to bottom, var(--amber), transparent);
-  opacity: 0.2;
-}
-
-.final-cta h2 { margin: 0 auto 1.5rem; max-width: 700px; }
+.final-cta{text-align:center;padding:6rem 2.5rem;border-top:1px solid var(--border);position:relative;z-index:1}
+.final-cta::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:100%;background:linear-gradient(to bottom,var(--amber),transparent);opacity:0.2}
+.final-cta h2{margin:0 auto 1.5rem;max-width:700px}
 
 /* FOOTER */
-footer {
-  border-top: 1px solid var(--border);
-  padding: 2rem 2.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--muted);
-}
+footer{border-top:1px solid var(--border);padding:2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-family:var(--mono);font-size:0.7rem;color:var(--muted);position:relative;z-index:1}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--amber)}
 
-footer a { color: var(--muted); text-decoration: none; }
-footer a:hover { color: var(--amber); }
-
-/* ANIMATIONS */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeDown {
-  from { opacity: 0; transform: translateY(-12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* SCROLL REVEALS */
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* UTILITY */
-.text-amber { color: var(--amber); }
-.mt-sm { margin-top: 0.5rem; }
-.mt-md { margin-top: 1.5rem; }
-
-@media(max-width:600px){
-  nav { padding: 0.75rem 1rem; }
-  .nav-stat { display: none; }
-  .section { padding: 3rem 1.25rem; }
-  .section-full { padding: 3rem 1.25rem; }
-  .audit-block { padding: 1.5rem; }
-  .faq-grid { grid-template-columns: 1fr; }
-  .audit-bullets { grid-template-columns: 1fr !important; }
-}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.btn-primary{background:var(--amber);color:#000;padding:0.9rem 2rem;font-family:var(--display);font-size:1.1rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none;transition:background 0.2s,transform 0.15s;display:inline-block}
+.btn-primary:hover{background:var(--amber-bright);transform:translateY(-1px)}
+.btn-secondary{border:1px solid var(--border);color:var(--text);padding:0.9rem 1.5rem;font-family:var(--mono);font-size:0.8rem;text-decoration:none;transition:border-color 0.2s,color 0.2s;display:inline-block}
+.btn-secondary:hover{border-color:var(--amber);color:var(--amber)}
+@media(max-width:600px){nav{padding:0.75rem 1rem}.nav-stat{display:none}.section{padding:3rem 1.25rem}.section-full{padding:3rem 1.25rem}}
 </style>
-<style>
-@keyframes revealFallback { to { opacity: 1; transform: translateY(0); } }
-.reveal { animation: revealFallback 0.6s ease 0.3s both; }
-</style></head>
+</head>
 <body>
 
-<!-- CLASSIFIED BANNER -->
-<div class="classified">⚠ CLASSIFIED OPERATIONAL DOCUMENT — CROWDFUNDING MOMENTUM KIT ⚠</div>
+<div class="classified-bar">⚠ CLASSIFIED OPERATIONAL DOCUMENT — CROWDFUNDING MOMENTUM KIT · THE ARCHITECT ⚠</div>
 
-<!-- NAV -->
 <nav>
   <div class="nav-brand">
     <div class="nav-icon">TA</div>
     <div class="nav-name">The <span>Architect</span></div>
   </div>
   <div class="nav-right">
-    <div class="nav-stat"><b>$890K</b> raised · 5 campaigns</div>
-    <a href="#pricing" class="btn-nav">GET THE KIT</a>
+    <div class="nav-stat"><b>$890K+</b> raised · 5 campaigns</div>
+    <a href="#pricing" class="btn-nav">Get the Kit</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-left">
-    <div class="classified-tag">Operational Intelligence · KS / IGG</div>
+    <div class="classified-tag">Crowdfunding Operations · KS / IGG</div>
     <h1>
       The Only<br>
       <span class="line-amber">Crowdfunding</span><br>
@@ -880,55 +345,56 @@ footer a:hover { color: var(--amber); }
       on Real Scars.
       <span class="line-dim">"Most consultants sell you the dream. I sell you the blueprint that survived contact with reality."</span>
     </h1>
-    <p class="hero-desc">
-      111 war-tested tactics. 70 operational tools. Built from 5 real campaigns, $890K raised, and every expensive mistake documented so you don't repeat it.
-    </p>
+    <p class="hero-desc">$890K raised. 5 campaigns. Every expensive mistake documented so you don't repeat it. Self-serve materials that run on the same system I used to build two international brands.</p>
     <div class="hero-stats">
-      <div class="stat-item">
-        <div class="stat-num">$890K</div>
-        <div class="stat-label">Raised across campaigns</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">111</div>
-        <div class="stat-label">Battle-tested tactics</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">70+</div>
-        <div class="stat-label">Operational tools</div>
-      </div>
+      <div><div class="stat-num">$890K</div><div class="stat-label">Raised across campaigns</div></div>
+      <div><div class="stat-num">111</div><div class="stat-label">Battle-tested tactics</div></div>
+      <div><div class="stat-num">5</div><div class="stat-label">Real campaigns</div></div>
     </div>
-    <div class="hero-cta-group">
-      <a href="#pricing" class="btn-primary">Get the Kit</a>
-      <a href="#audit" class="btn-secondary">Book an Audit — $499</a>
+
+    <!-- PATH GATE -->
+    <div class="path-gate">
+      <a href="#pricing" class="path-card active">
+        <div class="path-label"><span class="path-dot"></span>Path A · Ready</div>
+        <div class="path-title">I know I'm launching.<br>Give me the system.</div>
+        <div class="path-desc">You've decided. You need a framework that covers every critical variable before you press Launch.</div>
+        <div class="path-cta">→ See CMK Tiers</div>
+      </a>
+      <a href="https://readinesschecker.elitegrowth.pro" class="path-card">
+        <div class="path-label"><span class="path-dot"></span>Path B · Not Sure Yet</div>
+        <div class="path-title">I don't know<br>where I stand.</div>
+        <div class="path-desc">Free. 4 minutes. Get a scored readiness report on your campaign before you spend anything.</div>
+        <div class="path-cta">→ Take the Free Check</div>
+      </a>
     </div>
   </div>
 
+  <!-- DOC MOCKUP -->
   <div class="hero-right">
     <div class="doc-mockup">
       <div class="doc-header">
         <span class="doc-title">Campaign Intelligence Report</span>
-        <span class="doc-ref">REF: CMK-ARCH-001</span>
+        <span class="doc-ref">REF: CIR-SAMPLE-001</span>
       </div>
       <div class="doc-body">
-        <div class="doc-section-title">Pre-Launch Assessment</div>
-        <div class="doc-row"><span>Email list size</span><span class="warn">847 / min. 2,000</span></div>
-        <div class="doc-row"><span>Day 1 army status</span><span class="fail">NOT BUILT</span></div>
-        <div class="doc-row"><span>Super-backer outreach</span><span class="fail">0 / 50 target</span></div>
-        <div class="doc-row"><span>Pre-launch survey done</span><span class="ok">✓ COMPLETE</span></div>
-        <hr class="doc-divider">
-        <div class="doc-section-title">Financial Readiness</div>
-        <div class="doc-row"><span>Budget w/ stupidity tax</span><span class="warn">$42 est / $58 real</span></div>
-        <div class="doc-row"><span>Shipping cost accuracy</span><span class="fail">23% underestimated</span></div>
+        <div class="doc-st">Pre-Launch Infrastructure</div>
+        <div class="doc-row"><span>Email list (30% rule target)</span><span class="warn">847 / min. 2,000</span></div>
+        <div class="doc-row"><span>Day 1 backer pipeline</span><span class="fail">NOT BUILT</span></div>
+        <div class="doc-row"><span>VIP reservation funnel</span><span class="fail">0 / 50 target</span></div>
+        <div class="doc-row"><span>Demand validation</span><span class="ok">✓ CONFIRMED</span></div>
+        <hr class="doc-div">
+        <div class="doc-st">Financial Readiness</div>
+        <div class="doc-row"><span>COGS accuracy</span><span class="fail">23% underestimated</span></div>
         <div class="doc-row"><span>Refund reserve (5%)</span><span class="fail">NOT ALLOCATED</span></div>
         <div class="doc-row"><span>Hidden cost tracker</span><span class="ok">✓ IN KIT</span></div>
-        <hr class="doc-divider">
-        <div class="doc-section-title">Campaign Page</div>
+        <hr class="doc-div">
+        <div class="doc-st">Campaign Page</div>
         <div class="doc-row"><span>Video length</span><span class="fail">4:12 / max 1:30</span></div>
         <div class="doc-row"><span>Perk structure</span><span class="warn">2 tiers / need 4</span></div>
         <div class="doc-row"><span>Social proof elements</span><span class="ok">✓ STRONG</span></div>
         <div class="doc-score">
-          <span class="doc-score-label">⬡ GO / NO-GO SCORE</span>
-          <span class="doc-score-val">4.1 / 10 — NO-GO</span>
+          <span class="doc-score-label">⬡ READINESS SCORE</span>
+          <span class="doc-score-val">28 / 100 — NO-GO</span>
         </div>
       </div>
     </div>
@@ -937,36 +403,32 @@ footer a:hover { color: var(--amber); }
 
 <hr class="section-divider">
 
-<!-- THE GAP -->
+<!-- THE PROBLEM -->
 <section class="section reveal">
   <div class="section-eyebrow">The Problem</div>
   <h2>Why <em>90%</em> of Campaigns<br>Die in 48 Hours.</h2>
   <p class="section-sub">They follow YouTube advice. They hire "gurus" who've never shipped a product. They skip the Day 1 army. The blueprint doesn't match reality.</p>
-
   <div class="gap-grid">
     <div class="gap-col bad">
       <div class="gap-col-title">✕ Generic Advice</div>
-      <div class="gap-item"><span class="gap-icon">✕</span><span>Theoretical scenarios with no real dollar amounts</span></div>
-      <div class="gap-item"><span class="gap-icon">✕</span><span>Budget templates that ignore the 20% "stupidity tax"</span></div>
-      <div class="gap-item"><span class="gap-icon">✕</span><span>No Day 1 army — launch to silence</span></div>
-      <div class="gap-item"><span class="gap-icon">✕</span><span>Shipping costs calculated wrong — $42 budgeted, $58 real</span></div>
-      <div class="gap-item"><span class="gap-icon">✕</span><span>No Dead Zone recovery plan for days 10–20</span></div>
-      <div class="gap-item"><span class="gap-icon">✕</span><span>"AI-friendly" tone — zero brutal honesty</span></div>
+      <div class="gap-item"><span>✕</span><span>Theoretical scenarios — no real dollar amounts</span></div>
+      <div class="gap-item"><span>✕</span><span>Budget templates that ignore the 20% stupidity tax</span></div>
+      <div class="gap-item"><span>✕</span><span>No Day 1 army — launch to silence</span></div>
+      <div class="gap-item"><span>✕</span><span>Shipping costs wrong — $42 budgeted, $58 real</span></div>
+      <div class="gap-item"><span>✕</span><span>No Dead Zone recovery plan for days 10–20</span></div>
+      <div class="gap-item"><span>✕</span><span>Zero brutal honesty about what doesn't work</span></div>
     </div>
-    <div class="gap-vs">
-      <div class="vs-badge">VS</div>
-    </div>
+    <div class="gap-vs"><div class="vs-badge">VS</div></div>
     <div class="gap-col good">
-      <div class="gap-col-title">✓ The Architect's OS</div>
-      <div class="gap-item"><span class="gap-icon text-amber">✓</span><span>111 real war stories with exact dollar figures</span></div>
-      <div class="gap-item"><span class="gap-icon text-amber">✓</span><span>Budget calculator with stupidity tax built in</span></div>
-      <div class="gap-item"><span class="gap-icon text-amber">✓</span><span>Super-backer database + 48-hour launch playbook</span></div>
-      <div class="gap-item"><span class="gap-icon text-amber">✓</span><span>23-touchpoint hidden cost tracker, real benchmarks</span></div>
-      <div class="gap-item"><span class="gap-icon text-amber">✓</span><span>Dead Zone Recovery Playbook — pre-loaded for days 10–20</span></div>
-      <div class="gap-item"><span class="gap-icon text-amber">✓</span><span>Radical honesty — what doesn't work, documented in blood</span></div>
+      <div class="gap-col-title">✓ The Architect's System</div>
+      <div class="gap-item"><span class="text-amber">✓</span><span>111 real war stories with exact dollar figures</span></div>
+      <div class="gap-item"><span class="text-amber">✓</span><span>Budget calculator with stupidity tax built in</span></div>
+      <div class="gap-item"><span class="text-amber">✓</span><span>Super-backer database + 48-hour launch playbook</span></div>
+      <div class="gap-item"><span class="text-amber">✓</span><span>23-touchpoint hidden cost tracker, real benchmarks</span></div>
+      <div class="gap-item"><span class="text-amber">✓</span><span>Dead Zone Recovery Playbook — pre-loaded for days 10–20</span></div>
+      <div class="gap-item"><span class="text-amber">✓</span><span>Radical honesty — what doesn't work, documented in blood</span></div>
     </div>
   </div>
-
   <div class="war-story">
     <div class="ws-label">▸ War Story — Bullet #44 / Baggizmo Campaign</div>
     <p class="ws-text">"I shipped 800 packages to the US using a budget courier. Quoted: $4.80 per unit. Actual after residential surcharges, fuel fees, and redelivery: $8.40 per unit. That's $2,880 I never budgeted. The campaign was fully funded. The margin was gone. That number is now in the Hidden Cost Tracker so you never repeat it."</p>
@@ -981,162 +443,240 @@ footer a:hover { color: var(--amber); }
 
 <hr class="section-divider">
 
-<!-- WHAT'S INSIDE -->
+<!-- SYSTEM CONTENTS -->
 <div class="section-full">
-  <div class="inner">
-    <div class="section-eyebrow">Arsenal Contents</div>
+  <div class="inner reveal">
+    <div class="section-eyebrow">System Contents</div>
     <h2>196+ Deliverables.<br><em>One Operational System.</em></h2>
-    <p class="section-sub">Not a PDF dump. An operational OS covering every phase from idea to post-campaign retail — built from real campaigns with real outcomes.</p>
-
-    <div class="contents-grid reveal">
-      <div class="content-cell">
-        <div class="content-cell-icon">📖</div>
-        <div class="content-cell-title">The Elite Blueprint</div>
-        <div class="content-cell-desc">11 chapters. 111 bullets, each with Task + Guidance + Architect's Cut + War Story. 444 actionable segments from real campaigns.</div>
-        <div class="content-cell-count">444 segments</div>
-      </div>
-      <div class="content-cell">
-        <div class="content-cell-icon">📊</div>
-        <div class="content-cell-title">12 Calculators</div>
-        <div class="content-cell-desc">Budget with Stupidity Tax, Hidden Cost Tracker (23-touchpoint), 3PL vs Direct, Cash Flow Waterfall, CAC Survival, Pricing Tier Builder.</div>
-        <div class="content-cell-count">12 spreadsheets</div>
-      </div>
-      <div class="content-cell">
-        <div class="content-cell-icon">⚔️</div>
-        <div class="content-cell-title">10 Tactical Playbooks</div>
-        <div class="content-cell-desc">48-Hour Launch Sequence, Dead Zone Recovery, Final 48H Surge, Amazon Survival, V2 Evolution, Day 101, Troll Response, Golden Sample Protocol.</div>
-        <div class="content-cell-count">10 playbooks</div>
-      </div>
-      <div class="content-cell">
-        <div class="content-cell-icon">✉️</div>
-        <div class="content-cell-title">6 Email Sequences</div>
-        <div class="content-cell-desc">Pre-launch nurture, Super-Backer outreach, Post-campaign vault, 14-day survey, Address Lock, Post-fulfillment loyalty (Day 3/14/30/60/90).</div>
-        <div class="content-cell-count">6 sequences</div>
-      </div>
-      <div class="content-cell">
-        <div class="content-cell-icon">✅</div>
-        <div class="content-cell-title">9 Checklists</div>
-        <div class="content-cell-desc">Landing page conversion, VAT/IOSS compliance, Post-campaign Day 1, Pledge Manager setup, IP Protection, Marine cargo insurance, QC inspection.</div>
-        <div class="content-cell-count">9 checklists</div>
-      </div>
-      <div class="content-cell">
-        <div class="content-cell-icon">🎁</div>
-        <div class="content-cell-title">Bonus Vault</div>
-        <div class="content-cell-desc">50+ Support Scripts, Baggizmo Case Study, Crowdfunding Readiness Quiz, Master Press List, Commercial Invoice Template, SOP Documentation.</div>
-        <div class="content-cell-count">15 items</div>
-      </div>
-      <div class="content-cell">
-        <div class="content-cell-icon">🧪</div>
-        <div class="content-cell-title">9 Scored Checkpoints</div>
-        <div class="content-cell-desc">5 GO/NO-GO criteria at the end of every chapter. 45 self-assessment questions that tell you exactly where you're not ready.</div>
-        <div class="content-cell-count">45 criteria</div>
-      </div>
-      <div class="content-cell">
-        <div class="content-cell-icon">📐</div>
-        <div class="content-cell-title">13 Templates</div>
-        <div class="content-cell-desc">Competitor audit, influencer outreach, campaign video structure, perk architecture, backer update calendar, unboxing blueprint, VA onboarding.</div>
-        <div class="content-cell-count">13 templates</div>
-      </div>
+    <p class="section-sub">Not a PDF dump. An operational OS covering every phase from idea to post-campaign retail. The materials are the deliverable — the knowledge is the product.</p>
+    <div class="contents-grid">
+      <div class="content-cell"><div class="content-cell-icon">📖</div><div class="content-cell-title">The Elite Blueprint</div><div class="content-cell-desc">11 chapters. 111 bullets, each with Task + Guidance + Architect's Cut + War Story. 444 actionable segments from real campaigns.</div><div class="content-cell-count">444 segments</div></div>
+      <div class="content-cell"><div class="content-cell-icon">📊</div><div class="content-cell-title">12 Calculators</div><div class="content-cell-desc">Budget with Stupidity Tax, Hidden Cost Tracker (23-touchpoint), 3PL vs Direct, Cash Flow Waterfall, CAC Survival, Pricing Tier Builder.</div><div class="content-cell-count">12 spreadsheets</div></div>
+      <div class="content-cell"><div class="content-cell-icon">⚔️</div><div class="content-cell-title">10 Tactical Playbooks</div><div class="content-cell-desc">48-Hour Launch Sequence, Dead Zone Recovery, Final 48H Surge, Amazon Survival, V2 Evolution, Day 101, Troll Response, Golden Sample Protocol.</div><div class="content-cell-count">10 playbooks</div></div>
+      <div class="content-cell"><div class="content-cell-icon">✉️</div><div class="content-cell-title">6 Email Sequences</div><div class="content-cell-desc">Pre-launch nurture, Super-Backer outreach, Post-campaign vault, 14-day survey, Address Lock, Post-fulfillment loyalty (Day 3/14/30/60/90).</div><div class="content-cell-count">6 sequences</div></div>
+      <div class="content-cell"><div class="content-cell-icon">✅</div><div class="content-cell-title">9 Checklists</div><div class="content-cell-desc">Landing page conversion, VAT/IOSS compliance, Post-campaign Day 1, Pledge Manager setup, IP Protection, Marine cargo insurance, QC inspection.</div><div class="content-cell-count">9 checklists</div></div>
+      <div class="content-cell"><div class="content-cell-icon">🎁</div><div class="content-cell-title">Bonus Vault</div><div class="content-cell-desc">50+ Support Scripts, Baggizmo Case Study, Readiness Quiz, Master Press List, Commercial Invoice Template, SOP Documentation.</div><div class="content-cell-count">15 items</div></div>
+      <div class="content-cell"><div class="content-cell-icon">🧪</div><div class="content-cell-title">9 Scored Checkpoints</div><div class="content-cell-desc">5 GO/NO-GO criteria at the end of every chapter. 45 self-assessment questions that tell you exactly where you're not ready.</div><div class="content-cell-count">45 criteria</div></div>
+      <div class="content-cell"><div class="content-cell-icon">📐</div><div class="content-cell-title">13 Templates</div><div class="content-cell-desc">Competitor audit, influencer outreach, campaign video structure, perk architecture, backer update calendar, unboxing blueprint, VA onboarding.</div><div class="content-cell-count">13 templates</div></div>
     </div>
   </div>
 </div>
 
-<!-- PRICING -->
+<hr class="section-divider">
+
+<!-- CMK PRICING -->
 <section class="section" id="pricing">
-  <div class="section-eyebrow">Choose Your Tier</div>
-  <h2>One Arsenal.<br><em>Three Entry Points.</em></h2>
-  <p class="section-sub">Every tier is a complete operational system. The difference is depth, speed, and how much of my brain you want in the room.</p>
+  <div class="section-eyebrow">CMK Materials</div>
+  <h2>One Arsenal.<br><em>Three Tiers.</em></h2>
+  <p class="section-sub">Self-serve operational materials. Instant access. No consulting time included — this is the system you run yourself. Need my brain in the room? <a href="/momentum.html" style="color:var(--amber);text-decoration:none;">See Momentum Services →</a></p>
+
+  <!-- READINESS STRIP -->
+  <div class="readiness-strip">
+    <div class="rs-left">
+      <div class="rs-icon">RC</div>
+      <div>
+        <div class="rs-label">Free Tool · 4 Minutes</div>
+        <div class="rs-title">Not Sure Which Tier?</div>
+        <div class="rs-desc">Take the Campaign Readiness Check first — it tells you exactly where your gaps are and which tier you need.</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
+      <div class="rs-score-demo">
+        <div class="rs-score-item"><div class="rs-score-num green">75+</div><div class="rs-score-lbl">Blueprint</div></div>
+        <div style="color:var(--border);font-size:1.2rem;">·</div>
+        <div class="rs-score-item"><div class="rs-score-num amber">50–74</div><div class="rs-score-lbl">Pro</div></div>
+        <div style="color:var(--border);font-size:1.2rem;">·</div>
+        <div class="rs-score-item"><div class="rs-score-num red">&lt;50</div><div class="rs-score-lbl">Standard</div></div>
+      </div>
+      <a href="https://readinesschecker.elitegrowth.pro" class="rs-cta">Take Free Check →</a>
+    </div>
+  </div>
 
   <div class="pricing-grid reveal">
-
     <!-- STANDARD -->
     <div class="price-card">
-      <div class="price-tier">// TIER 01</div>
+      <div class="price-tier">// TIER 01 · Affiliate Available</div>
       <div class="price-name">Standard</div>
       <div class="price-desc">The knowledge layer. Everything you need to understand the battlefield before you step onto it.</div>
       <div class="price-amount"><sup>$</sup>299</div>
-      <div class="price-note">One-time · Instant access · <span style="font-family:var(--mono);font-size:0.62rem;color:var(--muted);opacity:0.75;">VAT may apply for EU customers</span></div>
+      <div class="price-note">One-time · Instant access · VAT may apply</div>
       <hr class="price-divider">
       <div class="price-includes">Includes:</div>
       <div class="price-feature"><span class="check">✓</span><span class="label">Elite Blueprint (111 bullets, 11 chapters)</span></div>
       <div class="price-feature"><span class="check">✓</span><span class="label">9 Scored Checkpoints (45 GO/NO-GO criteria)</span></div>
-      <div class="price-feature"><span class="check">✓</span><span class="label">111 War Stories from real campaigns</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">111 War Stories with exact dollar figures</span></div>
       <div class="price-feature"><span class="check">✓</span><span class="label">Epilogue: The 101st Day Manifesto</span></div>
       <div class="price-feature"><span class="cross">—</span><span class="label dim">70 Plugin Tools</span></div>
-      <div class="price-feature"><span class="cross">—</span><span class="label dim">Bonus Vault (15 items)</span></div>
-      <div class="price-feature"><span class="cross">—</span><span class="label dim">Master Press List (300+ contacts)</span></div>
-      <div class="price-feature"><span class="cross">—</span><span class="label dim">Lifetime Updates</span></div>
-      <a href="https://payhip.com/b/rNsfn" class="btn-tier btn-tier-secondary">Get Standard</a>
+      <div class="price-feature"><span class="cross">—</span><span class="label dim">Financial Calculators &amp; Playbooks</span></div>
+      <div class="price-feature"><span class="cross">—</span><span class="label dim">Master Press List · Lifetime Updates</span></div>
+      <a href="https://payhip.com/b/rNsfn" class="btn-tier btn-ts">Get Standard</a>
     </div>
 
     <!-- PRO -->
     <div class="price-card featured">
-      <div class="price-tier">// TIER 02</div>
+      <div class="price-tier">// TIER 02 · Affiliate Available</div>
       <div class="price-name">Pro</div>
-      <div class="price-desc">The full operational system. Knowledge + every tool, calculator, playbook, and sequence you'll run during the campaign.</div>
+      <div class="price-desc">The full operational toolkit. Knowledge plus every calculator, playbook, and email sequence you'll actually run.</div>
       <div class="price-amount"><sup>$</sup>699</div>
-      <div class="price-note">One-time · Instant access · <span style="font-family:var(--mono);font-size:0.62rem;color:var(--muted);opacity:0.75;">VAT may apply for EU customers</span></div>
+      <div class="price-note">One-time · Instant access · VAT may apply</div>
       <hr class="price-divider">
       <div class="price-includes">Everything in Standard, plus:</div>
-      <div class="price-feature"><span class="check">✓</span><span class="label">70 Plugin Tools (calculators, playbooks, email sequences)</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">70 Plugin Tools — calculators, templates, scripts</span></div>
       <div class="price-feature"><span class="check">✓</span><span class="label">12 Financial Calculators incl. Hidden Cost Tracker</span></div>
       <div class="price-feature"><span class="check">✓</span><span class="label">10 Tactical Playbooks (48H Launch, Dead Zone, Surge)</span></div>
       <div class="price-feature"><span class="check">✓</span><span class="label">6 Complete Email Sequences</span></div>
       <div class="price-feature"><span class="check">✓</span><span class="label">Master Campaign Checklist</span></div>
-      <div class="price-feature"><span class="cross">—</span><span class="label dim">Bonus Vault (15 items)</span></div>
-      <div class="price-feature"><span class="cross">—</span><span class="label dim">Master Press List (300+ contacts)</span></div>
-      <div class="price-feature"><span class="cross">—</span><span class="label dim">Lifetime Updates</span></div>
-      <a href="https://payhip.com/b/JCx6L" class="btn-tier btn-tier-primary">Get Pro</a>
+      <div class="price-feature"><span class="cross">—</span><span class="label dim">Master Press List · Lifetime Updates</span></div>
+      <a href="https://payhip.com/b/JCx6L" class="btn-tier btn-tp">Get Pro</a>
     </div>
 
-    <!-- ELITE -->
+    <!-- BLUEPRINT -->
     <div class="price-card">
-      <div class="price-tier">// TIER 03</div>
-      <div class="price-name">Elite</div>
-      <div class="price-desc">The complete arsenal. Everything in Pro plus the press network, support vault, case study, and lifetime updates as campaigns evolve.</div>
-      <div class="price-amount"><sup>$</sup>1,299</div>
-      <div class="price-note">One-time · Instant access · Lifetime updates · <span style="font-family:var(--mono);font-size:0.62rem;color:var(--muted);opacity:0.75;">VAT may apply for EU customers</span></div>
+      <div class="price-tier">// TIER 03 · Exclusive · No Affiliate</div>
+      <div class="price-name">The Blueprint</div>
+      <div class="price-desc">The complete system. Pro plus the press network, Baggizmo case study, $250K Mistake Map, and lifetime updates.</div>
+      <div class="price-amount"><sup>$</sup>999</div>
+      <div class="price-note">One-time · Instant access · Lifetime updates</div>
       <hr class="price-divider">
       <div class="price-includes">Everything in Pro, plus:</div>
       <div class="price-feature"><span class="check">✓</span><span class="label">Bonus Vault — 15 standalone deliverables</span></div>
-      <div class="price-feature"><span class="check">✓</span><span class="label">50+ Support Scripts Vault (every complaint, answered)</span></div>
-      <div class="price-feature"><span class="check">✓</span><span class="label">Master Press List — 300+ journalists, editors, searchable</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">50+ Support Scripts Vault</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">Master Press List — 300+ journalists, searchable</span></div>
       <div class="price-feature"><span class="check">✓</span><span class="label">Full Baggizmo Case Study — real campaign, real numbers</span></div>
-      <div class="price-feature"><span class="check">✓</span><span class="label">Living Notion Workspace — updated as campaigns run</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">$250K Mistake Map — 29 most expensive errors</span></div>
       <div class="price-feature"><span class="check">✓</span><span class="label">Lifetime Updates — new war stories, new tools</span></div>
-      <div class="price-feature"><span class="check">✓</span><span class="label">$250K Mistake Map — the 29 most expensive errors</span></div>
-      <a href="https://payhip.com/b/ALXuq" class="btn-tier btn-tier-secondary">Get Elite</a>
+      <a href="#" class="btn-tier btn-ts">Get The Blueprint</a>
     </div>
-
   </div>
 
-  <!-- AUDIT CTA -->
-  <div class="audit-block reveal" id="audit">
+  <!-- AUDIT HOOK -->
+  <div class="audit-hook reveal" id="audit">
     <div>
-      <div class="audit-tag">▸ Not ready to buy? Start here.</div>
-      <div class="audit-title">Get a Campaign Audit First.</div>
-      <p class="audit-desc">Before you invest in a campaign — or before you relaunch a failing one — I'll run your numbers, your page, your strategy through my full framework. You get a Go/NO-GO score, 5 critical gaps, a fix priority matrix, and a restart plan if needed. Every audit ends with a clear path forward.</p>
-      <p class="audit-desc mt-sm" style="margin-top:0.75rem;">If CMK can fix it yourself — I'll tell you which tier. If you need me in the room — I'll tell you that too.</p>
-      <div style="margin-top:1.25rem;border-top:1px solid var(--border);padding-top:1.25rem;">
-        <div style="font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;">What's in the report:</div>
-        <div class="audit-bullets" style="display:grid;grid-template-columns:1fr 1fr;gap:0.35rem 1.5rem;">
-          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--amber);flex-shrink:0;">✓</span><span>Go / NO-GO Score</span></div>
-          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--amber);flex-shrink:0;">✓</span><span>Budget Reality Check</span></div>
-          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--amber);flex-shrink:0;">✓</span><span>5 Critical Gaps + dollar amounts</span></div>
-          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--amber);flex-shrink:0;">✓</span><span>Competitive Landscape</span></div>
-          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--amber);flex-shrink:0;">✓</span><span>Fix Priority Matrix</span></div>
-          <div style="font-size:0.82rem;color:var(--text);display:flex;gap:0.5rem;align-items:flex-start;"><span style="color:var(--amber);flex-shrink:0;">✓</span><span>Restart Plan (if needed)</span></div>
-        </div>
-        <a href="/audit.html" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.72rem;color:var(--amber);text-decoration:none;margin-top:0.9rem;border-bottom:1px solid rgba(212,130,10,0.3);padding-bottom:0.1rem;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">▸ Full breakdown + 30-day guarantee →</a>
+      <div class="ah-tag">▸ Not sure which tier? Need a diagnosis first.</div>
+      <div class="ah-title">Get Your Campaign Intelligence Report.</div>
+      <p class="ah-desc">Before you invest in a campaign — or before you relaunch a failing one — I run your numbers, your page, your strategy through the full 8-module framework. GO/NO-GO verdict. Every critical gap quantified in dollars. The report tells you which CMK tier your situation requires.</p>
+      <div class="ah-items">
+        <div class="ah-item"><span>✓</span>GO / NO-GO Verdict</div>
+        <div class="ah-item"><span>✓</span>Win-Before-Launch Math</div>
+        <div class="ah-item"><span>✓</span>Critical Gap Analysis</div>
+        <div class="ah-item"><span>✓</span>Platform Risk Assessment</div>
+        <div class="ah-item"><span>✓</span>Fix Priority Matrix</div>
+        <div class="ah-item"><span>✓</span>72h delivery</div>
       </div>
     </div>
-    <div class="audit-price-block">
-      <div class="audit-price"><sup>$</sup>499</div>
-      <div class="audit-price-note">One-time · Delivered in 72h · <span style="font-family:var(--mono);font-size:0.62rem;color:var(--muted);opacity:0.75;">VAT may apply for EU customers</span></div>
-      <a href="https://payhip.com/b/FP7Aq" class="btn-tier btn-tier-primary">Order Audit Now</a>
+    <div class="ah-price-block">
+      <div class="ah-price"><sup>$</sup>499</div>
+      <div class="ah-price-note">One-time · 72h delivery · 30-day guarantee</div>
+      <a href="/audit.html" class="btn-primary">Order CIR — $499</a>
+    </div>
+  </div>
+
+  <!-- MOMENTUM BRIDGE -->
+  <div class="momentum-bridge reveal">
+    <div class="mb-eyebrow">Next Level</div>
+    <div class="mb-title">Need More Than Materials?<br>The Architect Comes With It.</div>
+    <p class="mb-desc">CMK gives you the system. Momentum Services puts me in the room — reviewing your numbers, stress-testing your strategy, or running the entire campaign. Three engagement levels, one clear upgrade path from the Blueprint.</p>
+    <div class="mb-tiers">
+      <div class="mb-tier">
+        <div class="mb-tier-mode">DIY + Architect</div>
+        <div class="mb-tier-name">CMK Elite</div>
+        <div class="mb-tier-price">$1,997</div>
+        <div style="font-family:var(--mono);font-size:0.6rem;color:var(--muted);margin-top:0.4rem;">Blueprint + 2h consulting · After Audit only</div>
+      </div>
+      <div class="mb-tier">
+        <div class="mb-tier-mode">Done With You</div>
+        <div class="mb-tier-name">The Campaign</div>
+        <div class="mb-tier-price">$2,500</div>
+        <div style="font-family:var(--mono);font-size:0.6rem;color:var(--muted);margin-top:0.4rem;">4 strategic calls · Full phases covered</div>
+      </div>
+      <div class="mb-tier">
+        <div class="mb-tier-mode">Done For You</div>
+        <div class="mb-tier-name">The Command</div>
+        <div class="mb-tier-price">$10K+</div>
+        <div style="font-family:var(--mono);font-size:0.6rem;color:var(--muted);margin-top:0.4rem;">I run the campaign · + success fee</div>
+      </div>
+    </div>
+    <a href="/momentum.html" class="mb-cta">See Momentum Services →</a>
+    <div class="mb-cta-note">Application required for The Campaign and The Command · Very limited availability</div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- CASE STUDY -->
+<section class="section reveal">
+  <div class="section-eyebrow">Proof of Work · Redacted</div>
+  <h2>What a CIR<br><em>Actually Delivers.</em></h2>
+  <p class="section-sub">Fashion & wearables. Indiegogo pre-launch. February 2026. Full 8-module report in 72h. Launch delayed — MVL plan implemented. Potential loss avoided: $5,000–$15,000.</p>
+  <div class="case-preview">
+    <div class="case-preview-header">
+      <span class="case-preview-label">CIR · Fashion & Wearables · Indiegogo · Pre-Launch · Feb 2026 · [CLIENT REDACTED]</span>
+      <span class="case-preview-verdict">⬡ VERDICT: 28/100 — NO-GO</span>
+    </div>
+    <div class="case-preview-body">
+      <div class="case-page">
+        <div class="case-page-num">Module 01</div>
+        <div class="case-page-title">GO / NO-GO Verdict</div>
+        <div class="case-page-lines"><div class="case-line amber"></div><div class="case-line long"></div><div class="case-line med"></div><div class="case-line short"></div><div class="case-line long"></div><div class="case-line med"></div></div>
+        <div class="case-page-key">Score: 28/100 · NO-GO → Conditional GO</div>
+      </div>
+      <div class="case-page">
+        <div class="case-page-num">Module 02</div>
+        <div class="case-page-title">Win-Before-Launch Math</div>
+        <div class="case-page-lines"><div class="case-line amber"></div><div class="case-line long"></div><div class="case-line long"></div><div class="case-line med"></div><div class="case-line short"></div><div class="case-line long"></div></div>
+        <div class="case-page-key">Day 1 gap: $10,500 target · $0 pipeline</div>
+      </div>
+      <div class="case-page">
+        <div class="case-page-num">Module 06</div>
+        <div class="case-page-title">Platform Risk Assessment</div>
+        <div class="case-page-lines"><div class="case-line amber"></div><div class="case-line long"></div><div class="case-line med"></div><div class="case-line long"></div><div class="case-line short"></div><div class="case-line med"></div></div>
+        <div class="case-page-key">Fund hold risk: HIGH · Trust & Safety flag</div>
+      </div>
+      <div class="case-page">
+        <div class="case-page-num">Module 08</div>
+        <div class="case-page-title">Conditional GO Roadmap</div>
+        <div class="case-page-lines"><div class="case-line amber"></div><div class="case-line long"></div><div class="case-line med"></div><div class="case-line short"></div><div class="case-line long"></div><div class="case-line med"></div></div>
+        <div class="case-page-key">6–8 week MVL plan · Exact sequence</div>
+      </div>
+    </div>
+    <div class="case-preview-footer">
+      <span><b>Outcome:</b> Launch delayed. MVL plan implemented. Est. $5K–$15K loss avoided. Upwork 5★ review received.</span>
+      <a href="/audit.html" style="font-family:var(--mono);font-size:0.68rem;color:var(--amber);text-decoration:none;border-bottom:1px solid rgba(212,130,10,0.3);">See full CIR breakdown →</a>
     </div>
   </div>
 </section>
+
+<hr class="section-divider">
+
+<!-- BIO -->
+<div class="section-full">
+  <div class="inner reveal">
+    <div class="section-eyebrow">The Operator Behind the System</div>
+    <h2>Not a Guru.<br><em>A Founder.</em></h2>
+    <p class="section-sub">Every tactic in this system was paid for with real money, real delays, and real factory arguments. There is no theory here.</p>
+    <div class="bio-block">
+      <div>
+        <div class="bio-thumb">
+          <img src="/assets/ladislav.jpg" alt="Ladislav Jurić — The Architect" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="bio-thumb-placeholder" style="display:none;">LJ</div>
+        </div>
+      </div>
+      <div>
+        <div class="bio-label">▸ The Architect</div>
+        <div class="bio-name">Ladislav Jurić</div>
+        <div class="bio-title">Crowdfunding Operator · Launch Engineer · Operations Architect</div>
+        <div class="bio-numbers">
+          <div class="bio-num-item"><div class="num">$890K+</div><div class="lbl">Raised across campaigns</div></div>
+          <div class="bio-num-item"><div class="num">5</div><div class="lbl">Successful campaigns</div></div>
+          <div class="bio-num-item"><div class="num">800+</div><div class="lbl">Units shipped globally</div></div>
+          <div class="bio-num-item"><div class="num">2</div><div class="lbl">Brands built from zero</div></div>
+        </div>
+        <p class="bio-text">He isn't a "guru" who read a book and decided to teach. He's the guy who bled for every millimeter. With <strong>Baggizmo and Wiseward</strong> — two global campaigns built from scratch — Ladislav navigated international manufacturing, 3PL logistics, platform compliance, and the psychological warfare of crowdfunding more times than most "experts" have checked their email.</p>
+        <p class="bio-text" style="margin-top:0.75rem;">He shipped pallets to America without ever having been there. He handled factory renegotiations at 3 AM. He watched his margin disappear on a single shipping surcharge he hadn't budgeted. <strong>Every mistake in the CMK happened to him first.</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
 
 <hr class="section-divider">
 
@@ -1144,50 +684,54 @@ footer a:hover { color: var(--amber); }
 <section class="section reveal">
   <div class="section-eyebrow">Intel Briefing</div>
   <h2>Questions.<br><em>Answered.</em></h2>
-
   <div class="faq-grid">
     <details>
-      <summary>Who is The Architect?</summary>
-      <p class="faq-answer">Five campaigns. $890K raised. Baggizmo, Wiseward, and others. Every mistake in the kit happened to me first — overstock losses, factory renegotiations, shipping surcharges that wiped margins, campaigns that almost died on Day 18. The CMK is the operational system I wish I had on campaign one.</p>
+      <summary>Where do I start?</summary>
+      <p class="faq-answer">If you're not sure where you stand — take the <a href="https://readinesschecker.elitegrowth.pro" style="color:var(--amber);">free Readiness Check</a>. It scores your campaign and tells you exactly which tier fits. If you know you're ready to launch — CMK Standard or Pro. If you want the complete system — The Blueprint ($999).</p>
     </details>
     <details>
-      <summary>Is this for first-time founders?</summary>
-      <p class="faq-answer">Primarily yes — 85% of Kickstarter backers back campaigns from creators they've never heard of before. This is built for founders who don't have a brand, don't have an audience, and need a system that compensates for both. It also works for repeat founders who want to stop guessing.</p>
+      <summary>What's the difference between Pro and The Blueprint?</summary>
+      <p class="faq-answer">Pro is the full operational toolkit — every calculator, playbook, and email sequence. The Blueprint adds the press network (300+ contacts), the full Baggizmo Case Study with real campaign numbers, the $250K Mistake Map, and lifetime updates as new campaigns generate new war stories. Pro is complete. Blueprint is definitive.</p>
     </details>
     <details>
-      <summary>What's the difference between CMK and a consulting call?</summary>
-      <p class="faq-answer">CMK is the system. Consulting is me operating it with you. Most founders can run 80% of this solo with Pro or Elite. If your campaign is complex, failing, or high-stakes — an Audit or Co-Pilot engagement gives you my analysis on YOUR specific situation, not a general framework.</p>
+      <summary>What's the difference between CMK and Momentum Services?</summary>
+      <p class="faq-answer">CMK is the system — materials, tools, frameworks you run yourself. Momentum Services adds my direct time: 2h consulting with the Blueprint (CMK Elite, $1,997), 4 strategic calls across your campaign (The Campaign, $2,500), or full campaign management (The Command, $10K+). <a href="/momentum.html" style="color:var(--amber);">See Momentum Services →</a></p>
+    </details>
+    <details>
+      <summary>What is the Campaign Intelligence Report?</summary>
+      <p class="faq-answer">A full 8-module audit of your campaign — GO/NO-GO verdict, Win-Before-Launch math, platform risk assessment, competitive benchmark, and a fix priority matrix. Delivered in 72 hours. The report tells you which CMK tier your situation requires — or whether you need a Momentum Services engagement. $499, 30-day guarantee.</p>
     </details>
     <details>
       <summary>What platforms does this cover?</summary>
       <p class="faq-answer">Kickstarter and Indiegogo primarily. The operational principles — budget management, launch strategy, backer communication, logistics — apply across both. Platform-specific tactics are clearly labeled throughout.</p>
     </details>
     <details>
-      <summary>What if my campaign is already live and struggling?</summary>
-      <p class="faq-answer">Start with the Audit ($499). That's built specifically for campaigns in crisis — it gives you a Go/NO-GO, identifies what's killing your momentum, and builds a restart or surge plan. The Dead Zone Recovery Playbook (in Pro/Elite) is directly applicable to campaigns at 30-70% with days remaining.</p>
+      <summary>My campaign is live and struggling. Now what?</summary>
+      <p class="faq-answer">Start with the Campaign Intelligence Report ($499). Built for campaigns in crisis — root cause identification, surge plan, and restart playbook if needed. The Dead Zone Recovery Playbook (included in Pro and Blueprint) is directly applicable to campaigns at 30–70% with days remaining.</p>
     </details>
     <details>
       <summary>Is there a refund policy?</summary>
-      <p class="faq-answer">7 days, no questions. The Audit has a stronger guarantee: if your campaign doesn't improve by 15%+ within 30 days of implementing the recommendations, I'll re-audit for free and personally build your restart plan.</p>
+      <p class="faq-answer">7 days, no questions asked on all CMK tiers. The CIR has a stronger guarantee: implement at least 3 of the critical recommendations — if your campaign metrics don't improve 15%+ within 30 days, I'll re-audit for free and personally build your restart plan.</p>
+    </details>
+    <details>
+      <summary>Who is The Architect?</summary>
+      <p class="faq-answer">Ladislav Jurić. Five campaigns. $890K raised. Baggizmo, Wiseward, and others. Every mistake in this system happened to me first — overstock losses, factory renegotiations, shipping surcharges that wiped margins, campaigns that almost died on Day 18. The CMK is the operational system I wish I had on campaign one.</p>
     </details>
   </div>
 </section>
 
 <!-- FINAL CTA -->
 <div class="final-cta reveal">
-  <div class="section-eyebrow" style="justify-content:center">Deploy the OS</div>
+  <div class="section-eyebrow" style="justify-content:center">Deploy the System</div>
   <h2>Your Campaign.<br><em>The Architect's Blueprint.</em></h2>
-  <p style="color:var(--muted);max-width:480px;margin:0 auto 2.5rem;font-size:0.95rem;line-height:1.7;">
-    196+ deliverables. Real numbers from real campaigns. Every mistake documented so you don't repeat it. If it doesn't save you hours in the first week — full refund.
-  </p>
+  <p style="color:var(--muted);max-width:500px;margin:0 auto 2.5rem;font-size:0.95rem;line-height:1.7;">Not sure where to start? The free Readiness Check will score your campaign in 4 minutes and tell you exactly which tier you need.</p>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
     <a href="#pricing" class="btn-primary">Choose Your Tier</a>
-    <a href="#audit" class="btn-secondary">Start with an Audit — $499</a>
+    <a href="https://readinesschecker.elitegrowth.pro" class="btn-secondary">Free Readiness Check →</a>
   </div>
   <p style="font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:1.25rem;">7-day guarantee · Instant access · Built from $890K in real campaigns</p>
 </div>
 
-<!-- FOOTER -->
 <footer>
   <span>© 2026 The Architect™ · Elitegrowth d.o.o.</span>
   <div style="display:flex;gap:1.5rem;">
@@ -1198,13 +742,10 @@ footer a:hover { color: var(--amber); }
   </div>
 </footer>
 
-
 <script>
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if(e.isIntersecting) { e.target.classList.add('visible'); }
-  });
-}, { threshold: 0.1 });
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); } });
+}, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
