@@ -1,64 +1,21 @@
-<<<<<<< Updated upstream
-import Image from "next/image";
-import styles from "./page.module.css";
-
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-=======
-import SiteNav from "@/components/SiteNav";
-import SiteFooter from "@/components/SiteFooter";
-
 export default function Home() {
   return (
     <main className="cmk-container">
-      <SiteNav />
+      <header className="cmk-nav" role="banner">
+        <div className="cmk-nav-inner">
+          <a className="cmk-brand" href="/" aria-label="Home">
+            <span className="cmk-brand-mark" aria-hidden="true" />
+            The <span className="cmk-brand-accent">Architect</span>
+          </a>
+          <nav className="cmk-links" aria-label="Primary">
+            <a href="/materials">Materials</a>
+            <a href="/audit">Audit</a>
+            <a href="/momentum">Consulting</a>
+            <a href="/tools">Tools</a>
+          </nav>
+        </div>
+      </header>
+
       <section className="cmk-main">
         <div className="cmk-kicker">
           <span className="cmk-kicker-dot" aria-hidden="true" />
@@ -78,21 +35,14 @@ export default function Home() {
         <div className="cmk-actions">
           <a className="cmk-cta" href="/tools/readiness">
             Free readiness check →
->>>>>>> Stashed changes
           </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
+          <a className="cmk-cta cmk-cta-secondary" href="/audit">
+            Order audit (CIR) →
+          </a>
+          <a className="cmk-cta cmk-cta-secondary" href="/materials">
+            Browse materials →
           </a>
         </div>
-<<<<<<< Updated upstream
-      </main>
-    </div>
-=======
 
         <section className="cmk-grid" aria-label="Main paths">
           <article className="cmk-card">
@@ -159,9 +109,16 @@ export default function Home() {
             </div>
           </article>
         </section>
+
+        <footer className="cmk-footer" role="contentinfo">
+          <span>© 2026 The Architect™ · Elitegrowth d.o.o.</span>
+          <span>
+            <a href="/data/privacy">Privacy</a> · <a href="/data/terms">Terms</a> ·{" "}
+            <a href="/data/refund">Refund</a> ·{" "}
+            <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
+          </span>
+        </footer>
       </section>
-      <SiteFooter />
     </main>
->>>>>>> Stashed changes
   );
 }
