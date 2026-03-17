@@ -1,0 +1,119 @@
+import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Service — The Architect™",
+  description: "Terms of Service for cmk.elitegrowth.pro (The Architect / Elitegrowth d.o.o.).",
+};
+
+export default function TermsPage() {
+  return (
+    <div className="legal-page">
+      <header className="legal-header">
+        <Link href="/" className="legal-logo">
+          The Architect™
+        </Link>
+        <span className="legal-doc-tag">LEGAL / TOS-001</span>
+      </header>
+
+      <div className="legal-container">
+        <div className="legal-doc-header">
+          <div className="legal-doc-ref">REF: CMK-LEGAL-TOS · v1.0</div>
+          <h1>Terms of Service</h1>
+          <div className="legal-effective">
+            Effective date: January 1, 2026 · Entity: Elitegrowth d.o.o.
+          </div>
+        </div>
+
+        <div className="legal-warning-box">
+          <p>
+            ⚠ By purchasing or accessing any CMK product, you confirm that you have read,
+            understood, and agreed to these terms in full.
+          </p>
+        </div>
+
+        <h2>01 — Parties</h2>
+        <p>
+          These Terms of Service govern the relationship between{" "}
+          <span className="legal-entity">Elitegrowth d.o.o.</span>, Jaruščica 21, 10020 Zagreb,
+          Croatia (&quot;The Architect&quot;, &quot;we&quot;, &quot;us&quot;) and any individual or
+          entity (&quot;Customer&quot;, &quot;you&quot;) who purchases or accesses products offered
+          at cmk.elitegrowth.pro.
+        </p>
+
+        <h2>02 — Products</h2>
+        <p>
+          We offer digital information products including but not limited to: the Crowdfunding
+          Momentum Kit (CMK), tactical playbooks, calculators, email sequences, templates, and
+          audit services. All products are delivered digitally. No physical goods are shipped unless
+          explicitly stated.
+        </p>
+
+        <h2>03 — Payment</h2>
+        <p>
+          All prices are listed in USD. Payment is processed by Paddle.com Market Limited, acting as
+          Merchant of Record. By completing a purchase, you agree to Paddle&apos;s terms and
+          conditions in addition to these terms. We do not store your payment information.
+        </p>
+
+        <h2>04 — Refund Policy</h2>
+        <p>
+          We offer a 7-day satisfaction guarantee on all digital products. If you have accessed less
+          than 20% of the product content and it does not meet the described value, contact us at
+          hello@elitegrowth.pro within 7 days of purchase for a full refund. Audit services are
+          non-refundable once delivery has commenced.
+        </p>
+
+        <h2>05 — Intellectual Property</h2>
+        <p>
+          All content, frameworks, calculators, playbooks, war stories, and materials within CMK
+          products are the exclusive intellectual property of Elitegrowth d.o.o. Customers receive a
+          personal, non-transferable license to use the materials for their own campaigns.
+        </p>
+        <p>You may not:</p>
+        <ul>
+          <li>Redistribute, resell, or share access with third parties</li>
+          <li>Reproduce content publicly without written permission</li>
+          <li>Use materials to create competing products</li>
+        </ul>
+
+        <h2>06 — Disclaimer</h2>
+        <p>
+          CMK products provide operational intelligence based on real campaign experience. Results
+          are not guaranteed. Campaign outcomes depend on factors outside our control including
+          market conditions, platform algorithms, and execution quality. We do not guarantee
+          specific revenue outcomes.
+        </p>
+
+        <h2>07 — Limitation of Liability</h2>
+        <p>
+          To the maximum extent permitted by applicable law, Elitegrowth d.o.o. shall not be liable
+          for indirect, incidental, or consequential damages arising from use of our products. Our
+          total liability shall not exceed the amount paid for the product in question.
+        </p>
+
+        <h2>08 — Governing Law</h2>
+        <p>
+          These terms are governed by the laws of the Republic of Croatia. Any disputes shall be
+          resolved in the competent courts of Zagreb, Croatia.
+        </p>
+
+        <h2>09 — Contact</h2>
+        <p>
+          For any legal notices or questions regarding these terms:
+          <br />
+          <span className="legal-entity">Elitegrowth d.o.o.</span>
+          <br />
+          Jaruščica 21, 10020 Zagreb, Croatia
+          <br />
+          <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
+        </p>
+      </div>
+
+      <footer className="legal-footer">
+        © 2026 The Architect™ · Elitegrowth d.o.o. · <Link href="/data/privacy">Privacy Policy</Link> ·{" "}
+        <Link href="/data/refund">Refund Policy</Link>
+      </footer>
+    </div>
+  );
+}
