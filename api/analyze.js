@@ -152,21 +152,59 @@ async function upsertSystemeAndTag({ email }) {
       body: JSON.stringify({ email })
     });
     const sd = await sr.json().catch(() => ({}));
-    const contactId = sd?.id ?? sd?.contact?.id ?? sd?.data?.id ?? sd?.contactId ?? sd?.contact_id;
+    let contactId = sd?.id ?? sd?.contact?.id ?? sd?.data?.id ?? sd?.contactId ?? sd?.contact_id;
     console.log('[systeme] upsert status', sr.status, 'contactId', contactId ? 'present' : 'missing');
+
+    // 1b) If upsert didn't return an id, try to look up by email (API variants differ by account)
+    if (!contactId) {
+      const lookupUrls = [
+        `https://api.systeme.io/api/contacts?email=${encodeURIComponent(email)}`,
+        `https://api.systeme.io/api/contacts?search=${encodeURIComponent(email)}`,
+        `https://api.systeme.io/api/contacts?query=${encodeURIComponent(email)}`
+      ];
+      for (const url of lookupUrls) {
+        try {
+          const gr = await fetch(url, { method: 'GET', headers });
+          const gd = await gr.json().catch(() => ({}));
+          const arr = Array.isArray(gd) ? gd : (gd?.data || gd?.contacts || gd?.items);
+          const found = Array.isArray(arr)
+            ? arr.find(c => (c?.email || '').toLowerCase() === email.toLowerCase())
+            : null;
+          const id2 = found?.id ?? found?.contactId ?? found?.contact_id;
+          console.log('[systeme] lookup', gr.status, url.split('?')[1], 'id', id2 ? 'present' : 'missing');
+          if (id2) { contactId = id2; break; }
+        } catch {
+          // ignore
+        }
+      }
+    }
 
     // 2) Apply tag by ID (only if we got a contact id back)
     if (contactId) {
-      const tr = await fetch(`https://api.systeme.io/api/contacts/${contactId}/tags`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ tagId })
-      });
-      if (!tr.ok) {
-        const td = await tr.text().catch(() => '');
-        console.log('[systeme] tag status', tr.status, td.slice(0, 300));
-      } else {
-        console.log('[systeme] tag status', tr.status, 'ok');
+      // Try the most common endpoint(s). Accounts differ.
+      const tagRequests = [
+        {
+          url: `https://api.systeme.io/api/contacts/${contactId}/tags`,
+          body: { tagId }
+        },
+        {
+          url: `https://api.systeme.io/api/tags/${tagId}/contacts`,
+          body: { contactId }
+        }
+      ];
+      for (const trq of tagRequests) {
+        try {
+          const tr = await fetch(trq.url, { method: 'POST', headers, body: JSON.stringify(trq.body) });
+          if (tr.ok) {
+            console.log('[systeme] tag ok', tr.status, trq.url.replace('https://api.systeme.io', ''));
+            break;
+          } else {
+            const td = await tr.text().catch(() => '');
+            console.log('[systeme] tag fail', tr.status, trq.url.replace('https://api.systeme.io', ''), td.slice(0, 240));
+          }
+        } catch {
+          // ignore
+        }
       }
     } else {
       try {
