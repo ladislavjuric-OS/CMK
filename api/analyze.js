@@ -74,15 +74,8 @@ const COUNTER_OFFSET = 247; // Starting offset — real count + this = displayed
 const COUNTER_NS = 'elitegrowth';
 const COUNTER_KEY = 'campaigns';
 
-async function sendResultsEmail({ email, result, debug }) {
-  const dbg = {
-    attempted: false,
-    status: null,
-    error: null
-  };
-
-  if (!email || !process.env.RESEND_API_KEY) return dbg;
-  dbg.attempted = true;
+async function sendResultsEmail({ email, result }) {
+  if (!email || !process.env.RESEND_API_KEY) return;
 
   const score = Number(result?.score ?? 0);
   const verdict = String(result?.verdict ?? '');
@@ -142,35 +135,18 @@ async function sendResultsEmail({ email, result, debug }) {
       html
     })
     });
-    dbg.status = rr.status;
-    if (!rr.ok) {
-      const t = await rr.text().catch(() => '');
-      dbg.error = t.slice(0, 900) || null;
-      console.log('[resend] fail', rr.status, dbg.error);
-    } else if (debug) {
-      console.log('[resend] ok', rr.status);
-    }
+    // Intentionally ignore non-2xx; results are already shown on-screen.
+    if (!rr.ok) await rr.text().catch(() => '');
   } catch (e) {
-    dbg.error = String(e?.message || e);
-    console.log('[resend] error', dbg.error);
+    // ignore
   }
-
-  return dbg;
 }
 
 async function upsertSystemeAndTag({ email }) {
-  const dbg = {
-    enabled: false,
-    upsertStatus: null,
-    contactId: null,
-    tagStatus: null,
-    tagError: null
-  };
-
-  if (!email || !process.env.SYSTEME_API_KEY) return dbg;
+  if (!email || !process.env.SYSTEME_API_KEY) return;
   const tagIdRaw = process.env.SYSTEME_TAG_ID ?? '1914659';
   const tagId = Number(tagIdRaw);
-  if (!tagId || Number.isNaN(tagId)) return dbg;
+  if (!tagId || Number.isNaN(tagId)) return;
 
   try {
     const headers = { 'Content-Type': 'application/json', 'X-API-Key': process.env.SYSTEME_API_KEY };
@@ -181,34 +157,19 @@ async function upsertSystemeAndTag({ email }) {
       headers,
       body: JSON.stringify({ email })
     });
-    dbg.upsertStatus = sr.status;
     const sd = await sr.json().catch(() => ({}));
     const contactId = sd?.id ?? sd?.contact?.id ?? sd?.data?.id ?? sd?.contactId ?? sd?.contact_id;
-    dbg.contactId = contactId ? String(contactId) : null;
-    console.log('[systeme] upsert', sr.status, 'contactId', contactId ? 'present' : 'missing');
-    if (!contactId) {
-      try { console.log('[systeme] upsert response', JSON.stringify(sd).slice(0, 600)); } catch {}
-      return dbg;
-    }
+    if (!contactId) return;
 
     const tr = await fetch(`https://api.systeme.io/api/contacts/${contactId}/tags`, {
       method: 'POST',
       headers,
       body: JSON.stringify({ tagId })
     });
-    dbg.tagStatus = tr.status;
-    if (!tr.ok) {
-      const td = await tr.text().catch(() => '');
-      dbg.tagError = td.slice(0, 600) || null;
-      console.log('[systeme] tag fail', tr.status, td.slice(0, 600));
-    } else {
-      console.log('[systeme] tag ok', tr.status);
-    }
+    if (!tr.ok) await tr.text().catch(() => '');
   } catch {
     // best-effort
   }
-
-  return dbg;
 }
 
 export default async function handler(req, res) {
@@ -231,7 +192,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { email, funding_goal, email_list_size, vip_deposits, cogs_per_unit, shipping_per_unit, has_video, prototype_status, weeks_to_launch, debug } = req.body;
+    const { email, funding_goal, email_list_size, vip_deposits, cogs_per_unit, shipping_per_unit, has_video, prototype_status, weeks_to_launch } = req.body;
 
     const avg_pledge = Math.round((funding_goal / 400) * 0.75);
     const backers_needed = Math.round(funding_goal / avg_pledge);
@@ -281,20 +242,10 @@ Return JSON only.`;
     fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/${COUNTER_KEY}/up`).catch(() => {});
 
     // Send results email (best-effort)
-    const resendDebug = await sendResultsEmail({ email, result, debug });
+    await sendResultsEmail({ email, result });
 
     // Add to Systeme.io (non-blocking)
-    const systemeDebug = await upsertSystemeAndTag({ email });
-
-    if (debug) {
-      return res.status(200).json({
-        ...result,
-        _debug: {
-          resend: resendDebug,
-          systeme: systemeDebug
-        }
-      });
-    }
+    upsertSystemeAndTag({ email });
 
     return res.status(200).json(result);
 
