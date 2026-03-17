@@ -152,13 +152,23 @@ async function upsertSystemeAndTag({ email }) {
       body: JSON.stringify({ email })
     });
     const sd = await sr.json().catch(() => ({}));
-    // Step 2: Apply tag by ID (requires contact id in response)
-    if (sd?.id) {
-      await fetch(`https://api.systeme.io/api/contacts/${sd.id}/tags`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ tagId })
-      }).catch(() => {});
+    const contactId = sd?.id ?? sd?.contact?.id ?? sd?.data?.id ?? sd?.contactId ?? sd?.contact_id;
+    console.log('[systeme] upsert', sr.status, 'contactId', contactId ? 'present' : 'missing');
+    if (!contactId) {
+      try { console.log('[systeme] upsert response', JSON.stringify(sd).slice(0, 600)); } catch {}
+      return;
+    }
+
+    const tr = await fetch(`https://api.systeme.io/api/contacts/${contactId}/tags`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ tagId })
+    });
+    if (!tr.ok) {
+      const td = await tr.text().catch(() => '');
+      console.log('[systeme] tag fail', tr.status, td.slice(0, 600));
+    } else {
+      console.log('[systeme] tag ok', tr.status);
     }
   } catch {
     // best-effort
