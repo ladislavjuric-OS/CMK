@@ -150,38 +150,76 @@ async function sendResultsEmail({
   }
 }
 
+function getContactIdFromResponse(sd: unknown): number | undefined {
+  if (!sd || typeof sd !== "object") return undefined;
+  const o = sd as Record<string, unknown>;
+  const from = (v: unknown): number | undefined => {
+    if (typeof v === "number" && !Number.isNaN(v)) return v;
+    if (typeof v === "string" && /^\d+$/.test(v)) return parseInt(v, 10);
+    return undefined;
+  };
+  return (
+    from(o.id) ??
+    from((o.contact as Record<string, unknown>)?.id) ??
+    from((o.data as Record<string, unknown>)?.id) ??
+    from(o.contactId) ??
+    from(o.contact_id) ??
+    (Array.isArray(o.items) && o.items[0] != null
+      ? from((o.items[0] as Record<string, unknown>).id)
+      : undefined)
+  );
+}
+
 async function upsertSystemeAndTag({ email }: { email: string }) {
   if (!email || !process.env.SYSTEME_API_KEY) return;
   const tagIdRaw = process.env.SYSTEME_TAG_ID ?? "1914659";
   const tagId = Number(tagIdRaw);
   if (!tagId || Number.isNaN(tagId)) return;
+  const headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": process.env.SYSTEME_API_KEY,
+  };
+
   try {
-    const headers = {
-      "Content-Type": "application/json",
-      "X-API-Key": process.env.SYSTEME_API_KEY,
-    };
     const sr = await fetch("https://api.systeme.io/api/contacts", {
       method: "POST",
       headers,
       body: JSON.stringify({ email }),
     });
     const sd = await sr.json().catch(() => ({}));
-    const contactId =
-      (sd as { id?: number })?.id ??
-      (sd as { contact?: { id?: number } })?.contact?.id ??
-      (sd as { data?: { id?: number } })?.data?.id ??
-      (sd as { contactId?: number })?.contactId ??
-      (sd as { contact_id?: number })?.contact_id;
+    let contactId = getContactIdFromResponse(sd);
+
+    if (!contactId && sr.ok) {
+      const listRes = await fetch(
+        `https://api.systeme.io/api/contacts?email=${encodeURIComponent(email)}&limit=1`,
+        { headers }
+      );
+      const listData = await listRes.json().catch(() => ({}));
+      const list = listData as { items?: Array<{ id?: number }> };
+      contactId = list?.items?.[0]?.id;
+    }
+
     if (!contactId) return;
-    const tr = await fetch(
-      `https://api.systeme.io/api/contacts/${contactId}/tags`,
+
+    const tagPayloads = [
       {
+        url: `https://api.systeme.io/api/contacts/${contactId}/tags`,
+        body: { tagId },
+      },
+      {
+        url: `https://api.systeme.io/api/tags/${tagId}/contacts`,
+        body: { contactId },
+      },
+    ];
+
+    for (const { url, body } of tagPayloads) {
+      const tr = await fetch(url, {
         method: "POST",
         headers,
-        body: JSON.stringify({ tagId }),
-      }
-    );
-    if (!tr.ok) await tr.text().catch(() => "");
+        body: JSON.stringify(body),
+      });
+      if (tr.ok || tr.status === 204) break;
+    }
   } catch {
     // best-effort
   }
