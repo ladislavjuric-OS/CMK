@@ -481,7 +481,27 @@ footer { border-top: 1px solid rgba(255,255,255,0.10); background: rgba(11,15,20
 </footer>
 
 <script>
-const API = '/api/analyze';
+const API_LOCAL = '/api/analyze';
+const API_REMOTE = 'https://readinesschecker.elitegrowth.pro/api/analyze';
+const FORCE_REMOTE_HOSTS = new Set(['cmk.elitegrowth.pro']);
+
+async function postAnalyze(payload) {
+  // Prefer local API when available (same-origin). If missing (static hosting) fall back to hosted API.
+  const forceRemote = FORCE_REMOTE_HOSTS.has(location.hostname);
+  const targets =
+    (location.protocol === 'file:' || forceRemote) ? [API_REMOTE] : [API_LOCAL, API_REMOTE];
+  let lastErr = null;
+  for (const url of targets) {
+    try {
+      const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return await r.json();
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw lastErr || new Error('Request failed');
+}
 const CTAS = {
   audit:       { h: 'You Need a Full Campaign Audit.',              url: '/audit.html',              l: 'Get Campaign Audit — $499' },
   cmk_standard:{ h: 'Start With the Campaign Intelligence Report.', url: '/audit.html',              l: 'Get CIR — $499' },
@@ -544,9 +564,7 @@ async function go() {
   };
 
   try {
-    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p) });
-    if (!r.ok) throw new Error(r.status);
-    const d = await r.json();
+    const d = await postAnalyze(p);
     const ls6 = document.getElementById('ls6');
     ls6.classList.remove('active'); ls6.classList.add('done');
     ls6.querySelector('.ls-icon').textContent = '✓';
@@ -556,7 +574,10 @@ async function go() {
   } catch (e) {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('form-section').style.display = 'block';
-    showErr('Analysis failed — please try again.');
+    const hint = (location.protocol === 'file:')
+      ? 'You are running locally (file://). This tool needs a live API.'
+      : 'The local API may be unavailable on static hosting.';
+    showErr('Analysis failed — ' + hint + ' Try again, or use the hosted version.');
     document.getElementById('btn-go').disabled = false;
   }
 }
@@ -636,13 +657,16 @@ function sLink(ev) {
   });
 }
 function initCounter() {
-  fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getCount' }) })
+  // Counter is best-effort; use hosted endpoint on file:// or when local API is missing.
+  const url = (location.protocol === 'file:' || FORCE_REMOTE_HOSTS.has(location.hostname)) ? API_REMOTE : API_LOCAL;
+  fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getCount' }) })
     .then(r => r.json())
     .then(d => { if (d && d.count > 0) document.getElementById('counter').textContent = Number(d.count).toLocaleString(); })
     .catch(() => {});
 }
 function bumpCounter() {
-  fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getCount' }) })
+  const url = (location.protocol === 'file:' || FORCE_REMOTE_HOSTS.has(location.hostname)) ? API_REMOTE : API_LOCAL;
+  fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getCount' }) })
     .then(r => r.json())
     .then(d => { if (d && d.count > 0) document.getElementById('counter').textContent = Number(d.count).toLocaleString(); })
     .catch(() => {});
