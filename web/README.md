@@ -1,5 +1,18 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Supabase setup
+
+1. **Create project:** [supabase.com](https://supabase.com) → New project → note **Project URL** and **Service role key** (Settings → API).
+2. **Run schema:** Dashboard → SQL Editor → New query → paste contents of `supabase/schema.sql` → Run.
+3. **Env (in `web/.env.local`):**
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+   SUPABASE_SERVICE_ROLE_KEY=eyJ...
+   ```
+4. **Install deps:** `npm install` (adds `@supabase/supabase-js`).
+
+API route `POST /api/audit-requests` expects `{ email, payload? }` and inserts into `audit_requests`.
+
 ## Getting Started
 
 First, run the development server:
