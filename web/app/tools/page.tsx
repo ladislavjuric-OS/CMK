@@ -33,6 +33,17 @@ export default function ToolsPage() {
           </article>
 
           <article className="cmk-card">
+            <div className="cmk-tag">Audit intake</div>
+            <h2>Client Discovery Brief (20 questions)</h2>
+            <p className="cmk-small">Complete the brief before or after ordering the Campaign Intelligence Report. Feeds scoring and verdict.</p>
+            <div className="cmk-actions">
+              <Link className="cmk-cta" href="/tools/intake">
+                Open intake form →
+              </Link>
+            </div>
+          </article>
+
+          <article className="cmk-card">
             <div className="cmk-tag">Tool page</div>
             <h2>Campaign Intelligence (preview)</h2>
             <p className="cmk-small">

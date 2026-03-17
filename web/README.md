@@ -13,6 +13,11 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 API route `POST /api/audit-requests` expects `{ email, payload? }` and inserts into `audit_requests`.
 
+**Test (PowerShell, one line, single quotes around JSON):**
+```powershell
+Invoke-RestMethod -Uri "http://localhost:3000/api/audit-requests" -Method POST -ContentType "application/json" -Body '{"email":"test@example.com","payload":{"note":"test"}}'
+```
+
 ## Getting Started
 
 First, run the development server:

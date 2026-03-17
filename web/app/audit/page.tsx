@@ -68,14 +68,19 @@ export default function AuditPage() {
             One-time · Delivered within 72 hours · 30-day improvement guarantee · VAT may apply for
             EU customers
           </div>
-          <a
-            href="https://payhip.com/b/FP7Aq"
-            className="audit-btn-primary"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Order Your Intelligence Report
-          </a>
+          <div className="audit-btn-row">
+            <a
+              href="https://payhip.com/b/FP7Aq"
+              className="audit-btn-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Order Your Intelligence Report
+            </a>
+            <Link href="/tools/intake" className="audit-btn-intake">
+              Fill intake brief first →
+            </Link>
+          </div>
           <span className="audit-btn-guarantee">
             🛡 If your campaign doesn&apos;t improve 15%+ in 30 days — I re-audit for free.
           </span>
