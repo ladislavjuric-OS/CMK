@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function MaterialsPage() {
   return (
-    <main>
+    <main className="pg-materials">
       <div className="classified-bar">
         ⚠ CLASSIFIED OPERATIONAL DOCUMENT — CROWDFUNDING MOMENTUM KIT · THE ARCHITECT ⚠
       </div>
