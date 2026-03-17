@@ -357,7 +357,7 @@ export default function IntakeForm() {
             </div>
           </div>
           <div className="card">
-            <div className="card-header"><div className="card-num">10</div><div className="card-title">Social media (followers / engagement)</div></div>
+            <div className="card-header"><div className="card-num">10</div><div className="card-title">{"Social media (followers / engagement)"}</div></div>
             <div className="card-body">
               <div className="fg g3">
                 <div className="field"><label className={labelCls}>Instagram</label><input type="text" className={inputCls} placeholder="followers, eng %" value={getFormValue(form, "q10_instagram")} onChange={(e) => set("q10_instagram", e.target.value)} /></div>
@@ -368,7 +368,7 @@ export default function IntakeForm() {
             </div>
           </div>
           <div className="card">
-            <div className="card-header"><div className="card-num">11</div><div className="card-title">Landing / pre-launch page</div></div>
+            <div className="card-header"><div className="card-num">11</div><div className="card-title">{"Landing / pre-launch page"}</div></div>
             <div className="card-body">
               <div className="field">
                 <label className={labelCls}>Link or tools (Systeme.io, Carrd, own site)</label>
@@ -417,7 +417,7 @@ export default function IntakeForm() {
             </div>
           </div>
           <div className="card">
-            <div className="card-header"><div className="card-num">14</div><div className="card-title">Video / visual materials</div></div>
+            <div className="card-header"><div className="card-num">14</div><div className="card-title">{"Video / visual materials"}</div></div>
             <div className="card-body">
               <div className="field">
                 <label className={labelCls}>Check what you have</label>
@@ -486,7 +486,7 @@ export default function IntakeForm() {
             </div>
           </div>
           <div className="card">
-            <div className="card-header"><div className="card-num">19A</div><div className="card-title">Engineering roadmap / project plan</div></div>
+            <div className="card-header"><div className="card-num">19A</div><div className="card-title">{"Engineering roadmap / project plan"}</div></div>
             <div className="card-body">
               <div className="field">
                 <textarea className="intake-textarea" rows={2} placeholder="Describe or N/A" value={getFormValue(form, "q19a_roadmap")} onChange={(e) => set("q19a_roadmap", e.target.value)} />
@@ -497,7 +497,7 @@ export default function IntakeForm() {
             <div className="card-header"><div className="card-num">20</div><div className="card-title">Tracking & analytics</div></div>
             <div className="card-body">
               <div className="field">
-                <label className={labelCls}>Status per tool: Live / Planned / Not Set Up</label>
+                <label className={labelCls}>{"Status per tool: Live / Planned / Not Set Up"}</label>
                 <div className="intake-tracking">
                   {TRACKING_TOOLS.map((tool) => (
                     <div key={tool} className="intake-tracking-row">
@@ -516,7 +516,7 @@ export default function IntakeForm() {
             </div>
           </div>
           <div className="card">
-            <div className="card-header"><div className="card-num">20A</div><div className="card-title">CRM / email platform & landing integration</div></div>
+            <div className="card-header"><div className="card-num">20A</div><div className="card-title">{"CRM / email platform & landing integration"}</div></div>
             <div className="card-body">
               <div className="field">
                 <input type="text" className={inputCls} placeholder="Tool name, integrated? Plan?" value={getFormValue(form, "q20a_crm")} onChange={(e) => set("q20a_crm", e.target.value)} />
