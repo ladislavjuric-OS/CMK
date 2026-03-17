@@ -483,7 +483,7 @@ footer { border-top: 1px solid rgba(255,255,255,0.10); background: rgba(11,15,20
 <script>
 const API_LOCAL = '/api/analyze';
 const API_REMOTE = 'https://readinesschecker.elitegrowth.pro/api/analyze';
-const FORCE_REMOTE_HOSTS = new Set(['cmk.elitegrowth.pro']);
+const FORCE_REMOTE_HOSTS = new Set([]);
 
 async function postAnalyze(payload) {
   // Prefer local API when available (same-origin). If missing (static hosting) fall back to hosted API.
