@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import MomentumRevealEffect from "@/components/MomentumRevealEffect";
+import BioThumb from "@/components/BioThumb";
 
 export const metadata: Metadata = {
   title: "Momentum Services — The Architect",
@@ -490,21 +491,7 @@ export default function MomentumPage() {
 
         <div className="bio-block">
           <div>
-            <div className="bio-thumb">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/assets/placeholder-ladislav.jpg"
-                alt="Ladislav Jurić — The Architect"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                  const next = e.currentTarget.nextElementSibling as HTMLElement;
-                  if (next) next.style.display = "flex";
-                }}
-              />
-              <div className="bio-thumb-placeholder" style={{ display: "none" }}>
-                LJ
-              </div>
-            </div>
+            <BioThumb />
           </div>
           <div>
             <div className="bio-label">▸ The Architect</div>
