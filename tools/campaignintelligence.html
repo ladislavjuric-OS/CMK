@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campaign Intelligence — The Architect</title>
+    <meta
+      name="description"
+      content="Data-backed crowdfunding due diligence. Get a campaign score, benchmarks, and a clear verdict before you launch."
+    />
+    <meta name="theme-color" content="#0b0f14" />
+    <meta property="og:title" content="Campaign Intelligence — The Architect" />
+    <meta
+      property="og:description"
+      content="We analyzed 600,000+ campaigns. Score yours before you launch."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/site.css" />
+    <style>
+      :root {
+        --bg: #0b0f14;
+        --panel: rgba(255, 255, 255, 0.06);
+        --panel-2: rgba(255, 255, 255, 0.08);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --muted-2: rgba(255, 255, 255, 0.55);
+        --border: rgba(255, 255, 255, 0.12);
+        --accent: #00ffcc;
+        --accent-2: #62a6ff;
+        --shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        background:
+          radial-gradient(1200px 600px at 80% -20%, rgba(0, 255, 204, 0.18), transparent 55%),
+          radial-gradient(900px 500px at 10% 10%, rgba(98, 166, 255, 0.16), transparent 55%),
+          var(--bg);
+        color: var(--text);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: -999px;
+        top: 8px;
+        background: #fff;
+        color: #000;
+        padding: 10px 12px;
+        border-radius: 10px;
+        z-index: 10;
+      }
+      .skip-link:focus {
+        left: 12px;
+      }
+
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        backdrop-filter: blur(12px);
+        background: rgba(11, 15, 20, 0.72);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .nav-inner {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 14px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-size: 13px;
+      }
+      .brand-mark {
+        width: 32px;
+        height: 32px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(0, 255, 204, 0.95), rgba(98, 166, 255, 0.85));
+        box-shadow: 0 12px 28px rgba(0, 255, 204, 0.18);
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: var(--muted);
+        font-weight: 700;
+        font-size: 13px;
+      }
+      .nav-links a {
+        text-decoration: none;
+        padding: 8px 10px;
+        border-radius: 10px;
+      }
+      .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+      }
+
+      .container {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 48px 20px 72px;
+      }
+
+      .hero {
+        padding: 28px 0 18px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 22px;
+        align-items: start;
+      }
+
+      .kicker {
+        display: inline-flex;
+        gap: 10px;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--muted);
+        font-weight: 600;
+        font-size: 13px;
+      }
+      .kicker-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 0 6px rgba(0, 255, 204, 0.12);
+      }
+
+      h1 {
+        font-size: clamp(34px, 3.4vw, 52px);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        margin: 14px 0 14px;
+      }
+
+      h2 {
+        margin: 54px 0 14px;
+        letter-spacing: -0.02em;
+        font-size: 22px;
+      }
+
+      p {
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.75;
+        margin: 12px 0;
+      }
+
+      .highlight {
+        color: var(--accent);
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+
+      .cta {
+        background: linear-gradient(135deg, rgba(0, 255, 204, 0.98), rgba(98, 166, 255, 0.92));
+        color: #041013;
+        padding: 14px 18px;
+        text-decoration: none;
+        font-weight: 900;
+        display: inline-flex;
+        gap: 10px;
+        align-items: center;
+        border-radius: 14px;
+        border: 1px solid rgba(0, 0, 0, 0.25);
+        box-shadow: 0 18px 50px rgba(0, 255, 204, 0.12);
+        transition: transform 120ms ease, filter 120ms ease;
+      }
+      .cta:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.02);
+      }
+
+      .cta.secondary {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        box-shadow: none;
+        font-weight: 800;
+      }
+      .cta.secondary:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .panel {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.05));
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .stat {
+        padding: 14px 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .stat strong {
+        display: block;
+        font-size: 18px;
+        letter-spacing: -0.02em;
+      }
+      .stat span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted-2);
+        font-size: 12.5px;
+        line-height: 1.4;
+      }
+
+      .section-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        align-items: start;
+      }
+
+      .box {
+        background: rgba(255, 255, 255, 0.055);
+        padding: 18px;
+        margin: 0;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      ul {
+        line-height: 1.9;
+        margin: 10px 0 0;
+        padding-left: 18px;
+        color: var(--muted);
+      }
+
+      .footer {
+        margin-top: 70px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+          monospace;
+        font-size: 12px;
+        color: var(--muted-2);
+      }
+
+      @media (max-width: 880px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+        .stats {
+          grid-template-columns: 1fr;
+        }
+        .section-grid {
+          grid-template-columns: 1fr;
+        }
+        .nav-links {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="nav" role="banner">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html" aria-label="Home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          The <span style="color: var(--accent)">Architect</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="../materials.html">Materials</a>
+          <a href="../audit.html">Audit</a>
+          <a href="../momentum.html">Consulting</a>
+          <a href="./index.html">Tools</a>
+        </nav>
+        <a class="cta" href="../audit.html">Get the Audit →</a>
+      </div>
+    </header>
+
+    <main id="main" class="container">
+      <section class="hero" aria-label="Hero">
+        <div class="hero-grid">
+          <div>
+            <div class="kicker">
+              <span class="kicker-dot" aria-hidden="true"></span>
+              Crowdfunding due diligence — before you launch
+            </div>
+
+            <h1>
+              We analyzed <span class="highlight">600,000+ crowdfunding campaigns</span>.<br />
+              We can tell if yours will <span class="highlight">win or fail</span> — before you
+              launch.
+            </h1>
+
+            <p>Most founders burn months and thousands of dollars launching campaigns that never had a chance.</p>
+            <p>We built a data engine that predicts success using real campaign benchmarks.</p>
+
+            <div class="actions">
+              <a href="../audit.html" class="cta">Get Your Campaign Analyzed →</a>
+              <a href="./readinesschecker.html" class="cta secondary">Free readiness check</a>
+            </div>
+          </div>
+
+          <aside class="panel" aria-label="Quick stats">
+            <div class="stats" role="list">
+              <div class="stat" role="listitem">
+                <strong>600k+</strong>
+                <span>Campaigns analyzed across categories</span>
+              </div>
+              <div class="stat" role="listitem">
+                <strong>Day‑1 focus</strong>
+                <span>Early traction is the strongest signal</span>
+              </div>
+              <div class="stat" role="listitem">
+                <strong>Clear verdict</strong>
+                <span>DO NOT LAUNCH, FIX, or SCALE</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section aria-label="The brutal truth">
+        <h2>The brutal truth</h2>
+        <div class="section-grid">
+          <div class="box">
+            <ul>
+              <li>No real validation before launch</li>
+              <li>Weak day-1 performance</li>
+              <li>Wrong pricing & positioning</li>
+              <li>No signal from ads or audience</li>
+            </ul>
+          </div>
+          <div class="box">
+            <p style="margin-top: 0">
+              If you want to reduce risk fast, start with the free readiness checker. If you want a GO/NO‑GO verdict
+              and fix sequence, order the audit.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer" role="contentinfo">
+        <span>© 2026 The Architect™ · Elitegrowth d.o.o.</span>
+        <span><a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a></span>
+      </footer>
+    </main>
+  </body>
+</html>

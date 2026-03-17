@@ -4,130 +4,136 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Campaign Intelligence Report — The Architect · $499</title>
+<meta name="description" content="Campaign Intelligence Report (CIR): GO/NO-GO verdict, gaps quantified in dollars, and a fix sequence delivered in 72h." />
+<meta property="og:title" content="Campaign Intelligence Report (CIR) — The Architect" />
+<meta property="og:description" content="GO/NO-GO verdict. Critical gaps quantified. 72h delivery. $499." />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#0b0f14" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css" />
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --black:#080807;--surface:#0f0e0c;--surface2:#161410;--border:#2a2620;
-  --amber:#d4820a;--amber-bright:#f0a020;--amber-dim:rgba(212,130,10,0.12);
-  --green:#52b788;--text:#d4cfc8;--muted:#6b6560;
-  --mono:'IBM Plex Mono',monospace;--display:'Barlow Condensed',sans-serif;--body:'Barlow',sans-serif;
+  --black:#0b0f14;--surface:rgba(255,255,255,0.06);--surface2:rgba(255,255,255,0.08);--border:rgba(255,255,255,0.12);
+  --amber:#00ffcc;--amber-bright:#62a6ff;--amber-dim:rgba(0,255,204,0.10);
+  --green:#57e0b3;--text:rgba(255,255,255,0.92);--muted:rgba(255,255,255,0.66);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  --display:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--body:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 }
 html{scroll-behavior:smooth}
-body{background:var(--black);color:var(--text);font-family:var(--body);overflow-x:hidden;line-height:1.6}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(212,130,10,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(212,130,10,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
-body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5}
+body{
+  background:
+    radial-gradient(1200px 600px at 80% -20%, rgba(0, 255, 204, 0.18), transparent 55%),
+    radial-gradient(900px 500px at 10% 10%, rgba(98, 166, 255, 0.16), transparent 55%),
+    var(--black);
+  color:var(--text);font-family:var(--body);overflow-x:hidden;line-height:1.6
+}
 nav,section,.hero,footer,.classified{position:relative;z-index:1}
 
-nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 2.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(8,8,7,0.95);backdrop-filter:blur(10px);z-index:100}
+nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 2.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(11,15,20,0.78);backdrop-filter:blur(12px);z-index:100}
 .nav-brand{display:flex;align-items:center;gap:0.75rem}
-.nav-icon{width:32px;height:32px;border:1px solid var(--amber);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.7rem;color:var(--amber);font-weight:700}
-.nav-name{font-family:var(--display);font-size:1rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase}
+.nav-icon{width:32px;height:32px;border:1px solid rgba(0,255,204,0.5);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.7rem;color:var(--amber);font-weight:800;border-radius:10px}
+.nav-name{font-family:var(--display);font-size:1rem;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);text-decoration:none}
+.nav-name:hover{opacity:0.9}
 .nav-name span{color:var(--amber)}
 .nav-stat{font-family:var(--mono);font-size:0.7rem;color:var(--muted)}
 .nav-stat b{color:var(--amber)}
-.btn-nav{background:var(--amber);color:#000;padding:0.5rem 1.25rem;font-family:var(--mono);font-size:0.75rem;font-weight:700;text-decoration:none;transition:background 0.2s}
-.btn-nav:hover{background:var(--amber-bright)}
+.btn-nav{background:linear-gradient(135deg,var(--amber),var(--amber-bright));color:#041013;padding:0.55rem 1.25rem;font-family:var(--mono);font-size:0.75rem;font-weight:800;text-decoration:none;transition:transform 0.15s ease,filter 0.15s ease;border-radius:12px}
+.btn-nav:hover{transform:translateY(-1px);filter:brightness(1.02)}
 
-.classified{background:var(--amber);color:#000;text-align:center;padding:0.4rem;font-family:var(--mono);font-size:0.7rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase}
+.classified{background:rgba(0,255,204,0.12);border-bottom:1px solid rgba(0,255,204,0.18);color:rgba(255,255,255,0.82);text-align:center;padding:0.45rem;font-family:var(--mono);font-size:0.7rem;font-weight:800;letter-spacing:0.18em;text-transform:uppercase}
 
 .hero{max-width:1100px;margin:0 auto;padding:5rem 2.5rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
 @media(max-width:900px){.hero{grid-template-columns:1fr;padding:3rem 1.5rem}}
 
-.tag{display:inline-flex;align-items:center;gap:0.5rem;border:1px solid var(--amber);padding:0.3rem 0.75rem;font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.5rem;background:var(--amber-dim)}
-.tag::before{content:'';width:5px;height:5px;background:var(--amber);border-radius:50%;animation:blink 1.5s step-end infinite}
+.tag{display:inline-flex;align-items:center;gap:0.5rem;border:1px solid rgba(0,255,204,0.25);padding:0.35rem 0.75rem;font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.5rem;background:var(--amber-dim);border-radius:999px}
+.tag::before{content:'';width:6px;height:6px;background:var(--amber);border-radius:50%;animation:blink 1.5s step-end infinite;box-shadow:0 0 0 6px rgba(0,255,204,0.12)}
 @keyframes blink{50%{opacity:0}}
 
-h1{font-family:var(--display);font-size:clamp(2.8rem,5.5vw,5rem);font-weight:900;line-height:0.95;letter-spacing:-0.01em;text-transform:uppercase;margin-bottom:1.5rem}
+h1{font-family:var(--display);font-size:clamp(2.8rem,5.5vw,5rem);font-weight:900;line-height:0.95;letter-spacing:-0.02em;text-transform:uppercase;margin-bottom:1.5rem}
 h1 .amber{color:var(--amber);display:block}
-h1 .sub{display:block;font-size:0.5em;font-weight:400;font-style:italic;text-transform:none;color:var(--muted);letter-spacing:0.02em;margin-top:0.4rem;line-height:1.4}
-.hero-desc{font-size:1rem;color:var(--text);line-height:1.7;border-left:2px solid var(--amber);padding-left:1rem;margin-bottom:2rem;max-width:500px}
+h1 .sub{display:block;font-size:0.5em;font-weight:500;font-style:italic;text-transform:none;color:rgba(255,255,255,0.58);letter-spacing:0.02em;margin-top:0.4rem;line-height:1.4}
+.hero-desc{font-size:1rem;color:rgba(255,255,255,0.84);line-height:1.7;border-left:2px solid rgba(0,255,204,0.6);padding-left:1rem;margin-bottom:2rem;max-width:500px}
 .price-big{font-family:var(--display);font-size:4rem;font-weight:900;color:var(--amber);line-height:1;letter-spacing:-0.03em;margin-bottom:0.3rem}
 .price-big sup{font-size:1.5rem;vertical-align:super}
 .price-note{font-family:var(--mono);font-size:0.7rem;color:var(--muted);margin-bottom:1.5rem}
-.btn-primary{display:inline-block;background:var(--amber);color:#000;padding:1rem 2.5rem;font-family:var(--display);font-size:1.15rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none;transition:background 0.2s,transform 0.15s;box-shadow:0 0 40px rgba(212,130,10,0.25)}
-.btn-primary:hover{background:var(--amber-bright);transform:translateY(-2px)}
+.btn-primary{display:inline-block;background:linear-gradient(135deg,var(--amber),var(--amber-bright));color:#041013;padding:1rem 2.5rem;font-family:var(--display);font-size:1.15rem;font-weight:900;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none;transition:transform 0.15s ease,filter 0.15s ease;box-shadow:0 20px 60px rgba(0,255,204,0.12);border-radius:14px}
+.btn-primary:hover{transform:translateY(-2px);filter:brightness(1.02)}
 .btn-guarantee{font-family:var(--mono);font-size:0.68rem;color:var(--muted);margin-top:0.75rem;display:block}
 
-.score-mockup{background:var(--surface);border:1px solid var(--border);position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.6)}
-.score-mockup::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--amber)}
-.sm-header{background:var(--surface2);padding:0.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
+.score-mockup{background:rgba(255,255,255,0.04);border:1px solid var(--border);position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.55);border-radius:18px}
+.score-mockup::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(135deg,var(--amber),var(--amber-bright))}
+.sm-header{background:rgba(255,255,255,0.06);padding:0.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
 .sm-title{font-family:var(--mono);font-size:0.68rem;color:var(--amber);letter-spacing:0.08em;text-transform:uppercase}
 .sm-ref{font-family:var(--mono);font-size:0.65rem;color:var(--muted)}
 .sm-body{padding:1.25rem}
 .sm-section{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.12em;text-transform:uppercase;margin:0.75rem 0 0.4rem;border-bottom:1px solid var(--border);padding-bottom:0.25rem}
 .sm-section:first-child{margin-top:0}
 .sm-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.7rem;padding:0.18rem 0}
-.sm-row span:first-child{color:var(--text)}
-.ok{color:var(--green)}.warn{color:var(--amber)}.fail{color:#e74c3c}
-.sm-hr{border:none;border-top:1px dashed var(--border);margin:0.5rem 0}
-.sm-score{display:flex;justify-content:space-between;align-items:center;background:rgba(212,130,10,0.08);border:1px solid rgba(212,130,10,0.3);padding:0.6rem 1rem;margin-top:0.75rem}
+.sm-row span:first-child{color:rgba(255,255,255,0.86)}
+.ok{color:var(--green)}.warn{color:var(--amber)}.fail{color:#ff5a6a}
+.sm-hr{border:none;border-top:1px dashed rgba(255,255,255,0.16);margin:0.5rem 0}
+.sm-score{display:flex;justify-content:space-between;align-items:center;background:rgba(0,255,204,0.07);border:1px solid rgba(0,255,204,0.18);padding:0.6rem 1rem;margin-top:0.75rem;border-radius:14px}
 .sm-score-label{font-family:var(--mono);font-size:0.68rem;color:var(--amber)}
 
 .section{padding:4.5rem 2.5rem;max-width:1100px;margin:0 auto}
-.section-full{padding:4.5rem 2.5rem;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.section-full{padding:4.5rem 2.5rem;background:rgba(255,255,255,0.03);border-top:1px solid rgba(255,255,255,0.10);border-bottom:1px solid rgba(255,255,255,0.10)}
 .section-full .inner{max-width:1100px;margin:0 auto}
-.divider{border:none;border-top:1px solid var(--border);margin:0;position:relative;z-index:1}
+.divider{border:none;border-top:1px solid rgba(255,255,255,0.10);margin:0;position:relative;z-index:1}
 
 .eyebrow{font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
 .eyebrow::before{content:'▸';color:var(--amber)}
-h2{font-family:var(--display);font-size:clamp(2rem,4vw,3.2rem);font-weight:900;text-transform:uppercase;letter-spacing:-0.01em;line-height:1;margin-bottom:1rem}
+h2{font-family:var(--display);font-size:clamp(2rem,4vw,3.2rem);font-weight:900;text-transform:uppercase;letter-spacing:-0.02em;line-height:1;margin-bottom:1rem}
 h2 em{font-style:normal;color:var(--amber)}
 .section-sub{font-size:1rem;color:var(--muted);max-width:580px;line-height:1.7;margin-bottom:3rem}
 
-/* WHAT YOU GET — module grid */
-.deliverables-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-top:3rem}
-.del-cell{background:var(--surface);padding:1.5rem;transition:background 0.2s}
-.del-cell:hover{background:var(--surface2)}
+.deliverables-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.12);margin-top:3rem;border-radius:18px;overflow:hidden}
+.del-cell{background:rgba(255,255,255,0.03);padding:1.5rem;transition:background 0.2s}
+.del-cell:hover{background:rgba(255,255,255,0.05)}
 .del-num{font-family:var(--display);font-size:2rem;font-weight:900;color:var(--amber);opacity:0.25;line-height:1;margin-bottom:0.5rem}
-.del-title{font-family:var(--display);font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.4rem}
+.del-title{font-family:var(--display);font-size:1.05rem;font-weight:900;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.4rem}
 .del-desc{font-size:0.83rem;color:var(--muted);line-height:1.6}
-.del-tag{display:inline-block;font-family:var(--mono);font-size:0.58rem;background:var(--amber-dim);border:1px solid rgba(212,130,10,0.3);color:var(--amber);padding:0.15rem 0.45rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem}
 
-/* WHO IS THIS FOR — two-track */
 .track-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:3rem}
 @media(max-width:700px){.track-grid{grid-template-columns:1fr}}
-.track-card{border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;transition:border-color 0.2s}
-.track-card:hover{border-color:rgba(212,130,10,0.4)}
-.track-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--amber)}
+.track-card{border:1px solid rgba(255,255,255,0.12);padding:2rem;position:relative;overflow:hidden;transition:border-color 0.2s;border-radius:18px;background:rgba(255,255,255,0.03)}
+.track-card:hover{border-color:rgba(0,255,204,0.35)}
+.track-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(135deg,var(--amber),var(--amber-bright))}
 .track-label{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.75rem}
-.track-title{font-family:var(--display);font-size:1.4rem;font-weight:800;text-transform:uppercase;margin-bottom:0.75rem;line-height:1.1}
+.track-title{font-family:var(--display);font-size:1.4rem;font-weight:900;text-transform:uppercase;margin-bottom:0.75rem;line-height:1.1}
 .track-desc{font-size:0.85rem;color:var(--muted);line-height:1.65;margin-bottom:1rem}
 .track-bullets{list-style:none;display:flex;flex-direction:column;gap:0.35rem}
-.track-bullets li{font-family:var(--mono);font-size:0.72rem;color:var(--text);display:flex;align-items:flex-start;gap:0.5rem}
+.track-bullets li{font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.86);display:flex;align-items:flex-start;gap:0.5rem}
 .track-bullets li::before{content:'→';color:var(--amber);flex-shrink:0}
 
-/* PROCESS */
-.process-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-top:3rem}
-.p-step{background:var(--surface);padding:2rem}
+.process-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.12);margin-top:3rem;border-radius:18px;overflow:hidden}
+.p-step{background:rgba(255,255,255,0.03);padding:2rem}
 .p-num{font-family:var(--display);font-size:3rem;font-weight:900;color:var(--amber);opacity:0.2;line-height:1;margin-bottom:0.75rem}
-.p-title{font-family:var(--display);font-size:1.05rem;font-weight:700;text-transform:uppercase;margin-bottom:0.5rem}
+.p-title{font-family:var(--display);font-size:1.05rem;font-weight:900;text-transform:uppercase;margin-bottom:0.5rem}
 .p-desc{font-size:0.85rem;color:var(--muted);line-height:1.6}
 
-/* CASE STUDY BLOCK */
-.case-block{background:var(--surface2);border:1px solid var(--border);margin-top:3rem;overflow:hidden}
-.case-header{background:rgba(212,130,10,0.08);border-bottom:1px solid var(--border);padding:0.75rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem}
-.case-label{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase}
-.case-verdict{font-family:var(--display);font-size:1rem;font-weight:900;color:#e74c3c;letter-spacing:0.05em}
+.case-block{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);margin-top:3rem;overflow:hidden;border-radius:18px}
+.case-header{background:rgba(0,255,204,0.07);border-bottom:1px solid rgba(255,255,255,0.12);padding:0.75rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem}
+.case-label{font-family:var(--mono);font-size:0.62rem;color:rgba(0,255,204,0.9);letter-spacing:0.15em;text-transform:uppercase}
+.case-verdict{font-family:var(--display);font-size:1rem;font-weight:900;color:#ff5a6a;letter-spacing:0.05em}
 .case-body{padding:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem}
 @media(max-width:650px){.case-body{grid-template-columns:1fr}}
-.case-col-title{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;border-bottom:1px solid var(--border);padding-bottom:0.4rem}
-.case-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.7rem;padding:0.22rem 0;border-bottom:1px solid rgba(42,38,32,0.5)}
+.case-col-title{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:0.4rem}
+.case-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.7rem;padding:0.22rem 0;border-bottom:1px solid rgba(255,255,255,0.10)}
 .case-row span:first-child{color:var(--muted)}
-.case-finding{font-size:0.82rem;color:var(--text);line-height:1.6;padding:0.3rem 0;border-bottom:1px solid rgba(42,38,32,0.5)}
+.case-finding{font-size:0.82rem;color:rgba(255,255,255,0.88);line-height:1.6;padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.10)}
 .case-finding strong{color:var(--amber);font-family:var(--mono);font-size:0.68rem;display:block;margin-bottom:0.2rem}
-.case-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);background:rgba(231,76,60,0.04);font-family:var(--mono);font-size:0.72rem;color:var(--muted)}
-.case-footer b{color:var(--text)}
+.case-footer{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.12);background:rgba(255,90,106,0.05);font-family:var(--mono);font-size:0.72rem;color:var(--muted)}
+.case-footer b{color:rgba(255,255,255,0.88)}
 
-/* GUARANTEE */
-.guarantee-block{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--green);padding:2rem 2.5rem;margin-top:3rem}
+.guarantee-block{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-left:3px solid rgba(87,224,179,0.75);padding:2rem 2.5rem;margin-top:3rem;border-radius:18px}
 .g-label{font-family:var(--mono);font-size:0.65rem;color:var(--green);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem}
 .g-title{font-family:var(--display);font-size:1.6rem;font-weight:900;text-transform:uppercase;margin-bottom:0.75rem}
 .g-text{font-size:0.9rem;color:var(--muted);line-height:1.7;max-width:650px}
 
-/* UPSELL */
-.upsell-block{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);padding:2rem 2.5rem;margin-top:1.5rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center}
+.upsell-block{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-left:3px solid rgba(0,255,204,0.6);padding:2rem 2.5rem;margin-top:1.5rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center;border-radius:18px}
 @media(max-width:700px){.upsell-block{grid-template-columns:1fr}}
 .u-label{font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem}
 .u-title{font-family:var(--display);font-size:1.4rem;font-weight:900;text-transform:uppercase;margin-bottom:0.4rem}
@@ -136,26 +142,24 @@ h2 em{font-style:normal;color:var(--amber)}
 .u-price-num{font-family:var(--display);font-size:2.2rem;font-weight:900;color:var(--amber);line-height:1}
 .u-price-num sup{font-size:1rem;vertical-align:super}
 .u-price-note{font-family:var(--mono);font-size:0.62rem;color:var(--muted);margin-top:0.2rem;margin-bottom:0.75rem}
-.btn-secondary{display:inline-block;border:1px solid var(--border);color:var(--text);padding:0.6rem 1.25rem;font-family:var(--mono);font-size:0.75rem;text-decoration:none;transition:border-color 0.2s,color 0.2s}
-.btn-secondary:hover{border-color:var(--amber);color:var(--amber)}
+.btn-secondary{display:inline-block;border:1px solid rgba(255,255,255,0.14);color:var(--text);padding:0.6rem 1.25rem;font-family:var(--mono);font-size:0.75rem;text-decoration:none;transition:border-color 0.2s,color 0.2s;border-radius:14px;background:rgba(255,255,255,0.03)}
+.btn-secondary:hover{border-color:rgba(0,255,204,0.35);color:rgba(0,255,204,0.9)}
 
-/* FAQ */
 .faq-list{max-width:750px;margin:3rem auto 0}
-details{border:1px solid var(--border);margin-bottom:0.75rem;transition:border-color 0.2s}
-details:hover,details[open]{border-color:rgba(212,130,10,0.3)}
-details[open]{background:rgba(212,130,10,0.02)}
-summary{padding:1.1rem 1.25rem;cursor:pointer;list-style:none;font-family:var(--display);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.02em;display:flex;justify-content:space-between;align-items:center;gap:1rem;transition:color 0.2s}
+details{border:1px solid rgba(255,255,255,0.12);margin-bottom:0.75rem;transition:border-color 0.2s;border-radius:14px;overflow:hidden}
+details:hover,details[open]{border-color:rgba(0,255,204,0.25)}
+details[open]{background:rgba(255,255,255,0.03)}
+summary{padding:1.1rem 1.25rem;cursor:pointer;list-style:none;font-family:var(--display);font-size:1rem;font-weight:900;text-transform:uppercase;letter-spacing:0.02em;display:flex;justify-content:space-between;align-items:center;gap:1rem;transition:color 0.2s}
 summary:hover{color:var(--amber)}
 summary::after{content:'+';font-family:var(--mono);font-size:1.2rem;color:var(--amber);transition:transform 0.2s;flex-shrink:0}
 details[open] summary::after{transform:rotate(45deg)}
-.faq-answer{padding:1rem 1.25rem 1.25rem;font-size:0.88rem;color:var(--muted);line-height:1.7;border-top:1px solid var(--border)}
+.faq-answer{padding:1rem 1.25rem 1.25rem;font-size:0.88rem;color:var(--muted);line-height:1.7;border-top:1px solid rgba(255,255,255,0.12)}
 
-/* CTA BOTTOM */
-.cta-bottom{text-align:center;padding:5rem 2.5rem;border-top:1px solid var(--border);position:relative;z-index:1}
+.cta-bottom{text-align:center;padding:5rem 2.5rem;border-top:1px solid rgba(255,255,255,0.12);position:relative;z-index:1}
 .cta-bottom h2{margin:0 auto 1.5rem}
 
-footer{border-top:1px solid var(--border);padding:1.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-family:var(--mono);font-size:0.7rem;color:var(--muted);position:relative;z-index:1}
-footer a{color:var(--muted);text-decoration:none}
+footer{border-top:1px solid rgba(255,255,255,0.12);padding:1.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.55);position:relative;z-index:1}
+footer a{color:rgba(255,255,255,0.62);text-decoration:none}
 footer a:hover{color:var(--amber)}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -179,7 +183,7 @@ footer a:hover{color:var(--amber)}
 <nav>
   <div class="nav-brand">
     <div class="nav-icon">TA</div>
-    <div class="nav-name">The <span>Architect</span></div>
+    <a class="nav-name" href="index.html" aria-label="Back to CMK homepage">The <span>Architect</span></a>
   </div>
   <div style="display:flex;align-items:center;gap:1.5rem;">
     <div class="nav-stat"><b>$890K+</b> raised · 5 campaigns</div>
@@ -226,7 +230,7 @@ footer a:hover{color:var(--amber)}
         <div class="sm-row"><span>Social proof</span><span class="ok">✓ STRONG</span></div>
         <div class="sm-score">
           <span class="sm-score-label">⬡ READINESS SCORE</span>
-          <span style="font-family:var(--display);font-size:1.3rem;font-weight:900;color:#e74c3c">28 / 100 — NO-GO</span>
+          <span style="font-family:var(--display);font-size:1.3rem;font-weight:900;color:#ff5a6a">28 / 100 — NO-GO</span>
         </div>
       </div>
     </div>
@@ -242,46 +246,14 @@ footer a:hover{color:var(--amber)}
     <h2>8 Intelligence<br><em>Modules.</em></h2>
     <p class="section-sub">Not a checklist. A custom campaign dossier built on your numbers, your page, your market — with dollar amounts attached to every gap found.</p>
     <div class="deliverables-grid">
-      <div class="del-cell">
-        <div class="del-num">01</div>
-        <div class="del-title">GO / NO-GO Verdict</div>
-        <div class="del-desc">A binary readiness score across pre-launch infrastructure, financials, page quality, and market positioning. One clear answer — with the reasoning behind it.</div>
-      </div>
-      <div class="del-cell">
-        <div class="del-num">02</div>
-        <div class="del-title">Win-Before-Launch Math</div>
-        <div class="del-desc">The 30% Rule applied to your campaign. How many backers you need on Day 1, what email list size that requires, and whether your current pipeline can hit it.</div>
-      </div>
-      <div class="del-cell">
-        <div class="del-num">03</div>
-        <div class="del-title">Critical Gap Analysis</div>
-        <div class="del-desc">The specific issues most likely to kill your campaign — each with a dollar amount showing the cost of leaving it unaddressed. No filler. Only what matters.</div>
-      </div>
-      <div class="del-cell">
-        <div class="del-num">04</div>
-        <div class="del-title">Competitive Intelligence</div>
-        <div class="del-desc">3–5 similar campaigns benchmarked against yours. Where you're stronger. Where you're exposed. What their numbers actually mean for your positioning.</div>
-      </div>
-      <div class="del-cell">
-        <div class="del-num">05</div>
-        <div class="del-title">Financial Reality Check</div>
-        <div class="del-desc">Your actual unit economics vs. what you think they are. COGS, shipping, platform fees, refund reserves — mapped against your funding goal and perk structure.</div>
-      </div>
-      <div class="del-cell">
-        <div class="del-num">06</div>
-        <div class="del-title">Platform Risk Assessment</div>
-        <div class="del-desc">Kickstarter and Indiegogo compliance flags, fund hold triggers, Trust & Safety red zones — identified before they shut you down mid-campaign.</div>
-      </div>
-      <div class="del-cell">
-        <div class="del-num">07</div>
-        <div class="del-title">Fix Priority Matrix</div>
-        <div class="del-desc">What to fix first, what can wait, what doesn't move the needle. Ranked by impact and effort. So you spend the next 30 days on the right things.</div>
-      </div>
-      <div class="del-cell">
-        <div class="del-num">08</div>
-        <div class="del-title">Launch Path or Restart Plan</div>
-        <div class="del-desc">For GO campaigns: a phased launch sequence. For NO-GO campaigns: the exact rebuild roadmap — what to fix, in what order, before you spend another dollar.</div>
-      </div>
+      <div class="del-cell"><div class="del-num">01</div><div class="del-title">GO / NO-GO Verdict</div><div class="del-desc">A binary readiness score across pre-launch infrastructure, financials, page quality, and market positioning. One clear answer — with the reasoning behind it.</div></div>
+      <div class="del-cell"><div class="del-num">02</div><div class="del-title">Win-Before-Launch Math</div><div class="del-desc">The 30% Rule applied to your campaign. How many backers you need on Day 1, what email list size that requires, and whether your current pipeline can hit it.</div></div>
+      <div class="del-cell"><div class="del-num">03</div><div class="del-title">Critical Gap Analysis</div><div class="del-desc">The specific issues most likely to kill your campaign — each with a dollar amount showing the cost of leaving it unaddressed. No filler. Only what matters.</div></div>
+      <div class="del-cell"><div class="del-num">04</div><div class="del-title">Competitive Intelligence</div><div class="del-desc">3–5 similar campaigns benchmarked against yours. Where you're stronger. Where you're exposed. What their numbers actually mean for your positioning.</div></div>
+      <div class="del-cell"><div class="del-num">05</div><div class="del-title">Financial Reality Check</div><div class="del-desc">Your actual unit economics vs. what you think they are. COGS, shipping, platform fees, refund reserves — mapped against your funding goal and perk structure.</div></div>
+      <div class="del-cell"><div class="del-num">06</div><div class="del-title">Platform Risk Assessment</div><div class="del-desc">Kickstarter and Indiegogo compliance flags, fund hold triggers, Trust & Safety red zones — identified before they shut you down mid-campaign.</div></div>
+      <div class="del-cell"><div class="del-num">07</div><div class="del-title">Fix Priority Matrix</div><div class="del-desc">What to fix first, what can wait, what doesn't move the needle. Ranked by impact and effort. So you spend the next 30 days on the right things.</div></div>
+      <div class="del-cell"><div class="del-num">08</div><div class="del-title">Launch Path or Restart Plan</div><div class="del-desc">For GO campaigns: a phased launch sequence. For NO-GO campaigns: the exact rebuild roadmap — what to fix, in what order, before you spend another dollar.</div></div>
     </div>
   </div>
 </div>
@@ -343,7 +315,7 @@ footer a:hover{color:var(--amber)}
           <div class="case-row"><span>Financial & Logistics</span><span class="fail">30/100</span></div>
           <div class="case-row"><span>Risk & Compliance</span><span class="fail">20/100</span></div>
           <div class="case-row"><span>Technical & Platform Setup</span><span class="fail">30/100</span></div>
-          <div style="margin-top:1rem;padding:0.6rem 0.75rem;background:rgba(212,130,10,0.06);border:1px solid rgba(212,130,10,0.2);font-family:var(--mono);font-size:0.68rem;color:var(--amber)">Win-Before-Launch gap: $0 pipeline vs. $10,500 Day 1 target</div>
+          <div style="margin-top:1rem;padding:0.6rem 0.75rem;background:rgba(0,255,204,0.06);border:1px solid rgba(0,255,204,0.18);font-family:var(--mono);font-size:0.68rem;color:var(--amber);border-radius:14px">Win-Before-Launch gap: $0 pipeline vs. $10,500 Day 1 target</div>
         </div>
         <div>
           <div class="case-col-title">Top Findings</div>
@@ -367,26 +339,10 @@ footer a:hover{color:var(--amber)}
   <div class="eyebrow">How It Works</div>
   <h2>From Order<br><em>to Report.</em></h2>
   <div class="process-steps">
-    <div class="p-step">
-      <div class="p-num">01</div>
-      <div class="p-title">You Order</div>
-      <p class="p-desc">Pay $499. Within 1 hour you receive a confirmation and intake brief — 15 targeted questions about your campaign, product, financials, and current prep status.</p>
-    </div>
-    <div class="p-step">
-      <div class="p-num">02</div>
-      <div class="p-title">I Analyze</div>
-      <p class="p-desc">Your campaign goes through all 8 intelligence modules. Every number is benchmarked against real campaign data. Every gap is quantified. No assumptions left unchallenged.</p>
-    </div>
-    <div class="p-step">
-      <div class="p-num">03</div>
-      <div class="p-title">Report Delivered</div>
-      <p class="p-desc">Within 72 hours: GO / NO-GO verdict, full scorecard, critical gaps with dollar amounts, competitive benchmark, and your fix priority matrix or restart plan.</p>
-    </div>
-    <div class="p-step">
-      <div class="p-num">04</div>
-      <div class="p-title">You Execute</div>
-      <p class="p-desc">The report tells you exactly what to fix. CMK gives you the tools, or I step in as your Co-Pilot. Either way — you're not guessing anymore.</p>
-    </div>
+    <div class="p-step"><div class="p-num">01</div><div class="p-title">You Order</div><p class="p-desc">Pay $499. Within 1 hour you receive a confirmation and intake brief — 15 targeted questions about your campaign, product, financials, and current prep status.</p></div>
+    <div class="p-step"><div class="p-num">02</div><div class="p-title">I Analyze</div><p class="p-desc">Your campaign goes through all 8 intelligence modules. Every number is benchmarked against real campaign data. Every gap is quantified. No assumptions left unchallenged.</p></div>
+    <div class="p-step"><div class="p-num">03</div><div class="p-title">Report Delivered</div><p class="p-desc">Within 72 hours: GO / NO-GO verdict, full scorecard, critical gaps with dollar amounts, competitive benchmark, and your fix priority matrix or restart plan.</p></div>
+    <div class="p-step"><div class="p-num">04</div><div class="p-title">You Execute</div><p class="p-desc">The report tells you exactly what to fix. CMK gives you the tools, or I step in as your Co-Pilot. Either way — you're not guessing anymore.</p></div>
   </div>
 </section>
 
@@ -416,7 +372,7 @@ footer a:hover{color:var(--amber)}
       <div class="u-price">
         <div class="u-price-num">From <sup>$</sup>299</div>
         <div class="u-price-note">One-time · Instant access</div>
-        <a href="https://cmk.elitegrowth.pro/#pricing" class="btn-secondary">View CMK Tiers →</a>
+        <a href="index.html#pricing" class="btn-secondary">View CMK Tiers →</a>
       </div>
     </div>
   </div>
@@ -429,30 +385,12 @@ footer a:hover{color:var(--amber)}
   <div class="eyebrow">Intel Briefing</div>
   <h2>Questions.<br><em>Answered.</em></h2>
   <div class="faq-list">
-    <details>
-      <summary>What do I need to provide?</summary>
-      <p class="faq-answer">After payment you'll receive a 15-question intake brief. You'll need your campaign URL or draft, funding goal, unit cost estimate, shipping plan, email list size, and current prep status. The more complete your answers — the sharper the report. Quality in, quality out.</p>
-    </details>
-    <details>
-      <summary>My campaign isn't live yet — is this still relevant?</summary>
-      <p class="faq-answer">Pre-launch is where the CIR delivers the most value. I'll assess your readiness across all 8 modules — pre-launch infrastructure, financials, page, platform compliance, competitive positioning. You'll know exactly what to fix before you go live and before you spend on ads.</p>
-    </details>
-    <details>
-      <summary>My campaign failed or was cancelled. Can this help?</summary>
-      <p class="faq-answer">Yes — and this is one of the most common requests. A post-failure CIR includes a full post-mortem across all 8 modules, root cause identification (not just "you didn't have enough traffic"), and a detailed restart roadmap with exact sequencing. Campaigns that cancelled at 30–40% funded have relaunched and fully funded after implementing the fixes. But only if you diagnose the real problem first.</p>
-    </details>
-    <details>
-      <summary>How is this different from generic crowdfunding advice?</summary>
-      <p class="faq-answer">Every gap in your report has a dollar amount attached. Every recommendation references benchmarks from real campaigns. The framework is the same one I use on campaigns I personally run — not theory extracted from blog posts. And unlike generic advice, this is built on your specific numbers, your product category, and your platform.</p>
-    </details>
-    <details>
-      <summary>What if I need more than just the report?</summary>
-      <p class="faq-answer">Every CIR ends with a clear path forward — three options depending on your situation: execute independently with CMK ($299–$1,299), work with me directly as Co-Pilot ($2,500 + 12% success fee), or full campaign architecture ($12,500 flat). The report will tell you which level your situation actually requires.</p>
-    </details>
-    <details>
-      <summary>How does the 30-day guarantee work?</summary>
-      <p class="faq-answer">Implement at least 3 of the critical recommendations from your report. If your campaign metrics don't improve by 15%+ within 30 days — email me with proof of implementation and I'll re-audit for free and build your restart plan personally. No hoops. The condition is that you actually implement.</p>
-    </details>
+    <details><summary>What do I need to provide?</summary><p class="faq-answer">After payment you'll receive a 15-question intake brief. You'll need your campaign URL or draft, funding goal, unit cost estimate, shipping plan, email list size, and current prep status. The more complete your answers — the sharper the report. Quality in, quality out.</p></details>
+    <details><summary>My campaign isn't live yet — is this still relevant?</summary><p class="faq-answer">Pre-launch is where the CIR delivers the most value. I'll assess your readiness across all 8 modules — pre-launch infrastructure, financials, page, platform compliance, competitive positioning. You'll know exactly what to fix before you go live and before you spend on ads.</p></details>
+    <details><summary>My campaign failed or was cancelled. Can this help?</summary><p class="faq-answer">Yes — and this is one of the most common requests. A post-failure CIR includes a full post-mortem across all 8 modules, root cause identification (not just "you didn't have enough traffic"), and a detailed restart roadmap with exact sequencing.</p></details>
+    <details><summary>How is this different from generic crowdfunding advice?</summary><p class="faq-answer">Every gap in your report has a dollar amount attached. Every recommendation references benchmarks from real campaigns. The framework is the same one I use on campaigns I personally run — not theory extracted from blog posts. And unlike generic advice, this is built on your specific numbers, your product category, and your platform.</p></details>
+    <details><summary>What if I need more than just the report?</summary><p class="faq-answer">Every CIR ends with a clear path forward — three options depending on your situation: execute independently with CMK ($299–$999), work with me directly as Co-Pilot, or full campaign architecture. The report will tell you which level your situation actually requires.</p></details>
+    <details><summary>How does the 30-day guarantee work?</summary><p class="faq-answer">Implement at least 3 of the critical recommendations from your report. If your campaign metrics don't improve by 15%+ within 30 days — email me with proof of implementation and I'll re-audit for free and build your restart plan personally.</p></details>
   </div>
 </section>
 
@@ -467,9 +405,9 @@ footer a:hover{color:var(--amber)}
 <footer>
   <span>© 2026 The Architect™ · Elitegrowth d.o.o.</span>
   <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
-    <a href="/data/privacy.html">Privacy Policy</a>
-    <a href="/data/terms.html">Terms</a>
-    <a href="/data/refund.html">Refund Policy</a>
+    <a href="data/privacy.html">Privacy Policy</a>
+    <a href="data/terms.html">Terms</a>
+    <a href="data/refund.html">Refund Policy</a>
     <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
   </div>
 </footer>

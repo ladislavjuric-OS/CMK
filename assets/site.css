@@ -1,0 +1,38 @@
+/* Shared base theme for CMK pages (non-legal). */
+
+:root {
+  --bg: #0b0f14;
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.66);
+  --muted2: rgba(255, 255, 255, 0.55);
+  --surface: rgba(255, 255, 255, 0.06);
+  --surface2: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.12);
+  --accent: #00ffcc;
+  --accent2: #62a6ff;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 80% -20%, rgba(0, 255, 204, 0.18), transparent 55%),
+    radial-gradient(900px 500px at 10% 10%, rgba(98, 166, 255, 0.16), transparent 55%),
+    var(--bg);
+  color: var(--text);
+}
+
+a {
+  color: inherit;
+}
+
+/* Simple utility for consistent focus */
+:focus-visible {
+  outline: 3px solid rgba(98, 166, 255, 0.55);
+  outline-offset: 2px;
+}
+

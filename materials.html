@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crowdfunding Momentum Kit — Materials</title>
+<meta name="description" content="CMK materials: Standard, Pro, and Blueprint tiers. Self-serve operational system built from real crowdfunding campaigns." />
+<meta name="theme-color" content="#0b0f14" />
+<meta property="og:title" content="Crowdfunding Momentum Kit — Materials" />
+<meta property="og:description" content="Choose your CMK tier: Standard, Pro, or Blueprint. Tools, playbooks, calculators, and war stories — built from real campaigns." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css" />
+<style>
+/* Note: This is the original CMK page, themed to match the new site palette.
+   We keep content/structure intact and use relative links for local + deploy. */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0b0f14;
+  --surface:rgba(255,255,255,0.06);
+  --surface2:rgba(255,255,255,0.08);
+  --border:rgba(255,255,255,0.12);
+  --amber:#00ffcc;
+  --amber-bright:#62a6ff;
+  --amber-dim:rgba(0,255,204,0.10);
+  --red:#ff5a6a;
+  --green:#2d6a4f;
+  --green-bright:#57e0b3;
+  --text:rgba(255,255,255,0.92);
+  --muted:rgba(255,255,255,0.66);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  --display:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  --body:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(1200px 600px at 80% -20%, rgba(0, 255, 204, 0.18), transparent 55%),
+    radial-gradient(900px 500px at 10% 10%, rgba(98, 166, 255, 0.16), transparent 55%),
+    var(--black);
+  color:var(--text);
+  font-family:var(--body);
+  overflow-x:hidden;
+  line-height:1.6
+}
+section,nav,footer,.hero,.classified-bar{position:relative;z-index:1}
+
+/* NAV */
+nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 2.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(11,15,20,0.78);backdrop-filter:blur(12px);z-index:100}
+.nav-brand{display:flex;align-items:center;gap:0.75rem}
+.nav-icon{width:32px;height:32px;border:1px solid rgba(0,255,204,0.5);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.7rem;color:var(--amber);font-weight:800;border-radius:10px}
+.nav-name{font-family:var(--display);font-size:1rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;color:var(--text)}
+.nav-name span{color:var(--amber)}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-stat{font-family:var(--mono);font-size:0.7rem;color:var(--muted)}
+.nav-stat b{color:var(--amber)}
+.btn-nav{background:linear-gradient(135deg,var(--amber),var(--amber-bright));color:#041013;padding:0.55rem 1.25rem;font-family:var(--mono);font-size:0.75rem;font-weight:800;text-decoration:none;letter-spacing:0.05em;border-radius:12px;transition:transform 0.15s ease,filter 0.15s ease}
+.btn-nav:hover{transform:translateY(-1px);filter:brightness(1.02)}
+.classified-bar{background:rgba(0,255,204,0.12);border-bottom:1px solid rgba(0,255,204,0.18);color:rgba(255,255,255,0.82);text-align:center;padding:0.45rem;font-family:var(--mono);font-size:0.7rem;font-weight:800;letter-spacing:0.18em;text-transform:uppercase}
+
+/* HERO */
+.hero{min-height:92vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:4rem;padding:5rem 2.5rem 4rem;max-width:1200px;margin:0 auto}
+@media(max-width:900px){.hero{grid-template-columns:1fr;padding:3rem 1.5rem}}
+.hero-left{animation:fadeUp 0.8s ease both}
+.hero-right{animation:fadeUp 0.8s 0.15s ease both}
+.classified-tag{display:inline-flex;align-items:center;gap:0.5rem;border:1px solid rgba(0,255,204,0.25);padding:0.35rem 0.75rem;font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:1.5rem;background:var(--amber-dim);border-radius:999px}
+.classified-tag::before{content:'';width:6px;height:6px;background:var(--amber);border-radius:50%;animation:blink 1.5s step-end infinite;box-shadow:0 0 0 6px rgba(0,255,204,0.12)}
+@keyframes blink{50%{opacity:0}}
+h1{font-family:var(--display);font-size:clamp(3rem,6vw,5.5rem);font-weight:900;line-height:0.95;letter-spacing:-0.02em;text-transform:uppercase;margin-bottom:1.5rem}
+h1 .line-amber{color:var(--amber);display:block}
+h1 .line-dim{color:rgba(255,255,255,0.58);font-weight:500;font-size:0.55em;display:block;font-style:italic;text-transform:none;letter-spacing:0.02em;margin-top:0.3rem}
+.hero-desc{font-size:1.05rem;color:rgba(255,255,255,0.82);max-width:520px;margin-bottom:2rem;line-height:1.7;border-left:2px solid rgba(0,255,204,0.6);padding-left:1rem}
+.hero-stats{display:flex;gap:2rem;margin-bottom:2.5rem;flex-wrap:wrap}
+.stat-num{font-family:var(--display);font-size:2.2rem;font-weight:900;color:var(--amber);line-height:1;letter-spacing:-0.02em}
+.stat-label{font-family:var(--mono);font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:0.2rem}
+
+/* PATH GATE */
+.path-gate{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+@media(max-width:600px){.path-gate{grid-template-columns:1fr}}
+.path-card{border:1px solid var(--border);padding:1.25rem 1.5rem;text-decoration:none;display:block;position:relative;overflow:hidden;transition:border-color 0.2s,background 0.2s;border-radius:16px;background:rgba(255,255,255,0.03)}
+.path-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(135deg,var(--amber),var(--amber-bright));opacity:0;transition:opacity 0.2s}
+.path-card:hover{border-color:rgba(0,255,204,0.35);background:rgba(0,255,204,0.04)}
+.path-card:hover::before,.path-card.active::before{opacity:1}
+.path-card.active{border-color:rgba(0,255,204,0.3);background:rgba(0,255,204,0.06)}
+.path-label{font-family:var(--mono);font-size:0.6rem;color:var(--amber);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.4rem}
+.path-dot{width:4px;height:4px;background:var(--amber);border-radius:50%;animation:blink 1.5s step-end infinite}
+.path-title{font-family:var(--display);font-size:1rem;font-weight:800;text-transform:uppercase;color:var(--text);margin-bottom:0.3rem;line-height:1.1}
+.path-desc{font-size:0.78rem;color:var(--muted);line-height:1.5;margin-bottom:0.6rem}
+.path-cta{font-family:var(--mono);font-size:0.68rem;color:rgba(0,255,204,0.9)}
+
+/* DOC MOCKUP */
+.doc-mockup{background:rgba(255,255,255,0.04);border:1px solid var(--border);font-family:var(--mono);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.55);position:relative;border-radius:18px}
+.doc-mockup::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(135deg,var(--amber),var(--amber-bright))}
+.doc-header{background:rgba(255,255,255,0.06);padding:0.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.doc-title{color:var(--amber);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase}
+.doc-ref{color:var(--muted);font-size:0.65rem}
+.doc-body{padding:1.25rem;line-height:1.9}
+.doc-st{color:var(--amber);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem;margin-top:1rem;border-bottom:1px solid var(--border);padding-bottom:0.3rem}
+.doc-st:first-child{margin-top:0}
+.doc-row{display:flex;justify-content:space-between;color:var(--muted);font-size:0.72rem;padding:0.15rem 0}
+.doc-row span:first-child{color:rgba(255,255,255,0.86)}
+.ok{color:var(--green-bright)}.warn{color:var(--amber)}.fail{color:#ff5a6a}
+.doc-div{border:none;border-top:1px dashed rgba(255,255,255,0.16);margin:0.75rem 0}
+.doc-score{display:flex;justify-content:space-between;align-items:center;background:rgba(0,255,204,0.07);border:1px solid rgba(0,255,204,0.18);padding:0.6rem 1rem;margin-top:0.75rem;border-radius:14px}
+.doc-score-label{color:var(--amber);font-size:0.72rem;letter-spacing:0.08em}
+.doc-score-val{font-family:var(--display);font-size:1.25rem;font-weight:900;color:#ff5a6a}
+
+/* SHARED SECTION */
+.section-divider{border:none;border-top:1px solid rgba(255,255,255,0.10);margin:0;position:relative;z-index:1}
+.section{padding:5rem 2.5rem;max-width:1200px;margin:0 auto}
+.section-full{padding:5rem 2.5rem;background:rgba(255,255,255,0.03);border-top:1px solid rgba(255,255,255,0.10);border-bottom:1px solid rgba(255,255,255,0.10);position:relative;z-index:1}
+.section-full .inner{max-width:1200px;margin:0 auto}
+.section-eyebrow{font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
+.section-eyebrow::before{content:'▸';color:var(--amber)}
+h2{font-family:var(--display);font-size:clamp(2rem,4.5vw,3.5rem);font-weight:900;text-transform:uppercase;letter-spacing:-0.02em;line-height:1;margin-bottom:1rem}
+h2 em{font-style:normal;color:var(--amber)}
+.section-sub{font-size:1.05rem;color:var(--muted);max-width:600px;line-height:1.7;margin-bottom:3rem}
+
+/* READINESS STRIP */
+.readiness-strip{
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);
+  border-top:2px solid rgba(0,255,204,0.6);
+  padding:1.5rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:2rem;flex-wrap:wrap;
+  margin-bottom:3rem;
+  border-radius:18px;
+}
+.rs-left{display:flex;align-items:center;gap:1.25rem}
+.rs-icon{
+  width:44px;height:44px;border:1px solid rgba(0,255,204,0.35);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:0.65rem;font-weight:800;color:var(--amber);
+  flex-shrink:0;border-radius:14px;background:rgba(0,255,204,0.06);
+}
+.rs-label{font-family:var(--mono);font-size:0.6rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.3rem}
+.rs-title{font-family:var(--display);font-size:1.1rem;font-weight:900;text-transform:uppercase;line-height:1}
+.rs-desc{font-size:0.8rem;color:var(--muted);margin-top:0.25rem}
+.rs-cta{
+  display:flex;align-items:center;gap:0.5rem;
+  font-family:var(--mono);font-size:0.72rem;font-weight:800;
+  color:#041013;background:linear-gradient(135deg,var(--amber),var(--amber-bright));
+  padding:0.7rem 1.25rem;text-decoration:none;
+  white-space:nowrap;transition:transform 0.15s ease,filter 0.15s ease;flex-shrink:0;
+  border-radius:14px;
+}
+.rs-cta:hover{transform:translateY(-1px);filter:brightness(1.02)}
+.rs-score-demo{
+  display:flex;gap:1rem;align-items:center;
+  font-family:var(--mono);font-size:0.68rem;
+}
+.rs-score-item{text-align:center}
+.rs-score-num{font-family:var(--display);font-size:1.4rem;font-weight:900;line-height:1}
+.rs-score-num.green{color:var(--green-bright)}
+.rs-score-num.amber{color:var(--amber)}
+.rs-score-num.red{color:#ff5a6a}
+.rs-score-lbl{font-size:0.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.2rem}
+
+/* CMK PRICING GRID */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:3rem;background:rgba(255,255,255,0.10);border-radius:18px;overflow:hidden}
+@media(max-width:900px){.pricing-grid{grid-template-columns:1fr}}
+.price-card{background:rgba(255,255,255,0.03);padding:2rem;position:relative;transition:background 0.2s}
+.price-card:hover{background:rgba(255,255,255,0.05)}
+.price-card.featured{background:rgba(255,255,255,0.05);border-top:2px solid rgba(0,255,204,0.7)}
+.price-card.featured::before{
+  content:'MOST COMPLETE';
+  position:absolute;top:-1px;right:1.5rem;
+  background:linear-gradient(135deg,var(--amber),var(--amber-bright));color:#041013;
+  font-family:var(--mono);font-size:0.58rem;font-weight:800;letter-spacing:0.1em;
+  padding:0.25rem 0.7rem;border-bottom-left-radius:10px;border-bottom-right-radius:10px;
+}
+.price-tier{font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem}
+.price-name{font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;margin-bottom:0.5rem}
+.price-desc{font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.5}
+.price-amount{font-family:var(--display);font-size:3.5rem;font-weight:900;color:var(--amber);line-height:1;margin-bottom:0.25rem}
+.price-amount sup{font-size:1.4rem;vertical-align:super}
+.price-note{font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-bottom:1.5rem}
+.price-divider{border:none;border-top:1px solid rgba(255,255,255,0.12);margin:1.5rem 0}
+.price-includes{font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem}
+.price-feature{display:flex;gap:0.6rem;margin-bottom:0.65rem;font-size:0.83rem;align-items:flex-start}
+.price-feature .check{color:var(--green-bright);flex-shrink:0;margin-top:0.1rem}
+.price-feature .cross{color:rgba(255,255,255,0.35);flex-shrink:0;margin-top:0.1rem}
+.price-feature .label{color:rgba(255,255,255,0.88)}
+.price-feature .label.dim{color:var(--muted)}
+.btn-tier{display:block;width:100%;text-align:center;padding:0.85rem;font-family:var(--display);font-size:1rem;font-weight:900;text-transform:uppercase;letter-spacing:0.05em;text-decoration:none;margin-top:1.5rem;transition:transform 0.15s ease,filter 0.15s ease;border-radius:14px}
+.btn-tp{background:linear-gradient(135deg,var(--amber),var(--amber-bright));color:#041013}
+.btn-tp:hover{transform:translateY(-1px);filter:brightness(1.02)}
+.btn-ts{border:1px solid rgba(255,255,255,0.14);color:var(--text);background:rgba(255,255,255,0.03)}
+.btn-ts:hover{border-color:rgba(0,255,204,0.35);color:rgba(0,255,204,0.9)}
+
+/* AUDIT HOOK */
+.audit-hook{
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);
+  border-left:3px solid rgba(0,255,204,0.7);
+  padding:2.5rem;margin-top:4rem;
+  display:grid;grid-template-columns:1fr auto;
+  gap:3rem;align-items:center;border-radius:18px;
+}
+@media(max-width:768px){.audit-hook{grid-template-columns:1fr}}
+.ah-tag{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.75rem}
+.ah-title{font-family:var(--display);font-size:2rem;font-weight:900;text-transform:uppercase;margin-bottom:0.75rem}
+.ah-desc{font-size:0.9rem;color:var(--muted);line-height:1.7;max-width:480px}
+.ah-items{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.12)}
+.ah-item{font-size:0.82rem;color:rgba(255,255,255,0.88);display:flex;gap:0.4rem;align-items:center}
+.ah-item span:first-child{color:var(--amber)}
+.ah-price-block{text-align:center;white-space:nowrap}
+.ah-price{font-family:var(--display);font-size:3rem;font-weight:900;color:var(--amber);line-height:1}
+.ah-price sup{font-size:1.2rem;vertical-align:super}
+.ah-price-note{font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin:0.3rem 0 1rem}
+
+/* MOMENTUM BRIDGE */
+.momentum-bridge{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.12);
+  border-top:2px solid rgba(0,255,204,0.35);
+  padding:3rem;
+  margin-top:4rem;
+  position:relative;
+  overflow:hidden;border-radius:18px;
+}
+.momentum-bridge::before{
+  content:'';
+  position:absolute;top:0;right:0;
+  width:320px;height:100%;
+  background:linear-gradient(to left,rgba(0,255,204,0.07),transparent);
+  pointer-events:none;
+}
+.mb-eyebrow{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
+.mb-eyebrow::before{content:'▸';color:var(--amber)}
+.mb-title{font-family:var(--display);font-size:clamp(1.5rem,3vw,2.5rem);font-weight:900;text-transform:uppercase;line-height:1;margin-bottom:1rem}
+.mb-desc{font-size:0.95rem;color:var(--muted);line-height:1.7;max-width:580px;margin-bottom:2rem}
+.mb-tiers{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:2rem}
+.mb-tier{
+  border:1px solid rgba(255,255,255,0.12);
+  padding:1rem 1.25rem;
+  font-size:0.82rem;
+  transition:border-color 0.2s;border-radius:16px;background:rgba(255,255,255,0.03)
+}
+.mb-tier-name{font-family:var(--display);font-size:1.1rem;font-weight:900;text-transform:uppercase;line-height:1;margin-bottom:0.2rem}
+.mb-tier-mode{font-family:var(--mono);font-size:0.58rem;color:var(--amber);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem}
+.mb-tier-price{font-family:var(--display);font-size:1.3rem;font-weight:900;color:var(--amber);line-height:1}
+.mb-cta{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:linear-gradient(135deg,var(--amber),var(--amber-bright));color:#041013;
+  padding:0.85rem 2rem;
+  font-family:var(--display);font-size:1rem;font-weight:900;
+  letter-spacing:0.05em;text-transform:uppercase;
+  text-decoration:none;transition:transform 0.15s ease,filter 0.15s ease;border-radius:14px;
+}
+.mb-cta:hover{transform:translateY(-1px);filter:brightness(1.02)}
+.mb-cta-note{font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:0.75rem}
+
+/* PROBLEM SECTION */
+.gap-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:1.5rem;align-items:start;margin-top:3rem}
+@media(max-width:768px){.gap-grid{grid-template-columns:1fr}.gap-vs{display:none}}
+.gap-col{border:1px solid rgba(255,255,255,0.12);padding:2rem;border-radius:18px;background:rgba(255,255,255,0.03)}
+.gap-col.bad{border-color:rgba(255,90,106,0.35)}
+.gap-col.good{border-color:rgba(87,224,179,0.35)}
+.gap-col-title{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid rgba(255,255,255,0.12)}
+.gap-col.bad .gap-col-title{color:#ff5a6a}
+.gap-col.good .gap-col-title{color:var(--green-bright)}
+.gap-item{display:flex;gap:0.75rem;margin-bottom:0.9rem;font-size:0.88rem;line-height:1.5}
+.gap-vs{display:flex;align-items:center;justify-content:center}
+.vs-badge{width:48px;height:48px;border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:1rem;font-weight:900;color:var(--muted);border-radius:14px;background:rgba(255,255,255,0.03)}
+.text-amber{color:var(--amber)}
+
+.war-story{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-left:3px solid rgba(0,255,204,0.65);padding:2rem 2.5rem;margin-top:3rem;border-radius:18px}
+.ws-label{font-family:var(--mono);font-size:0.65rem;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem}
+.ws-text{font-size:1.05rem;line-height:1.8;color:rgba(255,255,255,0.88);font-style:italic}
+.ws-numbers{display:flex;gap:2.5rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.12);flex-wrap:wrap}
+.ws-num{font-family:var(--display);font-size:2rem;font-weight:900;color:var(--amber);line-height:1}
+.ws-desc{font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:0.2rem;text-transform:uppercase;letter-spacing:0.08em}
+
+/* CONTENTS */
+.contents-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;border:1px solid rgba(255,255,255,0.12);margin-top:3rem;background:rgba(255,255,255,0.12);border-radius:18px;overflow:hidden}
+.content-cell{background:rgba(255,255,255,0.03);padding:1.5rem;transition:background 0.2s}
+.content-cell:hover{background:rgba(255,255,255,0.05)}
+.content-cell-icon{font-size:1.2rem;margin-bottom:0.75rem}
+.content-cell-title{font-family:var(--display);font-size:1rem;font-weight:900;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.4rem}
+.content-cell-desc{font-size:0.82rem;color:var(--muted);line-height:1.6}
+.content-cell-count{display:inline-block;font-family:var(--mono);font-size:0.65rem;color:var(--amber);border:1px solid rgba(0,255,204,0.25);padding:0.15rem 0.45rem;margin-top:0.5rem;border-radius:999px}
+
+/* CASE STUDY */
+.case-preview{margin-top:3rem;border:1px solid rgba(255,255,255,0.12);overflow:hidden;border-radius:18px}
+.case-preview-header{background:rgba(0,255,204,0.07);border-bottom:1px solid rgba(255,255,255,0.12);padding:0.75rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem}
+.case-preview-label{font-family:var(--mono);font-size:0.62rem;color:rgba(0,255,204,0.9);letter-spacing:0.12em;text-transform:uppercase}
+.case-preview-verdict{font-family:var(--display);font-size:1rem;font-weight:900;color:#ff5a6a;letter-spacing:0.05em}
+.case-preview-body{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.12)}
+@media(max-width:700px){.case-preview-body{grid-template-columns:repeat(2,1fr)}}
+.case-page{background:rgba(255,255,255,0.04);padding:1.25rem 1rem;position:relative;min-height:140px}
+.case-page-num{font-family:var(--mono);font-size:0.58rem;color:rgba(0,255,204,0.9);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;opacity:0.8}
+.case-page-title{font-family:var(--display);font-size:0.85rem;font-weight:900;text-transform:uppercase;color:rgba(255,255,255,0.9);line-height:1.2;margin-bottom:0.4rem}
+.case-page-lines{display:flex;flex-direction:column;gap:0.2rem}
+.case-line{height:6px;background:rgba(255,255,255,0.12);border-radius:2px}
+.case-line.amber{background:rgba(0,255,204,0.25);width:60%}
+.case-line.short{width:75%}.case-line.med{width:90%}.case-line.long{width:100%}
+.case-page-key{position:absolute;bottom:0.75rem;left:1rem;right:1rem;font-family:var(--mono);font-size:0.62rem;color:rgba(0,255,204,0.9);background:rgba(11,15,20,0.78);padding:0.3rem 0.5rem;border-left:2px solid rgba(0,255,204,0.7);border-radius:10px}
+.case-preview-footer{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.12);background:rgba(255,90,106,0.05);font-family:var(--mono);font-size:0.72rem;color:var(--muted);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem}
+.case-preview-footer b{color:rgba(255,255,255,0.88)}
+
+/* BIO */
+.bio-block{display:grid;grid-template-columns:auto 1fr;gap:2.5rem;align-items:start;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-left:3px solid rgba(0,255,204,0.6);padding:2.5rem;margin-top:4rem;border-radius:18px}
+@media(max-width:700px){.bio-block{grid-template-columns:1fr}}
+.bio-thumb{width:96px;height:96px;border:2px solid rgba(0,255,204,0.6);overflow:hidden;background:rgba(255,255,255,0.04);border-radius:18px}
+.bio-thumb img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.bio-thumb-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:2.5rem;font-weight:900;color:rgba(0,255,204,0.9);opacity:0.4}
+.bio-label{font-family:var(--mono);font-size:0.62rem;color:var(--amber);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.5rem}
+.bio-name{font-family:var(--display);font-size:1.8rem;font-weight:900;text-transform:uppercase;line-height:1;margin-bottom:0.25rem}
+.bio-title{font-family:var(--mono);font-size:0.7rem;color:var(--muted);margin-bottom:1rem;letter-spacing:0.05em}
+.bio-numbers{display:flex;gap:2rem;margin-bottom:1.25rem;flex-wrap:wrap;padding:0.75rem 0;border-top:1px solid rgba(255,255,255,0.12);border-bottom:1px solid rgba(255,255,255,0.12)}
+.bio-num-item .num{font-family:var(--display);font-size:1.5rem;font-weight:900;color:var(--amber);line-height:1}
+.bio-num-item .lbl{font-family:var(--mono);font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.15rem}
+.bio-text{font-size:0.88rem;color:var(--muted);line-height:1.75;max-width:580px}
+.bio-text strong{color:rgba(255,255,255,0.88)}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.12);margin-top:3rem;border:1px solid rgba(255,255,255,0.12);border-radius:18px;overflow:hidden}
+@media(max-width:768px){.faq-grid{grid-template-columns:1fr}}
+details{background:rgba(255,255,255,0.03);padding:0}
+summary{padding:1.25rem 1.5rem;cursor:pointer;list-style:none;font-family:var(--display);font-size:1rem;font-weight:900;text-transform:uppercase;letter-spacing:0.02em;display:flex;justify-content:space-between;align-items:center;gap:1rem;transition:color 0.2s}
+summary:hover{color:var(--amber)}
+summary::after{content:'+';font-family:var(--mono);font-size:1.2rem;color:var(--amber);flex-shrink:0;transition:transform 0.2s}
+details[open] summary::after{transform:rotate(45deg)}
+details[open]{background:rgba(255,255,255,0.05)}
+.faq-answer{padding:0 1.5rem 1.25rem;font-size:0.88rem;color:var(--muted);line-height:1.7;border-top:1px solid rgba(255,255,255,0.12);padding-top:1rem;margin-top:-0.1rem}
+
+/* FINAL CTA */
+.final-cta{text-align:center;padding:6rem 2.5rem;border-top:1px solid rgba(255,255,255,0.12);position:relative;z-index:1}
+.final-cta::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:100%;background:linear-gradient(to bottom,var(--amber),transparent);opacity:0.2}
+.final-cta h2{margin:0 auto 1.5rem;max-width:700px}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(255,255,255,0.12);padding:2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.55);position:relative;z-index:1}
+footer a{color:rgba(255,255,255,0.62);text-decoration:none}
+footer a:hover{color:var(--amber)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.btn-primary{background:linear-gradient(135deg,var(--amber),var(--amber-bright));color:#041013;padding:0.9rem 2rem;font-family:var(--display);font-size:1.1rem;font-weight:900;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none;transition:transform 0.15s ease,filter 0.15s ease;display:inline-block;border-radius:14px}
+.btn-primary:hover{transform:translateY(-1px);filter:brightness(1.02)}
+.btn-secondary{border:1px solid rgba(255,255,255,0.14);color:var(--text);padding:0.9rem 1.5rem;font-family:var(--mono);font-size:0.8rem;text-decoration:none;transition:border-color 0.2s,color 0.2s;display:inline-block;border-radius:14px;background:rgba(255,255,255,0.03)}
+.btn-secondary:hover{border-color:rgba(0,255,204,0.35);color:rgba(0,255,204,0.9)}
+@media(max-width:600px){nav{padding:0.75rem 1rem}.nav-stat{display:none}.section{padding:3rem 1.25rem}.section-full{padding:3rem 1.25rem}}
+</style>
+</head>
+<body>
+
+<div class="classified-bar">⚠ CLASSIFIED OPERATIONAL DOCUMENT — CROWDFUNDING MOMENTUM KIT · THE ARCHITECT ⚠</div>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-icon">TA</div>
+    <a class="nav-name" href="index.html" style="text-decoration:none;">The <span>Architect</span></a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-stat"><b>$890K+</b> raised · 5 campaigns</div>
+    <a href="#pricing" class="btn-nav">Get the Kit</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="classified-tag">Crowdfunding Operations · KS / IGG</div>
+    <h1>
+      The Only<br>
+      <span class="line-amber">Crowdfunding</span><br>
+      OS That Runs<br>
+      on Real Scars.
+      <span class="line-dim">"Most consultants sell you the dream. I sell you the blueprint that survived contact with reality."</span>
+    </h1>
+    <p class="hero-desc">$890K raised. 5 campaigns. Every expensive mistake documented so you don't repeat it. Self-serve materials that run on the same system I used to build two international brands.</p>
+    <div class="hero-stats">
+      <div><div class="stat-num">$890K</div><div class="stat-label">Raised across campaigns</div></div>
+      <div><div class="stat-num">111</div><div class="stat-label">Battle-tested tactics</div></div>
+      <div><div class="stat-num">5</div><div class="stat-label">Real campaigns</div></div>
+    </div>
+
+    <!-- PATH GATE -->
+    <div class="path-gate">
+      <a href="#pricing" class="path-card active">
+        <div class="path-label"><span class="path-dot"></span>Path A · Ready</div>
+        <div class="path-title">I know I'm launching.<br>Give me the system.</div>
+        <div class="path-desc">You've decided. You need a framework that covers every critical variable before you press Launch.</div>
+        <div class="path-cta">→ See CMK Tiers</div>
+      </a>
+      <a href="tools/readinesschecker.html" class="path-card">
+        <div class="path-label"><span class="path-dot"></span>Path B · Not Sure Yet</div>
+        <div class="path-title">I don't know<br>where I stand.</div>
+        <div class="path-desc">Free. 4 minutes. Get a scored readiness report on your campaign before you spend anything.</div>
+        <div class="path-cta">→ Take the Free Check</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- DOC MOCKUP -->
+  <div class="hero-right">
+    <div class="doc-mockup">
+      <div class="doc-header">
+        <span class="doc-title">Campaign Intelligence Report</span>
+        <span class="doc-ref">REF: CIR-SAMPLE-001</span>
+      </div>
+      <div class="doc-body">
+        <div class="doc-st">Pre-Launch Infrastructure</div>
+        <div class="doc-row"><span>Email list (30% rule target)</span><span class="warn">847 / min. 2,000</span></div>
+        <div class="doc-row"><span>Day 1 backer pipeline</span><span class="fail">NOT BUILT</span></div>
+        <div class="doc-row"><span>VIP reservation funnel</span><span class="fail">0 / 50 target</span></div>
+        <div class="doc-row"><span>Demand validation</span><span class="ok">✓ CONFIRMED</span></div>
+        <hr class="doc-div">
+        <div class="doc-st">Financial Readiness</div>
+        <div class="doc-row"><span>COGS accuracy</span><span class="fail">23% underestimated</span></div>
+        <div class="doc-row"><span>Refund reserve (5%)</span><span class="fail">NOT ALLOCATED</span></div>
+        <div class="doc-row"><span>Hidden cost tracker</span><span class="ok">✓ IN KIT</span></div>
+        <hr class="doc-div">
+        <div class="doc-st">Campaign Page</div>
+        <div class="doc-row"><span>Video length</span><span class="fail">4:12 / max 1:30</span></div>
+        <div class="doc-row"><span>Perk structure</span><span class="warn">2 tiers / need 4</span></div>
+        <div class="doc-row"><span>Social proof elements</span><span class="ok">✓ STRONG</span></div>
+        <div class="doc-score">
+          <span class="doc-score-label">⬡ READINESS SCORE</span>
+          <span class="doc-score-val">28 / 100 — NO-GO</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- THE PROBLEM -->
+<section class="section reveal">
+  <div class="section-eyebrow">The Problem</div>
+  <h2>Why <em>90%</em> of Campaigns<br>Die in 48 Hours.</h2>
+  <p class="section-sub">They follow YouTube advice. They hire "gurus" who've never shipped a product. They skip the Day 1 army. The blueprint doesn't match reality.</p>
+  <div class="gap-grid">
+    <div class="gap-col bad">
+      <div class="gap-col-title">✕ Generic Advice</div>
+      <div class="gap-item"><span>✕</span><span>Theoretical scenarios — no real dollar amounts</span></div>
+      <div class="gap-item"><span>✕</span><span>Budget templates that ignore the 20% stupidity tax</span></div>
+      <div class="gap-item"><span>✕</span><span>No Day 1 army — launch to silence</span></div>
+      <div class="gap-item"><span>✕</span><span>Shipping costs wrong — $42 budgeted, $58 real</span></div>
+      <div class="gap-item"><span>✕</span><span>No Dead Zone recovery plan for days 10–20</span></div>
+      <div class="gap-item"><span>✕</span><span>Zero brutal honesty about what doesn't work</span></div>
+    </div>
+    <div class="gap-vs"><div class="vs-badge">VS</div></div>
+    <div class="gap-col good">
+      <div class="gap-col-title">✓ The Architect's System</div>
+      <div class="gap-item"><span class="text-amber">✓</span><span>111 real war stories with exact dollar figures</span></div>
+      <div class="gap-item"><span class="text-amber">✓</span><span>Budget calculator with stupidity tax built in</span></div>
+      <div class="gap-item"><span class="text-amber">✓</span><span>Super-backer database + 48-hour launch playbook</span></div>
+      <div class="gap-item"><span class="text-amber">✓</span><span>23-touchpoint hidden cost tracker, real benchmarks</span></div>
+      <div class="gap-item"><span class="text-amber">✓</span><span>Dead Zone Recovery Playbook — pre-loaded for days 10–20</span></div>
+      <div class="gap-item"><span class="text-amber">✓</span><span>Radical honesty — what doesn't work, documented in blood</span></div>
+    </div>
+  </div>
+  <div class="war-story">
+    <div class="ws-label">▸ War Story — Bullet #44 / Baggizmo Campaign</div>
+    <p class="ws-text">"I shipped 800 packages to the US using a budget courier. Quoted: $4.80 per unit. Actual after residential surcharges, fuel fees, and redelivery: $8.40 per unit. That's $2,880 I never budgeted. The campaign was fully funded. The margin was gone. That number is now in the Hidden Cost Tracker so you never repeat it."</p>
+    <div class="ws-numbers">
+      <div><div class="ws-num">$4.80</div><div class="ws-desc">Quoted cost / unit</div></div>
+      <div><div class="ws-num">$8.40</div><div class="ws-desc">Actual cost / unit</div></div>
+      <div><div class="ws-num">$2,880</div><div class="ws-desc">Unbudgeted loss</div></div>
+      <div><div class="ws-num">0</div><div class="ws-desc">Times you'll repeat this</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SYSTEM CONTENTS -->
+<div class="section-full">
+  <div class="inner reveal">
+    <div class="section-eyebrow">System Contents</div>
+    <h2>196+ Deliverables.<br><em>One Operational System.</em></h2>
+    <p class="section-sub">Not a PDF dump. An operational OS covering every phase from idea to post-campaign retail. The materials are the deliverable — the knowledge is the product.</p>
+    <div class="contents-grid">
+      <div class="content-cell"><div class="content-cell-icon">📖</div><div class="content-cell-title">The Elite Blueprint</div><div class="content-cell-desc">11 chapters. 111 bullets, each with Task + Guidance + Architect's Cut + War Story. 444 actionable segments from real campaigns.</div><div class="content-cell-count">444 segments</div></div>
+      <div class="content-cell"><div class="content-cell-icon">📊</div><div class="content-cell-title">12 Calculators</div><div class="content-cell-desc">Budget with Stupidity Tax, Hidden Cost Tracker (23-touchpoint), 3PL vs Direct, Cash Flow Waterfall, CAC Survival, Pricing Tier Builder.</div><div class="content-cell-count">12 spreadsheets</div></div>
+      <div class="content-cell"><div class="content-cell-icon">⚔️</div><div class="content-cell-title">10 Tactical Playbooks</div><div class="content-cell-desc">48-Hour Launch Sequence, Dead Zone Recovery, Final 48H Surge, Amazon Survival, V2 Evolution, Day 101, Troll Response, Golden Sample Protocol.</div><div class="content-cell-count">10 playbooks</div></div>
+      <div class="content-cell"><div class="content-cell-icon">✉️</div><div class="content-cell-title">6 Email Sequences</div><div class="content-cell-desc">Pre-launch nurture, Super-Backer outreach, Post-campaign vault, 14-day survey, Address Lock, Post-fulfillment loyalty (Day 3/14/30/60/90).</div><div class="content-cell-count">6 sequences</div></div>
+      <div class="content-cell"><div class="content-cell-icon">✅</div><div class="content-cell-title">9 Checklists</div><div class="content-cell-desc">Landing page conversion, VAT/IOSS compliance, Post-campaign Day 1, Pledge Manager setup, IP Protection, Marine cargo insurance, QC inspection.</div><div class="content-cell-count">9 checklists</div></div>
+      <div class="content-cell"><div class="content-cell-icon">🎁</div><div class="content-cell-title">Bonus Vault</div><div class="content-cell-desc">50+ Support Scripts, Baggizmo Case Study, Readiness Quiz, Master Press List, Commercial Invoice Template, SOP Documentation.</div><div class="content-cell-count">15 items</div></div>
+      <div class="content-cell"><div class="content-cell-icon">🧪</div><div class="content-cell-title">9 Scored Checkpoints</div><div class="content-cell-desc">5 GO/NO-GO criteria at the end of every chapter. 45 self-assessment questions that tell you exactly where you're not ready.</div><div class="content-cell-count">45 criteria</div></div>
+      <div class="content-cell"><div class="content-cell-icon">📐</div><div class="content-cell-title">13 Templates</div><div class="content-cell-desc">Competitor audit, influencer outreach, campaign video structure, perk architecture, backer update calendar, unboxing blueprint, VA onboarding.</div><div class="content-cell-count">13 templates</div></div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- CMK PRICING -->
+<section class="section" id="pricing">
+  <div class="section-eyebrow">CMK Materials</div>
+  <h2>One Arsenal.<br><em>Three Tiers.</em></h2>
+  <p class="section-sub">Self-serve operational materials. Instant access. No consulting time included — this is the system you run yourself. Need my brain in the room? <a href="momentum.html" style="color:var(--amber);text-decoration:none;">See Momentum Services →</a></p>
+
+  <!-- READINESS STRIP -->
+  <div class="readiness-strip">
+    <div class="rs-left">
+      <div class="rs-icon">RC</div>
+      <div>
+        <div class="rs-label">Free Tool · 4 Minutes</div>
+        <div class="rs-title">Not Sure Which Tier?</div>
+        <div class="rs-desc">Take the Campaign Readiness Check first — it tells you exactly where your gaps are and which tier you need.</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
+      <div class="rs-score-demo">
+        <div class="rs-score-item"><div class="rs-score-num green">75+</div><div class="rs-score-lbl">Blueprint</div></div>
+        <div style="color:rgba(255,255,255,0.22);font-size:1.2rem;">·</div>
+        <div class="rs-score-item"><div class="rs-score-num amber">50–74</div><div class="rs-score-lbl">Pro</div></div>
+        <div style="color:rgba(255,255,255,0.22);font-size:1.2rem;">·</div>
+        <div class="rs-score-item"><div class="rs-score-num red">&lt;50</div><div class="rs-score-lbl">Standard</div></div>
+      </div>
+      <a href="tools/readinesschecker.html" class="rs-cta">Take Free Check →</a>
+    </div>
+  </div>
+
+  <div class="pricing-grid reveal">
+    <!-- STANDARD -->
+    <div class="price-card">
+      <div class="price-tier">// TIER 01 · Affiliate Available</div>
+      <div class="price-name">Standard</div>
+      <div class="price-desc">The knowledge layer. Everything you need to understand the battlefield before you step onto it.</div>
+      <div class="price-amount"><sup>$</sup>299</div>
+      <div class="price-note">One-time · Instant access · VAT may apply</div>
+      <div style="margin-top:-6px;font-family:var(--mono);font-size:0.62rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;">Best for: First-time founders who need the framework.</div>
+      <hr class="price-divider">
+      <div class="price-includes">Includes:</div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">Elite Blueprint (111 bullets, 11 chapters)</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">9 Scored Checkpoints (45 GO/NO-GO criteria)</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">111 War Stories with exact dollar figures</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">Epilogue: The 101st Day Manifesto</span></div>
+      <div class="price-feature"><span class="cross">—</span><span class="label dim">70 Plugin Tools</span></div>
+      <div class="price-feature"><span class="cross">—</span><span class="label dim">Financial Calculators &amp; Playbooks</span></div>
+      <div class="price-feature"><span class="cross">—</span><span class="label dim">Master Press List · Lifetime Updates</span></div>
+      <a href="https://payhip.com/b/rNsfn" class="btn-tier btn-ts">Get Standard</a>
+    </div>
+
+    <!-- PRO -->
+    <div class="price-card featured">
+      <div class="price-tier">// TIER 02 · Affiliate Available</div>
+      <div class="price-name">Pro</div>
+      <div class="price-desc">The full operational toolkit. Knowledge plus every calculator, playbook, and email sequence you'll actually run.</div>
+      <div class="price-amount"><sup>$</sup>699</div>
+      <div class="price-note">One-time · Instant access · VAT may apply</div>
+      <div style="margin-top:-6px;font-family:var(--mono);font-size:0.62rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;">Best for: Launching in 4–12 weeks and need tools + SOPs.</div>
+      <hr class="price-divider">
+      <div class="price-includes">Everything in Standard, plus:</div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">70 Plugin Tools — calculators, templates, scripts</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">12 Financial Calculators incl. Hidden Cost Tracker</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">10 Tactical Playbooks (48H Launch, Dead Zone, Surge)</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">6 Complete Email Sequences</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">Master Campaign Checklist</span></div>
+      <div class="price-feature"><span class="cross">—</span><span class="label dim">Master Press List · Lifetime Updates</span></div>
+      <a href="https://payhip.com/b/JCx6L" class="btn-tier btn-tp">Get Pro</a>
+    </div>
+
+    <!-- BLUEPRINT -->
+    <div class="price-card">
+      <div class="price-tier">// TIER 03 · Exclusive · No Affiliate</div>
+      <div class="price-name">The Blueprint</div>
+      <div class="price-desc">The complete system. Pro plus the press network, Baggizmo case study, $250K Mistake Map, and lifetime updates.</div>
+      <div class="price-amount"><sup>$</sup>999</div>
+      <div class="price-note">One-time · Instant access · Lifetime updates</div>
+      <div style="margin-top:-6px;font-family:var(--mono);font-size:0.62rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;">Best for: Serious campaigns and repeat operators.</div>
+      <hr class="price-divider">
+      <div class="price-includes">Everything in Pro, plus:</div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">Bonus Vault — 15 standalone deliverables</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">50+ Support Scripts Vault</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">Master Press List — 300+ journalists, searchable</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">Full Baggizmo Case Study — real campaign, real numbers</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">$250K Mistake Map — 29 most expensive errors</span></div>
+      <div class="price-feature"><span class="check">✓</span><span class="label">Lifetime Updates — new war stories, new tools</span></div>
+      <a href="https://payhip.com/b/ALXuq" class="btn-tier btn-ts">Get The Blueprint</a>
+    </div>
+  </div>
+
+  <!-- AUDIT HOOK -->
+  <div class="audit-hook reveal" id="audit">
+    <div>
+      <div class="ah-tag">▸ Not sure which tier? Need a diagnosis first.</div>
+      <div class="ah-title">Get Your Campaign Intelligence Report.</div>
+      <p class="ah-desc">Before you invest in a campaign — or before you relaunch a failing one — I run your numbers, your page, your strategy through the full 8-module framework. GO/NO-GO verdict. Every critical gap quantified in dollars. The report tells you which CMK tier your situation requires.</p>
+      <div class="ah-items">
+        <div class="ah-item"><span>✓</span>GO / NO-GO Verdict</div>
+        <div class="ah-item"><span>✓</span>Win-Before-Launch Math</div>
+        <div class="ah-item"><span>✓</span>Critical Gap Analysis</div>
+        <div class="ah-item"><span>✓</span>Platform Risk Assessment</div>
+        <div class="ah-item"><span>✓</span>Fix Priority Matrix</div>
+        <div class="ah-item"><span>✓</span>72h delivery</div>
+      </div>
+    </div>
+    <div class="ah-price-block">
+      <div class="ah-price"><sup>$</sup>499</div>
+      <div class="ah-price-note">One-time · 72h delivery · 30-day guarantee</div>
+      <a href="audit.html" class="btn-primary">Order CIR — $499</a>
+    </div>
+  </div>
+
+  <!-- MOMENTUM BRIDGE -->
+  <div class="momentum-bridge reveal">
+    <div class="mb-eyebrow">Next Level</div>
+    <div class="mb-title">Need More Than Materials?<br>The Architect Comes With It.</div>
+    <p class="mb-desc">CMK gives you the system. Momentum Services puts me in the room — reviewing your numbers, stress-testing your strategy, or running the entire campaign.</p>
+    <a href="momentum.html" class="mb-cta">See Momentum Services →</a>
+    <div class="mb-cta-note">Application required for The Campaign and The Command · Very limited availability</div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<footer>
+  <span>© 2026 The Architect™ · Elitegrowth d.o.o.</span>
+  <div style="display:flex;gap:1.5rem;">
+    <a href="data/privacy.html">Privacy Policy</a>
+    <a href="data/terms.html">Terms</a>
+    <a href="data/refund.html">Refund Policy</a>
+    <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); } });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
