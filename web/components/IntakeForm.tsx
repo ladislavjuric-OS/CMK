@@ -30,7 +30,8 @@ const TRACKING_TOOLS = ["Google Analytics 4", "Meta Pixel (Facebook/Instagram)",
 
 const STATUS_OPTIONS = ["Live", "Planned", "Not Set Up"];
 
-type FormState = Record<string, string | number | Record<string, string> | string[]>;
+type FormValue = string | number | Record<string, string> | string[];
+type FormState = Record<string, FormValue>;
 
 const emptyForm = (): FormState => ({
   email: "",
@@ -93,7 +94,7 @@ function getFormValue(form: FormState, key: string): string {
   return String(v ?? "");
 }
 
-function setFormValue(form: FormState, key: string, value: string | number | string[]): FormState {
+function setFormValue(form: FormState, key: string, value: FormValue): FormState {
   return { ...form, [key]: value };
 }
 
@@ -102,7 +103,7 @@ export default function IntakeForm() {
   const [step, setStep] = useState<"form" | "submitting" | "done" | "error">("form");
   const [error, setError] = useState("");
 
-  const set = (key: string, value: string | number | string[]) => {
+  const set = (key: string, value: FormValue) => {
     setForm((f) => setFormValue(f, key, value));
   };
 
@@ -503,14 +504,19 @@ export default function IntakeForm() {
                     <div key={tool} className="intake-tracking-row">
                       <span className="intake-tracking-name">{tool}</span>
                       <div className="seg-group">
-                        {STATUS_OPTIONS.map((opt) => (
-                          <label key={opt} className={`seg-opt ${(form.q20_tracking as Record<string, string>)?.[tool] === opt ? "selected" : ""}`} onClick={() => setTracking(tool, opt)}>
-                          <input type="radio" readOnly checked={(form.q20_tracking as Record<string, string>)?.[tool] === opt} />
-                          <div className="seg-label">{opt}</div>
-                        </label>
-                      ))}
+                        {STATUS_OPTIONS.map((opt) => {
+                          const trackingObj = (form.q20_tracking as Record<string, string>) || {};
+                          const current = trackingObj[tool] === opt;
+                          return (
+                            <label key={opt} className={`seg-opt ${current ? "selected" : ""}`} onClick={() => setTracking(tool, opt)}>
+                              <input type="radio" readOnly checked={current} />
+                              <div className="seg-label">{opt}</div>
+                            </label>
+                          );
+                        })}
                     </div>
                   </div>
+                  ))}
                 </div>
               </div>
             </div>
