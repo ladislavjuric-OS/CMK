@@ -835,7 +835,7 @@ a {
 .pg-readiness .fg.g3 { grid-template-columns: 1fr 1fr 1fr; }
 .pg-readiness .fg.g1 { grid-template-columns: 1fr; }
 .pg-readiness .field { display: flex; flex-direction: column; gap: 6px; }
-.pg-readiness .field label { font-size: 13px; font-weight: 500; color: var(--cmk-text); }
+.pg-readiness .field label { font-size: 13px; font-weight: 500; color: var(--cmk-text); min-height: 2.6em; display: flex; flex-direction: column; justify-content: flex-end; }
 .pg-readiness .field label .h { font-weight: 400; color: rgba(255,255,255,0.62); font-size: 12px; }
 .pg-readiness .field input, .pg-readiness .field select { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; color: var(--cmk-text); font-size: 15px; padding: 10px 13px; outline: none; transition: border-color 0.15s, box-shadow 0.15s, background 0.15s; -webkit-appearance: none; }
 .pg-readiness .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8a84' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 34px; cursor: pointer; }
@@ -974,6 +974,9 @@ a {
 .pg-readiness .restart-row { text-align: center; padding: 20px 0 44px; }
 .pg-readiness .btn-restart { font-size: 13px; color: rgba(255,255,255,0.62); font-weight: 500; background: none; border: none; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; transition: color 0.12s; }
 .pg-readiness .btn-restart:hover { color: var(--cmk-text); }
+
+/* Readiness page: footer links grouped, not spread */
+.pg-readiness-page .cmk-footer { justify-content: flex-start; gap: 1.5rem; }
 
 @media (max-width: 580px) {
   .pg-readiness .readiness-hero { padding: 44px 0 36px; }
