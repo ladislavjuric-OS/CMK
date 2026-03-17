@@ -74,8 +74,15 @@ const COUNTER_OFFSET = 247; // Starting offset — real count + this = displayed
 const COUNTER_NS = 'elitegrowth';
 const COUNTER_KEY = 'campaigns';
 
-async function sendResultsEmail({ email, result }) {
-  if (!email || !process.env.RESEND_API_KEY) return;
+async function sendResultsEmail({ email, result, debug }) {
+  const dbg = {
+    attempted: false,
+    status: null,
+    error: null
+  };
+
+  if (!email || !process.env.RESEND_API_KEY) return dbg;
+  dbg.attempted = true;
 
   const score = Number(result?.score ?? 0);
   const verdict = String(result?.verdict ?? '');
@@ -121,7 +128,8 @@ async function sendResultsEmail({ email, result }) {
   </html>`;
 
   // Best-effort: do not fail the API request if email fails
-  fetch('https://api.resend.com/emails', {
+  try {
+    const rr = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -133,7 +141,21 @@ async function sendResultsEmail({ email, result }) {
       subject: `Your Campaign Score: ${score}/100 — ${verdict}`,
       html
     })
-  }).catch(() => {});
+    });
+    dbg.status = rr.status;
+    if (!rr.ok) {
+      const t = await rr.text().catch(() => '');
+      dbg.error = t.slice(0, 900) || null;
+      console.log('[resend] fail', rr.status, dbg.error);
+    } else if (debug) {
+      console.log('[resend] ok', rr.status);
+    }
+  } catch (e) {
+    dbg.error = String(e?.message || e);
+    console.log('[resend] error', dbg.error);
+  }
+
+  return dbg;
 }
 
 async function upsertSystemeAndTag({ email }) {
@@ -259,7 +281,7 @@ Return JSON only.`;
     fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/${COUNTER_KEY}/up`).catch(() => {});
 
     // Send results email (best-effort)
-    sendResultsEmail({ email, result });
+    const resendDebug = await sendResultsEmail({ email, result, debug });
 
     // Add to Systeme.io (non-blocking)
     const systemeDebug = await upsertSystemeAndTag({ email });
@@ -268,6 +290,7 @@ Return JSON only.`;
       return res.status(200).json({
         ...result,
         _debug: {
+          resend: resendDebug,
           systeme: systemeDebug
         }
       });
