@@ -256,7 +256,7 @@ export default function AuditPage() {
       <section className="audit-section">
         <div className="audit-eyebrow">▸ Intel Briefing</div>
         <h2>Questions.<br /><em>Answered.</em></h2>
-        <div className="audit-faq-list">
+        <div className="audit-faq-grid">
           {FAQ.map((item) => (
             <details key={item.q}>
               <summary>{item.q}</summary>
