@@ -25,6 +25,7 @@ export async function POST(request: Request) {
       .single();
 
     if (error) {
+      console.error("[audit-requests] Supabase error:", error.message, error);
       return NextResponse.json(
         { error: "Failed to save request", detail: error.message },
         { status: 500 }
@@ -33,6 +34,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ok: true, id: data.id, created_at: data.created_at });
   } catch (e) {
+    console.error("[audit-requests] Exception:", e);
     return NextResponse.json(
       { error: "Server error", detail: e instanceof Error ? e.message : String(e) },
       { status: 500 }
