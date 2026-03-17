@@ -138,7 +138,8 @@ async function sendResultsEmail({ email, result }) {
 
 async function upsertSystemeAndTag({ email }) {
   if (!email || !process.env.SYSTEME_API_KEY) return;
-  const tagId = process.env.SYSTEME_TAG_ID ? Number(process.env.SYSTEME_TAG_ID) : 1914659;
+  const tagIdRaw = process.env.SYSTEME_TAG_ID ?? '1914659';
+  const tagId = Number(tagIdRaw);
   if (!tagId || Number.isNaN(tagId)) return;
 
   try {
@@ -151,14 +152,26 @@ async function upsertSystemeAndTag({ email }) {
       body: JSON.stringify({ email })
     });
     const sd = await sr.json().catch(() => ({}));
+    const contactId = sd?.id ?? sd?.contact?.id ?? sd?.data?.id ?? sd?.contactId ?? sd?.contact_id;
+    console.log('[systeme] upsert status', sr.status, 'contactId', contactId ? 'present' : 'missing');
 
     // 2) Apply tag by ID (only if we got a contact id back)
-    if (sd?.id) {
-      await fetch(`https://api.systeme.io/api/contacts/${sd.id}/tags`, {
+    if (contactId) {
+      const tr = await fetch(`https://api.systeme.io/api/contacts/${contactId}/tags`, {
         method: 'POST',
         headers,
         body: JSON.stringify({ tagId })
-      }).catch(() => {});
+      });
+      if (!tr.ok) {
+        const td = await tr.text().catch(() => '');
+        console.log('[systeme] tag status', tr.status, td.slice(0, 300));
+      } else {
+        console.log('[systeme] tag status', tr.status, 'ok');
+      }
+    } else {
+      try {
+        console.log('[systeme] upsert response keys', Object.keys(sd || {}).slice(0, 20));
+      } catch {}
     }
   } catch {
     // best-effort
