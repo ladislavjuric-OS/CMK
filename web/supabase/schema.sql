@@ -92,18 +92,21 @@ alter table public.profiles enable row level security;
 alter table public.entitlements enable row level security;
 
 -- Authenticated users can read their readiness results.
+drop policy if exists "read_own_readiness_results" on public.readiness_results;
 create policy "read_own_readiness_results"
   on public.readiness_results
   for select
   using (user_id = auth.uid());
 
 -- Users can read their profile.
+drop policy if exists "read_own_profile" on public.profiles;
 create policy "read_own_profile"
   on public.profiles
   for select
   using (user_id = auth.uid());
 
 -- Users can read their entitlements.
+drop policy if exists "read_own_entitlements" on public.entitlements;
 create policy "read_own_entitlements"
   on public.entitlements
   for select
