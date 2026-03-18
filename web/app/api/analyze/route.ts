@@ -175,6 +175,7 @@ async function upsertSystemeAndTag({ email }: { email: string }) {
   const tagIdRaw = process.env.SYSTEME_TAG_ID ?? "1914659";
   const tagId = Number(tagIdRaw);
   if (!tagId || Number.isNaN(tagId)) return;
+  const debug = String(process.env.SYSTEME_DEBUG ?? "").toLowerCase() === "true";
   const headers = {
     "Content-Type": "application/json",
     "X-API-Key": process.env.SYSTEME_API_KEY,
@@ -187,38 +188,38 @@ async function upsertSystemeAndTag({ email }: { email: string }) {
       body: JSON.stringify({ email }),
     });
     const sd = await sr.json().catch(() => ({}));
+    if (debug && !sr.ok && sr.status !== 409) {
+      console.error("[systeme] create contact failed", { status: sr.status, body: sd });
+    }
+
     let contactId = getContactIdFromResponse(sd);
 
-    if (!contactId && sr.ok) {
+    // If contact already exists (409) or API didn't return an id, fetch by email.
+    if (!contactId) {
       const listRes = await fetch(
         `https://api.systeme.io/api/contacts?email=${encodeURIComponent(email)}&limit=1`,
         { headers }
       );
       const listData = await listRes.json().catch(() => ({}));
-      const list = listData as { items?: Array<{ id?: number }> };
-      contactId = list?.items?.[0]?.id;
+      const list = listData as { items?: Array<{ id?: number | string }> };
+      const id = list?.items?.[0]?.id;
+      contactId = typeof id === "number" ? id : typeof id === "string" ? parseInt(id, 10) : undefined;
+      if (debug && !listRes.ok) {
+        console.error("[systeme] lookup contact failed", { status: listRes.status, body: listData });
+      }
     }
 
     if (!contactId) return;
 
-    const tagPayloads = [
-      {
-        url: `https://api.systeme.io/api/contacts/${contactId}/tags`,
-        body: { tagId },
-      },
-      {
-        url: `https://api.systeme.io/api/tags/${tagId}/contacts`,
-        body: { contactId },
-      },
-    ];
-
-    for (const { url, body } of tagPayloads) {
-      const tr = await fetch(url, {
-        method: "POST",
-        headers,
-        body: JSON.stringify(body),
-      });
-      if (tr.ok || tr.status === 204) break;
+    // Tag contact (official endpoint).
+    const tr = await fetch(`https://api.systeme.io/api/contacts/${contactId}/tags`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ tagId }),
+    });
+    if (debug && !(tr.ok || tr.status === 204)) {
+      const tb = await tr.json().catch(() => ({}));
+      console.error("[systeme] tag contact failed", { status: tr.status, body: tb, contactId, tagId });
     }
   } catch {
     // best-effort
@@ -343,7 +344,10 @@ Return JSON only.`;
       email: String(email ?? ""),
       result,
     });
-    upsertSystemeAndTag({ email: String(email ?? "") });
+    // Ensure Systeme.io tagging completes in serverless environments.
+    await Promise.allSettled([
+      upsertSystemeAndTag({ email: String(email ?? "") }),
+    ]);
 
     return NextResponse.json(result, { headers });
   } catch (err) {
