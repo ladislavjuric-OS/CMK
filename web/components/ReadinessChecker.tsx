@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
-import { getSupabaseBrowser } from "@/lib/supabaseBrowser";
-
 const CATEGORIES = [
   { k: "win_before_launch", l: "Win-Before-Launch", m: 30 },
   { k: "financial_readiness", l: "Financial Readiness", m: 25 },
@@ -58,7 +56,6 @@ export default function ReadinessChecker() {
     weeks_to_launch: "",
   });
 
-  const [saveStep, setSaveStep] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [saveError, setSaveError] = useState("");
 
   const setSel = (name: string, value: string) => {
@@ -149,36 +146,6 @@ export default function ReadinessChecker() {
     } catch (e) {
       setError(e instanceof Error ? e.message : "Analysis failed. Try again.");
       setStep("form");
-    }
-  };
-
-  const saveResultsToAccount = async () => {
-    try {
-      setSaveStep("sending");
-      setSaveError("");
-
-      const em = String(payload?.email ?? form.email ?? "");
-      if (!em || !em.includes("@")) {
-        setSaveStep("error");
-        setSaveError("Missing email. Please run analysis again.");
-        return;
-      }
-
-      const supabase = getSupabaseBrowser();
-      const redirectTo =
-        typeof window !== "undefined" ? `${window.location.origin}/auth/callback` : "/auth/callback";
-
-      const { error: otpErr } = await supabase.auth.signInWithOtp({
-        email: em,
-        options: { emailRedirectTo: redirectTo },
-      });
-
-      if (otpErr) throw otpErr;
-
-      setSaveStep("sent");
-    } catch (e) {
-      setSaveStep("error");
-      setSaveError(e instanceof Error ? e.message : String(e));
     }
   };
 
@@ -362,20 +329,12 @@ export default function ReadinessChecker() {
         </div>
 
         <div className="save-card">
-          <div className="save-ey">Optional: link results to your account</div>
-          <div className="save-h">Save my score via magic link</div>
-          <div className="save-r">After login, your readiness results appear in your dashboard and can unlock upsells.</div>
-          <div className="save-btn-row">
-            <button
-              type="button"
-              className="save-btn"
-              onClick={saveResultsToAccount}
-              disabled={saveStep === "sending" || saveStep === "sent"}
-            >
-              {saveStep === "sending" ? "Sending…" : saveStep === "sent" ? "Check inbox" : "Send magic link"}
-            </button>
+          <div className="save-ey">Link results to your account</div>
+          <div className="save-h">Use the email we just sent you</div>
+          <div className="save-r">
+            We&apos;ve emailed your results to <strong>{payload?.email ?? form.email ?? ""}</strong>. Open that email and click <strong>View your history</strong> to save to your account and open your dashboard. No second email — one link only.
           </div>
-          {saveStep === "error" ? <div className="save-err">{saveError}</div> : null}
+          {saveError ? <div className="save-err">{saveError}</div> : null}
         </div>
 
         <div className="share-card">
