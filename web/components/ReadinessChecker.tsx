@@ -332,7 +332,7 @@ export default function ReadinessChecker() {
           <div className="save-ey">Link results to your account</div>
           <div className="save-h">Use the email we just sent you</div>
           <div className="save-r">
-            We&apos;ve emailed your results to <strong>{payload?.email ?? form.email ?? ""}</strong>. Open that email and click <strong>View your history</strong> to save to your account and open your dashboard. No second email — one link only.
+            We&apos;ve emailed your results to <strong>{String(payload?.email ?? form.email ?? "")}</strong>. Open that email and click <strong>View your history</strong> to save to your account and open your dashboard. No second email — one link only.
           </div>
           {saveError ? <div className="save-err">{saveError}</div> : null}
         </div>
