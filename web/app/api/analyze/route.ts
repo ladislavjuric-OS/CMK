@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getSupabaseServer } from "@/lib/supabase";
 
 const SYSTEM_PROMPT = `You are The Architect — a crowdfunding strategist who has raised $890K across 5 real campaigns (Baggizmo, Wiseward, and others). You speak with brutal honesty, no fluff, no empty encouragement.
 
@@ -335,6 +336,23 @@ Return JSON only.`;
     const text = (data.content?.[0] as { text?: string })?.text?.trim?.() ?? "";
     const clean = text.replace(/```json|```/g, "").trim();
     const result = JSON.parse(clean) as Record<string, unknown>;
+
+    // Persist readiness result for later account linking/dashboard.
+    try {
+      const supabase = getSupabaseServer();
+      const emailStr = String(email ?? "");
+      const score = Number(result?.score ?? 0);
+      const verdict = String(result?.verdict ?? "");
+      await supabase.from("readiness_results").insert({
+        user_id: null,
+        email: emailStr,
+        score,
+        verdict,
+        payload: result,
+      });
+    } catch (e) {
+      console.error("[readiness_results] insert failed", e);
+    }
 
     fetch(
       `https://api.counterapi.dev/v1/${COUNTER_NS}/${COUNTER_KEY}/up`

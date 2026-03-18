@@ -972,6 +972,16 @@ a {
 .pg-readiness .btn-cs { display: inline-block; color: rgba(255,255,255,0.62); font-size: 13px; font-weight: 600; padding: 12px 14px; text-decoration: none; transition: color 0.15s, background 0.15s, border-color 0.15s; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; }
 .pg-readiness .btn-cs:hover { color: var(--cmk-text); border-color: rgba(0,255,204,0.35); background: rgba(255,255,255,0.08); }
 
+.pg-readiness .save-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 20px 22px; margin-bottom: 10px; box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
+.pg-readiness .save-ey { font-size: 10px; color: rgba(255,255,255,0.62); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; font-weight: 800; }
+.pg-readiness .save-h { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; color: var(--cmk-text); line-height: 1.2; margin-bottom: 6px; }
+.pg-readiness .save-r { font-size: 13px; color: rgba(255,255,255,0.72); line-height: 1.6; max-width: 540px; margin-bottom: 14px; }
+.pg-readiness .save-btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.pg-readiness .save-btn { background: linear-gradient(135deg, rgba(0,255,204,0.98), rgba(98,166,255,0.92)); color: #041013; border: 1px solid rgba(0,0,0,0.25); border-radius: 10px; padding: 11px 18px; font-size: 14px; font-weight: 900; cursor: pointer; transition: transform 0.1s, filter 0.15s; }
+.pg-readiness .save-btn:hover { filter: brightness(1.02); transform: translateY(-1px); }
+.pg-readiness .save-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.pg-readiness .save-err { background: rgba(255,90,106,0.12); border: 1px solid rgba(255,90,106,0.22); border-radius: 10px; padding: 10px 14px; margin-top: 12px; font-size: 13px; color: #ff5a6a; }
+
 .pg-readiness .share-card { background: rgba(255,255,255,0.06); border: 1px solid var(--cmk-border); border-radius: 12px; padding: 14px 22px; display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
 .pg-readiness .share-lbl { font-size: 13px; color: rgba(255,255,255,0.72); font-weight: 500; }
 .pg-readiness .share-btns { display: flex; gap: 6px; }
