@@ -38,21 +38,29 @@ export async function POST(request: Request) {
     const supabase = getSupabaseServer();
 
     // Ensure profile exists (used later for admin flag).
-    await supabase
-      .from("profiles")
-      .upsert(
-        { user_id: userId, email, is_admin: false },
-        { onConflict: "user_id" }
-      )
-      .catch(() => {});
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .upsert(
+          { user_id: userId, email, is_admin: false },
+          { onConflict: "user_id" }
+        );
+      if (error) console.error("[readiness/link] profile upsert failed:", error);
+    } catch (e) {
+      console.error("[readiness/link] profile upsert exception:", e);
+    }
 
     // Link readiness rows created by email-only flow.
-    await supabase
-      .from("readiness_results")
-      .update({ user_id: userId })
-      .eq("email", email)
-      .is("user_id", null)
-      .catch(() => {});
+    try {
+      const { error } = await supabase
+        .from("readiness_results")
+        .update({ user_id: userId })
+        .eq("email", email)
+        .is("user_id", null);
+      if (error) console.error("[readiness/link] readiness update failed:", error);
+    } catch (e) {
+      console.error("[readiness/link] readiness update exception:", e);
+    }
 
     return NextResponse.json({ ok: true });
   } catch (e) {
