@@ -40,14 +40,20 @@ export default function AuthCallbackPage() {
         }
 
         setStatus("Linking your readiness results…");
-        await fetch("/api/readiness/link", {
+        const linkRes = await fetch("/api/readiness/link", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({}),
-        }).catch(() => {});
+        });
+        if (!linkRes.ok) {
+          const errData = await linkRes.json().catch(() => ({}));
+          setStatus(`Linking failed: ${(errData as { error?: string }).error ?? linkRes.statusText}. You’re signed in — try the dashboard.`);
+          setTimeout(() => router.replace("/dashboard"), 2500);
+          return;
+        }
 
         router.replace("/dashboard");
       } catch {

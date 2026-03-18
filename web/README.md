@@ -11,6 +11,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
    ```
 4. **Install deps:** `npm install` (adds `@supabase/supabase-js`).
 
+**When switching to production (cmk.elitegrowth.pro):** Supabase → Authentication → URL Configuration: set Site URL and Redirect URLs to `https://cmk.elitegrowth.pro` and `https://cmk.elitegrowth.pro/auth/callback`. In Vercel Production env set `NEXT_PUBLIC_APP_URL=https://cmk.elitegrowth.pro`.
+
 API route `POST /api/audit-requests` expects `{ email, payload? }` and inserts into `audit_requests`.
 
 **Test (PowerShell, one line, single quotes around JSON):**

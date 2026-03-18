@@ -10,7 +10,10 @@ async function verifyAccessToken(accessToken: string) {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
   const verifyData = await verifyRes.json().catch(() => ({}));
-  if (!verifyRes.ok) throw new Error("Invalid token");
+  if (!verifyRes.ok) {
+    const msg = (verifyData as { msg?: string }).msg ?? (verifyData as { error_description?: string }).error_description ?? "Invalid token";
+    throw new Error(msg);
+  }
   return verifyData as { id?: string; email?: string; user?: { id?: string; email?: string } };
 }
 
@@ -49,9 +52,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ readiness, entitlements, user: { userId, email } });
   } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    const isAuthError = message.includes("Invalid") || message.includes("token") || message.includes("401");
     return NextResponse.json(
-      { error: "Failed to load dashboard", detail: e instanceof Error ? e.message : String(e) },
-      { status: 500 }
+      { error: isAuthError ? "Session expired or invalid. Use the link from your results email again." : "Failed to load dashboard", detail: message },
+      { status: isAuthError ? 401 : 500 }
     );
   }
 }

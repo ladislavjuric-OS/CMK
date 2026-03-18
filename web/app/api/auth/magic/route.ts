@@ -4,6 +4,12 @@ import { getSupabaseServer } from "@/lib/supabase";
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://cmk.elitegrowth.pro";
 const CALLBACK_URL = `${BASE_URL}/auth/callback`;
 
+/*
+ * When moving DNS to production (cmk.elitegrowth.pro): update Supabase Dashboard →
+ * Authentication → URL Configuration: Site URL + Redirect URLs to https://cmk.elitegrowth.pro
+ * (and https://cmk.elitegrowth.pro/auth/callback). Set NEXT_PUBLIC_APP_URL for Production env.
+ */
+
 /**
  * GET /api/auth/magic?token=xxx
  * Exchanges a one-time token (from Resend "View your history" link) for a Supabase magic link.
