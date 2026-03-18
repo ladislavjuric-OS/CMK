@@ -33,7 +33,8 @@ export async function GET(request: Request) {
     .maybeSingle();
 
   if (fetchError || !row?.email) {
-    return NextResponse.redirect(`${BASE_URL}/tools/readiness?error=invalid_or_expired`, 302);
+    // Link already used or expired — send to dashboard; if they have a session it may still work.
+    return NextResponse.redirect(`${BASE_URL}/dashboard`, 302);
   }
 
   const email = row.email as string;

@@ -51,22 +51,33 @@ export default function DashboardPage() {
       try {
         setLoading(true);
         const supabase = getSupabaseBrowser();
-        const sessRes = await supabase.auth.getSession();
-        const session = sessRes.data.session;
+        let sessRes = await supabase.auth.getSession();
+        let session = sessRes.data.session;
         if (!session?.access_token) {
           setErr("Please sign in to see your readiness dashboard.");
           setLoading(false);
           return;
         }
 
-        const res = await fetch("/api/readiness/me", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify({}),
-        });
+        const doFetch = (token: string) =>
+          fetch("/api/readiness/me", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({}),
+          });
+
+        let res = await doFetch(session.access_token);
+        if (res.status === 401) {
+          const { data: refreshData } = await supabase.auth.refreshSession();
+          const newSession = refreshData.session;
+          if (newSession?.access_token) {
+            res = await doFetch(newSession.access_token);
+          }
+        }
+
         const data = await res.json();
         if (!res.ok) throw new Error(data?.error || "Failed to load");
 

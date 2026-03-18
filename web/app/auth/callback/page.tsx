@@ -26,6 +26,8 @@ export default function AuthCallbackPage() {
 
         if (access_token && refresh_token) {
           await supabase.auth.setSession({ access_token, refresh_token });
+          // Give storage a moment to persist so dashboard has session on load.
+          await new Promise((r) => setTimeout(r, 300));
         }
 
         const sessRes = await supabase.auth.getSession();
