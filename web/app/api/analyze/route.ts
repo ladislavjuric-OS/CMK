@@ -192,33 +192,33 @@ async function upsertSystemeAndTag({ email }: { email: string }) {
       console.error("[systeme] create contact failed", { status: sr.status, body: sd });
     }
 
-    let contactId = getContactIdFromResponse(sd);
+    // Mirror the legacy HTML behavior (`api/analyze.js`) to remove differences.
+    const contactIdRaw =
+      (sd as { id?: unknown } | null)?.id ??
+      (sd as { contact?: { id?: unknown } } | null)?.contact?.id ??
+      (sd as { data?: { id?: unknown } } | null)?.data?.id ??
+      (sd as { contactId?: unknown } | null)?.contactId ??
+      (sd as { contact_id?: unknown } | null)?.contact_id;
 
-    // If contact already exists (409) or API didn't return an id, fetch by email.
+    const contactId =
+      typeof contactIdRaw === "number"
+        ? contactIdRaw
+        : typeof contactIdRaw === "string" && /^\d+$/.test(contactIdRaw)
+          ? parseInt(contactIdRaw, 10)
+          : undefined;
+
     if (!contactId) {
-      const listRes = await fetch(
-        `https://api.systeme.io/api/contacts?email=${encodeURIComponent(email)}&limit=1`,
-        { headers }
-      );
-      const listData = await listRes.json().catch(() => ({}));
-      const list = listData as { items?: Array<{ id?: number | string }> };
-      const id = list?.items?.[0]?.id;
-      contactId = typeof id === "number" ? id : typeof id === "string" ? parseInt(id, 10) : undefined;
-      if (debug && !listRes.ok) {
-        console.error("[systeme] lookup contact failed", { status: listRes.status, body: listData });
-      }
+      if (debug) console.error("[systeme] contactId missing from response", { response: sd });
+      return;
     }
 
-    if (!contactId) return;
-
-    // Tag contact (official endpoint).
     const tr = await fetch(`https://api.systeme.io/api/contacts/${contactId}/tags`, {
       method: "POST",
       headers,
       body: JSON.stringify({ tagId }),
     });
     if (debug && !(tr.ok || tr.status === 204)) {
-      const tb = await tr.json().catch(() => ({}));
+      const tb = await tr.text().catch(() => "");
       console.error("[systeme] tag contact failed", { status: tr.status, body: tb, contactId, tagId });
     }
   } catch {
