@@ -46,7 +46,7 @@ export default function AuditPage() {
 
       <div className="audit-hero">
         <div>
-          <div className="audit-tag">Campaign Intelligence Report · $499 · 72h Delivery</div>
+          <div className="audit-tag">Campaign Intelligence Report · 72h Delivery</div>
           <h1>
             Before You Launch —<br />
             <span className="audit-amber">Know The Verdict.</span>
@@ -61,8 +61,14 @@ export default function AuditPage() {
             Intelligence Report tells you exactly where you stand, what will kill your campaign,
             and what to fix first. Before you spend a dollar on ads.
           </p>
-          <div className="audit-price-big">
-            <sup>$</sup>499
+          <div className="audit-price-stack">
+            <div className="audit-price-old" aria-label="Regular price">
+              <sup>$</sup>999
+            </div>
+            <div className="audit-price-big" aria-label="Founders cohort price">
+              <sup>$</sup>499
+            </div>
+            <div className="audit-price-badge">Limited edition · Founders cohort</div>
           </div>
           <div className="audit-price-note">
             One-time · Delivered within 72 hours · 30-day improvement guarantee · VAT may apply for

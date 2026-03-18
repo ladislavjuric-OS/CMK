@@ -378,8 +378,12 @@ a {
 .audit-hero .audit-amber { color: var(--cmk-accent); display: block; }
 .audit-hero .audit-sub { display: block; font-size: 0.5em; font-weight: 500; font-style: italic; text-transform: none; color: rgba(255,255,255,0.58); letter-spacing: 0.02em; margin-top: 0.4rem; line-height: 1.4; }
 .audit-hero-desc { font-size: 1rem; color: rgba(255,255,255,0.84); line-height: 1.7; border-left: 2px solid rgba(0,255,204,0.6); padding-left: 1rem; margin-bottom: 2rem; max-width: 500px; }
-.audit-price-big { font-size: 4rem; font-weight: 900; color: var(--cmk-accent); line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
+.audit-price-stack { margin-bottom: 0.3rem; }
+.audit-price-old { font-size: 1.35rem; font-weight: 800; color: rgba(255,255,255,0.55); letter-spacing: -0.02em; line-height: 1; text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: rgba(255, 90, 106, 0.7); }
+.audit-price-old sup { font-size: 0.75em; vertical-align: super; }
+.audit-price-big { font-size: 4rem; font-weight: 900; color: var(--cmk-accent); line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.25rem; }
 .audit-price-big sup { font-size: 1.5rem; vertical-align: super; }
+.audit-price-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 0.65rem; color: rgba(255,255,255,0.72); letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 999px; }
 .audit-price-note { font-size: 0.7rem; color: var(--cmk-muted); margin-bottom: 1.5rem; }
 .audit-btn-primary { display: inline-block; background: linear-gradient(135deg, var(--cmk-accent), var(--cmk-accent2)); color: #041013; padding: 1rem 2.5rem; font-size: 1.15rem; font-weight: 900; letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none; border-radius: 14px; box-shadow: 0 20px 60px rgba(0,255,204,0.12); }
 .audit-btn-primary:hover { filter: brightness(1.02); transform: translateY(-2px); }
