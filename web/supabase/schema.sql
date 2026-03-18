@@ -68,6 +68,22 @@ create index if not exists entitlements_user_id on public.entitlements (user_id)
 create index if not exists entitlements_product on public.entitlements (product_key);
 create unique index if not exists entitlements_user_product_unique on public.entitlements (user_id, product_key);
 
+-- One-time magic tokens for "View your history" link in Resend email (no Supabase email sent).
+create table if not exists public.magic_tokens (
+  id uuid primary key default gen_random_uuid(),
+  token uuid not null unique default gen_random_uuid(),
+  email text not null,
+  expires_at timestamptz not null default (now() + interval '24 hours'),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists magic_tokens_token on public.magic_tokens (token);
+create index if not exists magic_tokens_expires_at on public.magic_tokens (expires_at);
+
+-- RLS: no direct client access; only server (service role) uses this table.
+alter table public.magic_tokens enable row level security;
+-- No policies: anon/authenticated cannot read/write; server uses service role.
+
 -- RLS: enabled so anon key has no access. Policies below allow authenticated users to read their own rows.
 alter table public.audit_requests enable row level security;
 alter table public.purchases enable row level security;

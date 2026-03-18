@@ -8,8 +8,9 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
  */
 let singleton: SupabaseClient | null = null;
 
-export function getSupabaseBrowser(): SupabaseClient {
-  if (singleton) return singleton;
+export function getSupabaseBrowser(opts?: { forceNew?: boolean }): SupabaseClient {
+  if (singleton && !opts?.forceNew) return singleton;
+  if (opts?.forceNew) singleton = null;
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;

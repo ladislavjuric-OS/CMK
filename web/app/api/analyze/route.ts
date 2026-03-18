@@ -77,12 +77,16 @@ const COUNTER_OFFSET = 247;
 const COUNTER_NS = "elitegrowth";
 const COUNTER_KEY = "campaigns";
 
+const EMAIL_BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://cmk.elitegrowth.pro";
+
 async function sendResultsEmail({
   email,
   result,
+  historyLink,
 }: {
   email: string;
   result: Record<string, unknown>;
+  historyLink?: string | null;
 }) {
   if (!email || !process.env.RESEND_API_KEY) return;
   const score = Number(result?.score ?? 0);
@@ -102,6 +106,9 @@ async function sendResultsEmail({
   `
     )
     .join("");
+  const historyButton = historyLink
+    ? `<a href="${historyLink}" style="display:inline-block;margin-left:10px;background:rgba(0,255,204,0.15);color:#00ffcc;font-weight:700;text-decoration:none;padding:12px 16px;border-radius:12px;border:1px solid rgba(0,255,204,0.4);">View your history</a>`
+    : "";
   const html = `<!doctype html>
   <html>
     <body style="margin:0;background:#0b0f14;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;">
@@ -120,8 +127,9 @@ async function sendResultsEmail({
               <ul style="padding-left:18px;margin:0;color:#e5e7eb;">${gaps || '<li style="color:#57e0b3;">No critical blockers found.</li>'}</ul>
             </div>
             <div style="margin-top:18px;">
-              <a href="https://cmk.elitegrowth.pro/tools/readiness" style="display:inline-block;background:linear-gradient(135deg,#00ffcc,#62a6ff);color:#041013;font-weight:900;text-decoration:none;padding:12px 16px;border-radius:12px;">Open Readiness Checker</a>
-              <a href="https://cmk.elitegrowth.pro/audit" style="display:inline-block;margin-left:10px;color:#e5e7eb;text-decoration:none;border:1px solid rgba(255,255,255,0.14);padding:12px 16px;border-radius:12px;background:rgba(255,255,255,0.06);">Get the Audit</a>
+              <a href="${EMAIL_BASE_URL}/tools/readiness" style="display:inline-block;background:linear-gradient(135deg,#00ffcc,#62a6ff);color:#041013;font-weight:900;text-decoration:none;padding:12px 16px;border-radius:12px;">Open Readiness Checker</a>
+              <a href="${EMAIL_BASE_URL}/audit" style="display:inline-block;margin-left:10px;color:#e5e7eb;text-decoration:none;border:1px solid rgba(255,255,255,0.14);padding:12px 16px;border-radius:12px;background:rgba(255,255,255,0.06);">Get the Audit</a>
+              ${historyButton}
             </div>
             <div style="margin-top:18px;color:#6b7280;font-size:12px;">
               If you didn't request this email, ignore it. Contact: <a href="mailto:hello@elitegrowth.pro" style="color:#00ffcc;text-decoration:none;">hello@elitegrowth.pro</a>
@@ -337,10 +345,11 @@ Return JSON only.`;
     const clean = text.replace(/```json|```/g, "").trim();
     const result = JSON.parse(clean) as Record<string, unknown>;
 
-    // Persist readiness result for later account linking/dashboard.
+    const emailStr = String(email ?? "");
+    let historyLink: string | null = null;
+
     try {
       const supabase = getSupabaseServer();
-      const emailStr = String(email ?? "");
       const score = Number(result?.score ?? 0);
       const verdict = String(result?.verdict ?? "");
       await supabase.from("readiness_results").insert({
@@ -350,8 +359,17 @@ Return JSON only.`;
         verdict,
         payload: result,
       });
+
+      const { data: tokenRow } = await supabase
+        .from("magic_tokens")
+        .insert({ email: emailStr })
+        .select("token")
+        .single();
+      if (tokenRow?.token) {
+        historyLink = `${EMAIL_BASE_URL}/api/auth/magic?token=${tokenRow.token}`;
+      }
     } catch (e) {
-      console.error("[readiness_results] insert failed", e);
+      console.error("[readiness_results / magic_tokens] insert failed", e);
     }
 
     fetch(
@@ -359,8 +377,9 @@ Return JSON only.`;
     ).catch(() => {});
 
     await sendResultsEmail({
-      email: String(email ?? ""),
+      email: emailStr,
       result,
+      historyLink,
     });
     // Ensure Systeme.io tagging completes in serverless environments.
     await Promise.allSettled([

@@ -11,7 +11,8 @@ export default function AuthCallbackPage() {
   useEffect(() => {
     const run = async () => {
       try {
-        const supabase = getSupabaseBrowser();
+        // Force a new client instance so `detectSessionInUrl` re-runs on this callback URL.
+        const supabase = getSupabaseBrowser({ forceNew: true });
 
         // Supabase magic link returns tokens in the query string.
         // Depending on configuration, they may also be present in the URL hash.
@@ -30,7 +31,11 @@ export default function AuthCallbackPage() {
         const sessRes = await supabase.auth.getSession();
         const session = sessRes.data.session;
         if (!session?.access_token) {
-          setStatus("Session missing. Please try signing in again.");
+          const hasAccess = Boolean(access_token);
+          const hasRefresh = Boolean(refresh_token);
+          setStatus(
+            `Session missing. Check login again. Params: access_token=${hasAccess ? "yes" : "no"}, refresh_token=${hasRefresh ? "yes" : "no"}`
+          );
           return;
         }
 
