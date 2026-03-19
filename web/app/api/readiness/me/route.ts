@@ -58,14 +58,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ readiness, entitlements, user: { userId, email } });
     }
 
-    const rrRows = await supabase
-      .from("readiness_results")
-      .select("*")
-      .eq("email", email)
-      .order("created_at", { ascending: false })
-      .limit(1);
+    const [rrRows, entByEmailRows] = await Promise.all([
+      supabase
+        .from("readiness_results")
+        .select("*")
+        .eq("email", email)
+        .order("created_at", { ascending: false })
+        .limit(1),
+      supabase
+        .from("entitlements_by_email")
+        .select("product_key,status")
+        .eq("email", email),
+    ]);
     const readiness = (rrRows.data && rrRows.data[0]) || null;
-    const entitlements: { product_key: string; status: string }[] = [];
+    const entitlements = (entByEmailRows.data || []).map((r) => ({ product_key: r.product_key, status: r.status }));
 
     return NextResponse.json({ readiness, entitlements, user: { userId: null, email } });
   } catch (e) {

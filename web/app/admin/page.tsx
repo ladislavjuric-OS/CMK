@@ -15,7 +15,7 @@ type ReadinessRow = {
 };
 
 type EntitlementRow = {
-  user_id: string;
+  user_id: string | null;
   email: string;
   product_key: string;
   status: string;
@@ -38,17 +38,14 @@ export default function AdminPage() {
         const supabase = getSupabaseBrowser();
         const sessRes = await supabase.auth.getSession();
         const session = sessRes.data.session;
-        if (!session?.access_token) {
-          setErr("Sign in required.");
-          return;
-        }
+
+        const headers: Record<string, string> = { "Content-Type": "application/json" };
+        if (session?.access_token) headers.Authorization = `Bearer ${session.access_token}`;
 
         const res = await fetch("/api/admin/summary", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`,
-          },
+          credentials: "include",
+          headers,
           body: JSON.stringify({}),
         });
 
@@ -70,37 +67,35 @@ export default function AdminPage() {
   const entMap = useMemo(() => {
     const map = new Map<string, EntitlementRow[]>();
     for (const e of entitlements) {
-      const list = map.get(e.user_id) || [];
+      const key = e.user_id ?? `email:${e.email}`;
+      const list = map.get(key) || [];
       list.push(e);
-      map.set(e.user_id, list);
+      map.set(key, list);
     }
     return map;
   }, [entitlements]);
 
   const productKeys = ["blueprint", "audit", "ladislav"];
 
-  const unlock = async (userId: string, email: string, productKey: string) => {
+  const unlock = async (userId: string | null, email: string, productKey: string) => {
     try {
       const supabase = getSupabaseBrowser();
       const sessRes = await supabase.auth.getSession();
       const session = sessRes.data.session;
-      if (!session?.access_token) throw new Error("No active session");
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (session?.access_token) headers.Authorization = `Bearer ${session.access_token}`;
 
       await fetch("/api/admin/entitlements/set", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`,
-        },
+        credentials: "include",
+        headers,
         body: JSON.stringify({
-          userId,
-          email,
+          ...(userId ? { userId, email } : { email }),
           productKey,
           status: "manual_unlocked",
         }),
-      }).catch(() => {});
+      });
 
-      // Refresh by reload.
       window.location.reload();
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
@@ -149,8 +144,8 @@ export default function AdminPage() {
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 12 }}>
         {readiness.map((r) => {
-          if (!r.user_id) return null;
-          const ent = entMap.get(r.user_id) || [];
+          const entKey = r.user_id ?? `email:${r.email}`;
+          const ent = entMap.get(entKey) || [];
           const unlocked = new Set(ent.filter((x) => isUnlocked(x.status)).map((x) => x.product_key));
 
           const gaps = r.payload?.critical_gaps || [];
@@ -188,7 +183,7 @@ export default function AdminPage() {
                         <button
                           key={pk}
                           type="button"
-                          onClick={() => unlock(r.user_id as string, r.email, pk)}
+                          onClick={() => unlock(r.user_id, r.email, pk)}
                           disabled={on}
                           style={{
                             cursor: on ? "not-allowed" : "pointer",

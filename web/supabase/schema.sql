@@ -68,6 +68,19 @@ create index if not exists entitlements_user_id on public.entitlements (user_id)
 create index if not exists entitlements_product on public.entitlements (product_key);
 create unique index if not exists entitlements_user_product_unique on public.entitlements (user_id, product_key);
 
+-- Entitlements by email (for magic-cookie users without Supabase user_id)
+create table if not exists public.entitlements_by_email (
+  id uuid primary key default gen_random_uuid(),
+  email text not null,
+  product_key text not null,
+  status text not null default 'manual_unlocked' check (status in ('locked', 'unlocked', 'manual_unlocked')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique(email, product_key)
+);
+create index if not exists entitlements_by_email_email on public.entitlements_by_email (email);
+alter table public.entitlements_by_email enable row level security;
+
 -- One-time magic tokens for "View your history" link in Resend email (no Supabase email sent).
 create table if not exists public.magic_tokens (
   id uuid primary key default gen_random_uuid(),

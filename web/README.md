@@ -9,6 +9,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
    NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
    SUPABASE_SERVICE_ROLE_KEY=eyJ...
    MAGIC_SESSION_SECRET=your-secret-at-least-16-chars  # for "View your history" link (signed cookie)
+   ADMIN_EMAILS=your@email.com  # comma-separated; these emails can access /admin (via magic cookie or Supabase)
    ```
 4. **Install deps:** `npm install` (adds `@supabase/supabase-js`).
 
