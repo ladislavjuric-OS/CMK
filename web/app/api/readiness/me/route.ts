@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase";
+import { getMagicCookieFromRequest, verifyMagicCookie } from "@/lib/magicSession";
 
-async function verifyAccessToken(accessToken: string) {
+async function verifySupabaseToken(accessToken: string) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!supabaseUrl) throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL");
-
   const verifyRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
     method: "GET",
     headers: { Authorization: `Bearer ${accessToken}` },
@@ -14,49 +14,65 @@ async function verifyAccessToken(accessToken: string) {
     const msg = (verifyData as { msg?: string }).msg ?? (verifyData as { error_description?: string }).error_description ?? "Invalid token";
     throw new Error(msg);
   }
-  return verifyData as { id?: string; email?: string; user?: { id?: string; email?: string } };
+  const data = verifyData as { id?: string; email?: string; user?: { id?: string; email?: string } };
+  const userId = data.id ?? data.user?.id;
+  const email = String(data.email ?? data.user?.email ?? "");
+  if (!userId || !email.includes("@")) throw new Error("User verification failed");
+  return { userId, email };
 }
 
 export async function POST(request: Request) {
   try {
+    const supabase = getSupabaseServer();
     const authHeader = request.headers.get("authorization") ?? "";
-    const token = authHeader.startsWith("Bearer ") ? authHeader.slice("Bearer ".length) : "";
-    if (!token) return NextResponse.json({ error: "Missing access token" }, { status: 401 });
+    const bearerToken = authHeader.startsWith("Bearer ") ? authHeader.slice("Bearer ".length) : "";
+    const magicCookie = getMagicCookieFromRequest(request);
+    const magicSession = verifyMagicCookie(magicCookie);
 
-    const verifyData = await verifyAccessToken(token);
-    const userId =
-      verifyData.id ?? verifyData.user?.id;
-    const email = String(verifyData.email ?? verifyData.user?.email ?? "");
+    let userId: string | null = null;
+    let email = "";
 
-    if (!userId || !email.includes("@")) {
-      return NextResponse.json({ error: "User verification failed" }, { status: 400 });
+    if (bearerToken) {
+      try {
+        const verified = await verifySupabaseToken(bearerToken);
+        userId = verified.userId;
+        email = verified.email;
+      } catch {
+        // Fall through to magic cookie if Bearer invalid
+      }
+    }
+    if (!email && magicSession) {
+      email = magicSession.email;
+    }
+    if (!email.includes("@")) {
+      return NextResponse.json({ error: "Please sign in or use the link from your results email." }, { status: 401 });
     }
 
-    const supabase = getSupabaseServer();
+    if (userId) {
+      const [rrRows, entRows] = await Promise.all([
+        supabase.from("readiness_results").select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(1),
+        supabase.from("entitlements").select("product_key,status").eq("user_id", userId),
+      ]);
+      const readiness = (rrRows.data && rrRows.data[0]) || null;
+      const entitlements = entRows.data || [];
+      return NextResponse.json({ readiness, entitlements, user: { userId, email } });
+    }
 
-    const [rrRows, entRows] = await Promise.all([
-      supabase
-        .from("readiness_results")
-        .select("*")
-        .eq("user_id", userId)
-        .order("created_at", { ascending: false })
-        .limit(1),
-      supabase
-        .from("entitlements")
-        .select("product_key,status")
-        .eq("user_id", userId),
-    ]);
-
+    const rrRows = await supabase
+      .from("readiness_results")
+      .select("*")
+      .eq("email", email)
+      .order("created_at", { ascending: false })
+      .limit(1);
     const readiness = (rrRows.data && rrRows.data[0]) || null;
-    const entitlements = entRows.data || [];
+    const entitlements: { product_key: string; status: string }[] = [];
 
-    return NextResponse.json({ readiness, entitlements, user: { userId, email } });
+    return NextResponse.json({ readiness, entitlements, user: { userId: null, email } });
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
-    const isAuthError = message.includes("Invalid") || message.includes("token") || message.includes("401");
     return NextResponse.json(
-      { error: isAuthError ? "Session expired or invalid. Use the link from your results email again." : "Failed to load dashboard", detail: message },
-      { status: isAuthError ? 401 : 500 }
+      { error: "Failed to load dashboard", detail: message },
+      { status: 500 }
     );
   }
 }

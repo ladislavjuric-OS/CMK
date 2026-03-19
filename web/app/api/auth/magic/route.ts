@@ -1,20 +1,18 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase";
+import { createMagicCookie, COOKIE_NAME, MAX_AGE_DAYS } from "@/lib/magicSession";
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://cmk.elitegrowth.pro";
-const CALLBACK_URL = `${BASE_URL}/auth/callback`;
 
 /*
- * When moving DNS to production (cmk.elitegrowth.pro): update Supabase Dashboard →
- * Authentication → URL Configuration: Site URL + Redirect URLs to https://cmk.elitegrowth.pro
- * (and https://cmk.elitegrowth.pro/auth/callback). Set NEXT_PUBLIC_APP_URL for Production env.
+ * When moving DNS to production: set NEXT_PUBLIC_APP_URL for Production env.
+ * No Supabase redirect URLs needed for this flow — we use our own session cookie.
  */
 
 /**
  * GET /api/auth/magic?token=xxx
- * Exchanges a one-time token (from Resend "View your history" link) for a Supabase magic link.
- * Redirects the user to Supabase's action_link; Supabase then redirects back to /auth/callback with session.
- * Result: one email (Resend only), no Supabase email.
+ * One-time token from Resend "View your history" link. We set a signed cookie (email, 7 days)
+ * and redirect to /dashboard. No Supabase magic link — no expiry, no invalid token.
  */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -33,24 +31,28 @@ export async function GET(request: Request) {
     .maybeSingle();
 
   if (fetchError || !row?.email) {
-    // Link already used or expired — send to dashboard; if they have a session it may still work.
     return NextResponse.redirect(`${BASE_URL}/dashboard`, 302);
   }
 
   const email = row.email as string;
-
   await supabase.from("magic_tokens").delete().eq("token", token);
 
-  const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
-    type: "magiclink",
-    email,
-    options: { redirectTo: CALLBACK_URL },
-  });
-
-  if (linkError || !linkData?.properties?.action_link) {
-    console.error("[auth/magic] generateLink failed", linkError);
-    return NextResponse.redirect(`${BASE_URL}/tools/readiness?error=link_failed`, 302);
+  let cookieValue: string;
+  try {
+    cookieValue = createMagicCookie(email);
+  } catch (e) {
+    console.error("[auth/magic] MAGIC_SESSION_SECRET missing or invalid", e);
+    return NextResponse.redirect(`${BASE_URL}/tools/readiness?error=config`, 302);
   }
 
-  return NextResponse.redirect(linkData.properties.action_link, 302);
+  const res = NextResponse.redirect(`${BASE_URL}/dashboard`, 302);
+  const isProd = process.env.NODE_ENV === "production";
+  res.cookies.set(COOKIE_NAME, cookieValue, {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: "lax",
+    maxAge: MAX_AGE_DAYS * 24 * 60 * 60,
+    path: "/",
+  });
+  return res;
 }

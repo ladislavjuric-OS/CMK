@@ -51,30 +51,27 @@ export default function DashboardPage() {
       try {
         setLoading(true);
         const supabase = getSupabaseBrowser();
-        let sessRes = await supabase.auth.getSession();
-        let session = sessRes.data.session;
-        if (!session?.access_token) {
-          setErr("Please sign in to see your readiness dashboard.");
-          setLoading(false);
-          return;
-        }
+        const sessRes = await supabase.auth.getSession();
+        const session = sessRes.data.session;
 
-        const doFetch = (token: string) =>
+        const doFetch = (bearer?: string) =>
           fetch("/api/readiness/me", {
             method: "POST",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              ...(bearer ? { Authorization: `Bearer ${bearer}` } : {}),
             },
             body: JSON.stringify({}),
           });
 
-        let res = await doFetch(session.access_token);
-        if (res.status === 401) {
+        let res = session?.access_token
+          ? await doFetch(session.access_token)
+          : await doFetch();
+        if (res.status === 401 && session?.access_token) {
           const { data: refreshData } = await supabase.auth.refreshSession();
-          const newSession = refreshData.session;
-          if (newSession?.access_token) {
-            res = await doFetch(newSession.access_token);
+          if (refreshData.session?.access_token) {
+            res = await doFetch(refreshData.session.access_token);
           }
         }
 
