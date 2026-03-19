@@ -13,6 +13,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
    ```
 4. **Install deps:** `npm install` (adds `@supabase/supabase-js`).
 
+**Admin login with Google:** Supabase → Authentication → Providers → Google: enable and add Client ID + Secret from [Google Cloud Console](https://console.cloud.google.com/) (OAuth 2.0 credentials, redirect URI `https://<project-ref>.supabase.co/auth/v1/callback`). Redirect URLs in Supabase must include your app callback, e.g. `https://cmk-preview.vercel.app/auth/callback`. Only emails in `ADMIN_EMAILS` get `is_admin` after sign-in.
+
 **When switching to production (cmk.elitegrowth.pro):** Supabase → Authentication → URL Configuration: set Site URL and Redirect URLs to `https://cmk.elitegrowth.pro` and `https://cmk.elitegrowth.pro/auth/callback`. In Vercel Production env set `NEXT_PUBLIC_APP_URL=https://cmk.elitegrowth.pro`.
 
 API route `POST /api/audit-requests` expects `{ email, payload? }` and inserts into `audit_requests`.

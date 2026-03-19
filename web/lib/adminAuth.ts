@@ -3,7 +3,7 @@ import { getMagicCookieFromRequest, verifyMagicCookie } from "@/lib/magicSession
 
 const ADMIN_EMAILS_KEY = "ADMIN_EMAILS";
 
-function getAdminEmails(): Set<string> {
+export function getAdminEmails(): Set<string> {
   const raw = process.env[ADMIN_EMAILS_KEY] ?? "";
   return new Set(
     raw

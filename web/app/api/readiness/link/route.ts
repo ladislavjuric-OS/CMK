@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase";
+import { getAdminEmails } from "@/lib/adminAuth";
 
 export async function POST(request: Request) {
   try {
@@ -36,13 +37,15 @@ export async function POST(request: Request) {
     }
 
     const supabase = getSupabaseServer();
+    const adminEmails = getAdminEmails();
+    const isAdmin = adminEmails.has(email.toLowerCase());
 
-    // Ensure profile exists (used later for admin flag).
+    // Ensure profile exists; is_admin only for emails in ADMIN_EMAILS (e.g. Google admin login).
     try {
       const { error } = await supabase
         .from("profiles")
         .upsert(
-          { user_id: userId, email, is_admin: false },
+          { user_id: userId, email, is_admin: isAdmin },
           { onConflict: "user_id" }
         );
       if (error) console.error("[readiness/link] profile upsert failed:", error);

@@ -17,31 +17,35 @@ export default function AuthCallbackPage() {
         // Supabase magic link returns tokens in the query string.
         // Depending on configuration, they may also be present in the URL hash.
         const url = new URL(window.location.href);
+        const next = url.searchParams.get("next") || "/dashboard";
         const access_token =
           url.searchParams.get("access_token") ||
           new URLSearchParams(url.hash.replace(/^#/, "")).get("access_token");
         const refresh_token =
           url.searchParams.get("refresh_token") ||
           new URLSearchParams(url.hash.replace(/^#/, "")).get("refresh_token");
+        const code = url.searchParams.get("code");
 
         if (access_token && refresh_token) {
           await supabase.auth.setSession({ access_token, refresh_token });
-          // Give storage a moment to persist so dashboard has session on load.
+          await new Promise((r) => setTimeout(r, 300));
+        } else if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error) {
+            setStatus(`Sign-in failed: ${error.message}`);
+            return;
+          }
           await new Promise((r) => setTimeout(r, 300));
         }
 
         const sessRes = await supabase.auth.getSession();
         const session = sessRes.data.session;
         if (!session?.access_token) {
-          const hasAccess = Boolean(access_token);
-          const hasRefresh = Boolean(refresh_token);
-          setStatus(
-            `Session missing. Check login again. Params: access_token=${hasAccess ? "yes" : "no"}, refresh_token=${hasRefresh ? "yes" : "no"}`
-          );
+          setStatus("Session missing. Try signing in again from the login page.");
           return;
         }
 
-        setStatus("Linking your readiness results…");
+        setStatus(next === "/admin" ? "Checking admin access…" : "Linking your readiness results…");
         const linkRes = await fetch("/api/readiness/link", {
           method: "POST",
           headers: {
@@ -53,11 +57,11 @@ export default function AuthCallbackPage() {
         if (!linkRes.ok) {
           const errData = await linkRes.json().catch(() => ({}));
           setStatus(`Linking failed: ${(errData as { error?: string }).error ?? linkRes.statusText}. You’re signed in — try the dashboard.`);
-          setTimeout(() => router.replace("/dashboard"), 2500);
+          setTimeout(() => router.replace(next), 2500);
           return;
         }
 
-        router.replace("/dashboard");
+        router.replace(next);
       } catch {
         setStatus("Auth failed. Please try again.");
       }

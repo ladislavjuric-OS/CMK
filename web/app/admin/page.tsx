@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { getSupabaseBrowser } from "@/lib/supabaseBrowser";
 
 type CriticalGap = { priority: string; title: string; finding: string; fix: string };
@@ -124,6 +125,14 @@ export default function AdminPage() {
           <h1 style={{ marginTop: "1.25rem", marginBottom: "0.75rem" }}>Access denied</h1>
           <p style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.7, maxWidth: 620, margin: "0 auto" }}>
             {err}
+          </p>
+          <p style={{ marginTop: "1.25rem" }}>
+            <Link
+              href="/admin/login"
+              style={{ color: "var(--cmk-accent)", fontWeight: 700, textDecoration: "none" }}
+            >
+              Sign in with Google →
+            </Link>
           </p>
         </div>
       </main>
