@@ -70,7 +70,7 @@ Return ONLY valid JSON, no markdown:
   "cta_reason": "<one sentence>"
 }
 
-CTA: score<50 and goal>30k=audit, score<50 and goal<=30k=cmk_pro, 50-74=cmk_pro, 75+=cmk_elite, already live or <4 weeks=audit always.
+CTA: score<50 and goal>30k=audit, score<50 and goal<=30k=cmk_standard, 50-74=cmk_pro, 75+=cmk_elite, already live or <4 weeks=audit always.
 verdict_emoji: use actual emoji characters not words.`;
 
 const COUNTER_OFFSET = 247;

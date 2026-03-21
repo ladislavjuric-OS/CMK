@@ -9,11 +9,28 @@ const CATEGORIES = [
   { k: "timeline_realism", l: "Timeline Realism", m: 20 },
 ];
 
+/** Matches `cta` from /api/analyze; URLs stay on-site (materials tiers + audit). */
 const CTAS: Record<string, { h: string; url: string; l: string }> = {
-  audit: { h: "You Need a Full Campaign Audit.", url: "/audit", l: "Get Campaign Audit — $499" },
-  cmk_standard: { h: "Start With the Campaign Intelligence Report.", url: "/audit", l: "Get CIR — $499" },
-  cmk_pro: { h: "You Need a Full Campaign Audit.", url: "/audit", l: "Get Campaign Audit — $499" },
-  cmk_elite: { h: "You Need a Full Campaign Audit.", url: "/audit", l: "Get Campaign Audit — $499" },
+  audit: {
+    h: "You Need a Full Campaign Audit.",
+    url: "/audit",
+    l: "Get Campaign Audit — $499",
+  },
+  cmk_standard: {
+    h: "Start With CMK Standard.",
+    url: "/materials#tier-standard",
+    l: "Get CMK Standard — $299",
+  },
+  cmk_pro: {
+    h: "The CMK Pro Has What You Need.",
+    url: "/materials#tier-pro",
+    l: "Get CMK Pro — $699",
+  },
+  cmk_elite: {
+    h: "You're Close — CMK Blueprint Will Get You There.",
+    url: "/materials#tier-blueprint",
+    l: "Get The Blueprint — $999",
+  },
 };
 
 const VERDICT_MAP: Record<string, string> = {

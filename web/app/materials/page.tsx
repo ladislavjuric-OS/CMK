@@ -414,7 +414,7 @@ export default function MaterialsPage() {
 
         <div className="pricing-grid reveal">
           {/* STANDARD */}
-          <div className="price-card">
+          <div className="price-card" id="tier-standard" style={{ scrollMarginTop: "5.5rem" }}>
             <div className="price-tier">// TIER 01 · Affiliate Available</div>
             <div className="price-name">Standard</div>
             <div className="price-desc">
@@ -472,7 +472,7 @@ export default function MaterialsPage() {
           </div>
 
           {/* PRO */}
-          <div className="price-card featured">
+          <div className="price-card featured" id="tier-pro" style={{ scrollMarginTop: "5.5rem" }}>
             <div className="price-tier">// TIER 02 · Affiliate Available</div>
             <div className="price-name">Pro</div>
             <div className="price-desc">
@@ -526,8 +526,8 @@ export default function MaterialsPage() {
             </a>
           </div>
 
-          {/* BLUEPRINT */}
-          <div className="price-card">
+          {/* BLUEPRINT (API key: cmk_elite) */}
+          <div className="price-card" id="tier-blueprint" style={{ scrollMarginTop: "5.5rem" }}>
             <div className="price-tier">// TIER 03 · Exclusive · No Affiliate</div>
             <div className="price-name">The Blueprint</div>
             <div className="price-desc">
