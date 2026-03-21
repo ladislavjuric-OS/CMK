@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import ScrollRevealEffect from "@/components/ScrollRevealEffect";
 
 export const metadata: Metadata = {
   title: "Crowdfunding Momentum Kit — Materials",
@@ -656,6 +657,8 @@ export default function MaterialsPage() {
           <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
         </div>
       </footer>
+
+      <ScrollRevealEffect scopeClass="pg-materials" />
     </main>
   );
 }

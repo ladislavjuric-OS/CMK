@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import MomentumRevealEffect from "@/components/MomentumRevealEffect";
+import ScrollRevealEffect from "@/components/ScrollRevealEffect";
 import BioThumb from "@/components/BioThumb";
 
 export const metadata: Metadata = {
@@ -605,7 +605,7 @@ export default function MomentumPage() {
           <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
         </div>
       </footer>
-      <MomentumRevealEffect />
+      <ScrollRevealEffect scopeClass="pg-momentum" />
     </main>
   );
 }
