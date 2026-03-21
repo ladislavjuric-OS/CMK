@@ -1,3 +1,5 @@
+import SiteFooter from "@/components/SiteFooter";
+
 export default function Home() {
   return (
     <main className="cmk-container">
@@ -110,14 +112,7 @@ export default function Home() {
           </article>
         </section>
 
-        <footer className="cmk-footer" role="contentinfo">
-          <span>© 2026 The Architect™ · Elitegrowth d.o.o.</span>
-          <span>
-            <a href="/data/privacy">Privacy</a> · <a href="/data/terms">Terms</a> ·{" "}
-            <a href="/data/refund">Refund</a> ·{" "}
-            <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
-          </span>
-        </footer>
+        <SiteFooter />
       </section>
     </main>
   );

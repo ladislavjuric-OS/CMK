@@ -1,12 +1,22 @@
 export default function SiteFooter() {
   return (
     <footer className="cmk-footer" role="contentinfo">
-      <span>© 2026 The Architect™ · Elitegrowth d.o.o.</span>
-      <span>
-        <a href="/data/privacy">Privacy</a> · <a href="/data/terms">Terms</a> ·{" "}
-        <a href="/data/refund">Refund</a> ·{" "}
+      <div className="cmk-footer-copy">© 2026 The Architect™ · Elitegrowth d.o.o.</div>
+      <nav className="cmk-footer-links" aria-label="Legal and contact">
+        <a href="/data/privacy">Privacy</a>
+        <span className="cmk-footer-sep" aria-hidden>
+          ·
+        </span>
+        <a href="/data/terms">Terms</a>
+        <span className="cmk-footer-sep" aria-hidden>
+          ·
+        </span>
+        <a href="/data/refund">Refund</a>
+        <span className="cmk-footer-sep" aria-hidden>
+          ·
+        </span>
         <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
-      </span>
+      </nav>
     </footer>
   );
 }

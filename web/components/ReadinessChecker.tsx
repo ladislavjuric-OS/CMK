@@ -143,6 +143,7 @@ export default function ReadinessChecker() {
       await new Promise((r) => setTimeout(r, 500 + i * 380));
       setLoadingStep(i + 1);
     }
+    setLoadingStep(6);
 
     try {
       const r = await fetch("/api/analyze", {
@@ -209,10 +210,11 @@ export default function ReadinessChecker() {
       "Scoring 4 readiness modules",
       "Generating verdict",
     ];
+    const apiPhase = loadingStep >= 6;
     return (
       <div className="pg-readiness">
         <div id="loading" className="readiness-loading">
-          <div className="load-card">
+          <div className={`load-card${apiPhase ? " load-card-api" : ""}`}>
             <div className="load-title">Analyzing your campaign…</div>
             <div className="load-steps">
               {steps.map((text, i) => (
@@ -227,6 +229,20 @@ export default function ReadinessChecker() {
                 </div>
               ))}
             </div>
+            {apiPhase ? (
+              <div className="load-api-block" aria-live="polite" aria-busy="true">
+                <div className="readiness-spinner" aria-hidden />
+                <div className="load-api-title">Calculating your score…</div>
+                <div className="load-api-hint">
+                  Running the full AI analysis — safe to wait; this often takes 20–60 seconds.
+                </div>
+                <div className="load-api-dots" aria-hidden>
+                  <span />
+                  <span />
+                  <span />
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
