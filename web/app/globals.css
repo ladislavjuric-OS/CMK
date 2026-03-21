@@ -13,6 +13,11 @@
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+  background-color: var(--cmk-bg);
+}
+
 html,
 body {
   margin: 0;
@@ -22,11 +27,14 @@ body {
 }
 
 body {
+  min-height: 100vh;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background:
+  background-color: var(--cmk-bg);
+  background-image:
     radial-gradient(1200px 600px at 80% -20%, rgba(0, 255, 204, 0.18), transparent 55%),
-    radial-gradient(900px 500px at 10% 10%, rgba(98, 166, 255, 0.16), transparent 55%),
-    var(--cmk-bg);
+    radial-gradient(900px 500px at 10% 10%, rgba(98, 166, 255, 0.16), transparent 55%);
+  background-repeat: no-repeat;
+  background-attachment: fixed, fixed;
   color: var(--cmk-text);
 }
 
@@ -849,6 +857,12 @@ a {
 .pg-momentum .bio-name { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 0.25rem; }
 .pg-momentum .bio-title-line { font-size: 0.7rem; color: var(--cmk-muted); margin-bottom: 1rem; letter-spacing: 0.05em; }
 .pg-momentum .bio-numbers { display: flex; gap: 2rem; margin-bottom: 1.25rem; flex-wrap: wrap; padding: 0.75rem 0; border-top: 1px solid rgba(255,255,255,0.12); border-bottom: 1px solid rgba(255,255,255,0.12); }
+.pg-momentum .bio-numbers-five { gap: 1.25rem 1.75rem; }
+@media (max-width: 640px) {
+  .pg-momentum .bio-numbers-five .bio-num-item .num {
+    font-size: 1.25rem;
+  }
+}
 .pg-momentum .bio-num-item .num { font-size: 1.5rem; font-weight: 900; color: var(--cmk-accent); line-height: 1; }
 .pg-momentum .bio-num-item .lbl { font-size: 0.6rem; color: var(--cmk-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.15rem; }
 .pg-momentum .bio-text { font-size: 0.88rem; color: var(--cmk-muted); line-height: 1.75; max-width: 580px; }
@@ -866,6 +880,86 @@ a {
 .pg-momentum .bio-linkedin:hover {
   color: var(--cmk-text);
   border-color: var(--cmk-accent);
+}
+
+.pg-momentum .bio-founder-card {
+  margin-top: 1.5rem;
+  margin-bottom: 0.25rem;
+  padding: 1.35rem 1.35rem 1.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 255, 204, 0.22);
+  background: linear-gradient(145deg, rgba(0, 255, 204, 0.07), rgba(98, 166, 255, 0.05));
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+  max-width: 640px;
+}
+.pg-momentum .bio-founder-eyebrow {
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cmk-accent);
+  margin-bottom: 0.35rem;
+}
+.pg-momentum .bio-founder-title {
+  margin: 0 0 0.85rem;
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: var(--cmk-text);
+}
+.pg-momentum .bio-founder-title span {
+  color: var(--cmk-accent);
+}
+.pg-momentum .bio-star-list {
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.pg-momentum .bio-star-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.65rem 0.75rem;
+  align-items: start;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--cmk-muted);
+}
+.pg-momentum .bio-star-mark {
+  font-size: 0.95rem;
+  line-height: 1.3;
+  color: var(--cmk-accent);
+  font-weight: 900;
+  text-shadow: 0 0 18px rgba(0, 255, 204, 0.25);
+}
+.pg-momentum .bio-star-item strong {
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+.pg-momentum .bio-founder-close {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--cmk-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+.pg-momentum .bio-founder-close strong {
+  color: rgba(255, 255, 255, 0.92);
+}
+@media (max-width: 520px) {
+  .pg-momentum .bio-founder-card {
+    padding: 1.1rem 1rem 1.25rem;
+  }
 }
 
 .pg-about .about-h2 {
@@ -967,6 +1061,9 @@ a {
 .pg-materials .reveal.visible { opacity: 1; transform: translateY(0); }
 
 @media (prefers-reduced-motion: reduce) {
+  body {
+    background-attachment: scroll, scroll;
+  }
   .pg-momentum .reveal,
   .pg-materials .reveal,
   .pg-about .reveal {
