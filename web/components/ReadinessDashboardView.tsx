@@ -138,8 +138,8 @@ export function ReadinessDashboardView({
           </div>
           <p style={{ margin: 0, color: "rgba(255,255,255,0.88)", lineHeight: 1.65, fontSize: 15 }}>
             {fullReadinessHistoryUnlocked
-              ? `Your readiness history (up to ${readinessHistoryLimit} recent runs on this screen), plus clear next steps. Bookmark this page — share the link in your team or come back before launch.`
-              : `Your free readiness scores (last ${readinessHistoryLimit} runs from the checker), plus clear next steps. Bookmark this page — share the link in your team or come back before launch.`}
+              ? `Up to ${readinessHistoryLimit} recent checks can appear here. Your score, offers, and AI notes stay in one place — bookmark for your team or before launch.`
+              : `Your last ${readinessHistoryLimit} checker runs live here with clear next steps. Bookmark this page, share it with your team, or come back before you go live.`}
           </p>
         </section>
       )}
@@ -295,6 +295,161 @@ export function ReadinessDashboardView({
               Email {CONTACT_EMAIL}
             </a>
           </div>
+
+          {otherRuns.length > 0 ? (
+            <section style={{ marginTop: "0.25rem", marginBottom: "1.5rem", maxWidth: 900 }}>
+              <div
+                style={{
+                  fontSize: 10,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.5)",
+                  fontWeight: 800,
+                  marginBottom: 6,
+                }}
+              >
+                Readiness history
+              </div>
+              <p style={{ margin: "0 0 14px", color: "rgba(255,255,255,0.72)", fontSize: 14, lineHeight: 1.55, maxWidth: 640 }}>
+                <strong style={{ color: "rgba(255,255,255,0.92)" }}>{otherRuns.length} more run{otherRuns.length === 1 ? "" : "s"}</strong> — tap a card to load it at the top. Use{" "}
+                <span style={{ color: "rgba(0,255,204,0.85)" }}>Expand snippet</span> for a quick peek without scrolling up.
+              </p>
+              <div
+                style={{
+                  maxHeight: otherRuns.length > 6 ? 420 : undefined,
+                  overflowY: otherRuns.length > 6 ? "auto" : undefined,
+                  paddingRight: otherRuns.length > 6 ? 6 : undefined,
+                }}
+              >
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                    gap: 12,
+                  }}
+                >
+                  {otherRuns.map((r) => {
+                    const p = verdictToPill(r.score, r.verdict);
+                    const pr = r.payload as ReadinessPayload;
+                    const ogaps = pr.critical_gaps || [];
+                    const gapHint = ogaps.length > 0 ? ogaps[0]?.title : "—";
+                    const expanded = expandedOtherId === r.id;
+                    return (
+                      <div
+                        key={r.id}
+                        style={{
+                          background: "rgba(0,0,0,0.2)",
+                          border: "1px solid rgba(255,255,255,0.1)",
+                          borderRadius: 12,
+                          padding: 14,
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 8,
+                          minWidth: 0,
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFocusedId(r.id);
+                            setExpandedOtherId(null);
+                            requestAnimationFrame(() => {
+                              mainRunAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                            });
+                          }}
+                          style={{
+                            textAlign: "left",
+                            cursor: "pointer",
+                            background: "transparent",
+                            border: "none",
+                            padding: 0,
+                            color: "inherit",
+                            font: "inherit",
+                          }}
+                        >
+                          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.55)", fontWeight: 700, lineHeight: 1.4 }}>
+                            {new Date(r.created_at).toLocaleDateString(undefined, {
+                              weekday: "short",
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })}
+                          </div>
+                          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", fontWeight: 600, marginTop: 2 }}>
+                            {new Date(r.created_at).toLocaleTimeString(undefined, {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              second: "2-digit",
+                            })}
+                          </div>
+                          <div style={{ fontWeight: 900, fontSize: "1.05rem", marginTop: 8 }}>
+                            {r.score}/100 · {p.key}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: 12,
+                              color: "rgba(255,255,255,0.72)",
+                              lineHeight: 1.45,
+                              marginTop: 4,
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              display: "-webkit-box",
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: "vertical",
+                            }}
+                          >
+                            Top gap: {gapHint}
+                          </div>
+                        </button>
+                        <div style={{ marginTop: "auto", paddingTop: 4, display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setExpandedOtherId((id) => (id === r.id ? null : r.id));
+                            }}
+                            style={{
+                              cursor: "pointer",
+                              background: "rgba(255,255,255,0.06)",
+                              border: "1px solid rgba(255,255,255,0.14)",
+                              borderRadius: 8,
+                              padding: "6px 10px",
+                              color: "rgba(0,255,204,0.9)",
+                              fontWeight: 800,
+                              fontSize: 11,
+                            }}
+                          >
+                            {expanded ? "Hide snippet" : "Expand snippet"}
+                          </button>
+                          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>Card → full view ↑</span>
+                        </div>
+                        {expanded ? (
+                          <div
+                            style={{
+                              fontSize: 12,
+                              color: "rgba(255,255,255,0.78)",
+                              lineHeight: 1.5,
+                              borderTop: "1px solid rgba(255,255,255,0.08)",
+                              paddingTop: 10,
+                            }}
+                          >
+                            {(pr.cta_reason || pr.one_win || "—").slice(0, 280)}
+                            {(pr.cta_reason || pr.one_win || "").length > 280 ? "…" : ""}
+                            {ogaps.length > 1 ? (
+                              <div style={{ marginTop: 8, color: "rgba(255,255,255,0.65)" }}>
+                                <strong style={{ color: "rgba(255,255,255,0.88)" }}>{ogaps[1].priority}</strong> {ogaps[1].title}
+                              </div>
+                            ) : null}
+                          </div>
+                        ) : null}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </section>
+          ) : null}
         </>
       ) : null}
 
@@ -317,8 +472,17 @@ export function ReadinessDashboardView({
             marginBottom: 10,
           }}
         >
-          AI summary (this run)
+          {variant === "user" ? "AI notes for this run" : "AI summary (this run)"}
         </div>
+        {variant === "user" && otherRuns.length > 0 ? (
+          <p style={{ margin: "0 0 12px", fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>
+            Matches the run loaded at the top — pick another run in <strong style={{ color: "rgba(255,255,255,0.75)" }}>Readiness history</strong> above to refresh this section.
+          </p>
+        ) : variant === "user" ? (
+          <p style={{ margin: "0 0 12px", fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>
+            Long-form notes for this score and verdict.
+          </p>
+        ) : null}
         <div style={{ color: "rgba(255,255,255,0.86)", lineHeight: 1.8, fontSize: 14, marginBottom: 10 }}>
           {payload.cta_reason || payload.one_win || "—"}
         </div>
@@ -336,157 +500,6 @@ export function ReadinessDashboardView({
           </div>
         ) : null}
       </section>
-
-      {variant === "user" && otherRuns.length > 0 ? (
-        <section style={{ marginTop: "0.5rem", marginBottom: "2rem", maxWidth: 900 }}>
-          <div
-            style={{
-              fontSize: 10,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.55)",
-              fontWeight: 800,
-              marginBottom: 12,
-            }}
-          >
-            Other runs ({otherRuns.length}) — tap a card to show it full above · expand for a short snippet
-          </div>
-          <div
-            style={{
-              maxHeight: otherRuns.length > 6 ? 420 : undefined,
-              overflowY: otherRuns.length > 6 ? "auto" : undefined,
-              paddingRight: otherRuns.length > 6 ? 6 : undefined,
-            }}
-          >
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                gap: 12,
-              }}
-            >
-              {otherRuns.map((r) => {
-                const p = verdictToPill(r.score, r.verdict);
-                const pr = r.payload as ReadinessPayload;
-                const ogaps = pr.critical_gaps || [];
-                const gapHint = ogaps.length > 0 ? ogaps[0]?.title : "—";
-                const expanded = expandedOtherId === r.id;
-                return (
-                  <div
-                    key={r.id}
-                    style={{
-                      background: "rgba(0,0,0,0.2)",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      borderRadius: 12,
-                      padding: 14,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 8,
-                      minWidth: 0,
-                    }}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setFocusedId(r.id);
-                        setExpandedOtherId(null);
-                        requestAnimationFrame(() => {
-                          mainRunAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                        });
-                      }}
-                      style={{
-                        textAlign: "left",
-                        cursor: "pointer",
-                        background: "transparent",
-                        border: "none",
-                        padding: 0,
-                        color: "inherit",
-                        font: "inherit",
-                      }}
-                    >
-                      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.55)", fontWeight: 700, lineHeight: 1.4 }}>
-                        {new Date(r.created_at).toLocaleDateString(undefined, {
-                          weekday: "short",
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </div>
-                      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", fontWeight: 600, marginTop: 2 }}>
-                        {new Date(r.created_at).toLocaleTimeString(undefined, {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          second: "2-digit",
-                        })}
-                      </div>
-                      <div style={{ fontWeight: 900, fontSize: "1.05rem", marginTop: 8 }}>
-                        {r.score}/100 · {p.key}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: 12,
-                          color: "rgba(255,255,255,0.72)",
-                          lineHeight: 1.45,
-                          marginTop: 4,
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          display: "-webkit-box",
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: "vertical",
-                        }}
-                      >
-                        Top gap: {gapHint}
-                      </div>
-                    </button>
-                    <div style={{ marginTop: "auto", paddingTop: 4, display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setExpandedOtherId((id) => (id === r.id ? null : r.id));
-                        }}
-                        style={{
-                          cursor: "pointer",
-                          background: "rgba(255,255,255,0.06)",
-                          border: "1px solid rgba(255,255,255,0.14)",
-                          borderRadius: 8,
-                          padding: "6px 10px",
-                          color: "rgba(0,255,204,0.9)",
-                          fontWeight: 800,
-                          fontSize: 11,
-                        }}
-                      >
-                        {expanded ? "▲ Snippet" : "▼ Expand snippet"}
-                      </button>
-                      <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>→ full above</span>
-                    </div>
-                    {expanded ? (
-                      <div
-                        style={{
-                          fontSize: 12,
-                          color: "rgba(255,255,255,0.78)",
-                          lineHeight: 1.5,
-                          borderTop: "1px solid rgba(255,255,255,0.08)",
-                          paddingTop: 10,
-                        }}
-                      >
-                        {(pr.cta_reason || pr.one_win || "—").slice(0, 280)}
-                        {(pr.cta_reason || pr.one_win || "").length > 280 ? "…" : ""}
-                        {ogaps.length > 1 ? (
-                          <div style={{ marginTop: 8, color: "rgba(255,255,255,0.65)" }}>
-                            <strong style={{ color: "rgba(255,255,255,0.88)" }}>{ogaps[1].priority}</strong> {ogaps[1].title}
-                          </div>
-                        ) : null}
-                      </div>
-                    ) : null}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      ) : null}
 
       {variant === "admin" ? (
         <section style={{ marginTop: 10 }}>
