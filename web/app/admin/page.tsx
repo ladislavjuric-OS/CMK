@@ -177,6 +177,19 @@ export default function AdminPage() {
                   <div style={{ color: "rgba(255,255,255,0.65)", fontSize: 12, marginTop: 4 }}>
                     {new Date(r.created_at).toLocaleString()}
                   </div>
+                  <div style={{ marginTop: 10 }}>
+                    <Link
+                      href={`/admin/readiness/${r.id}`}
+                      style={{
+                        color: "var(--cmk-accent)",
+                        fontWeight: 800,
+                        fontSize: 13,
+                        textDecoration: "none",
+                      }}
+                    >
+                      View as user (full dashboard) →
+                    </Link>
+                  </div>
                   <div style={{ color: "rgba(255,255,255,0.72)", fontSize: 13, marginTop: 10 }}>
                     Critical gaps: {gaps.length > 0 ? gaps.slice(0, 2).map((g) => g.title).join(" · ") : "None"}
                   </div>
