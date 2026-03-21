@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { Fragment, useMemo, useRef, useState } from "react";
 import { getPrimaryOfferFromPayload } from "@/lib/readinessPrimaryOffer";
 
 export type CriticalGap = { priority: string; title: string; finding: string; fix: string };
@@ -29,6 +29,26 @@ export type ReadinessRow = {
 export type EntitlementRow = { product_key: string; status: string };
 
 const CONTACT_EMAIL = "hello@elitegrowth.pro";
+
+/** Mailto subject so inbox can filter dashboard / paywall-interest requests. */
+const EXTENDED_HISTORY_MAIL_SUBJECT = "CMK — request: extended readiness history on dashboard";
+
+function formatTestDateTime(iso: string) {
+  const d = new Date(iso);
+  const datePart = d.toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  const timePart = d.toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+  return { datePart, timePart, combined: `${datePart} · ${timePart}` };
+}
 
 export function verdictToPill(score: number, verdict: string) {
   const s = score >= 75 ? "GO" : score >= 50 ? "CONDITIONAL GO" : "NO-GO";
@@ -172,25 +192,222 @@ export function ReadinessDashboardView({
           </p>
         ) : (
           <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 12, marginTop: 8 }}>
-            Test:{" "}
-            {new Date(active.created_at).toLocaleDateString(undefined, {
-              weekday: "short",
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            })}{" "}
-            ·{" "}
-            {new Date(active.created_at).toLocaleTimeString(undefined, {
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-            })}
+            Test: {formatTestDateTime(active.created_at).combined}
           </p>
         )}
       </div>
 
       {variant === "user" ? (
         <>
+          <div style={{ marginBottom: "1.25rem", display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", justifyContent: "flex-start" }}>
+            <Link href="/tools/readiness" style={{ fontSize: 14, color: "var(--cmk-accent)", fontWeight: 700, textDecoration: "none" }}>
+              Run readiness again →
+            </Link>
+            <span style={{ color: "rgba(255,255,255,0.25)" }}>·</span>
+            <Link href="/materials" style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", fontWeight: 600, textDecoration: "none" }}>
+              All CMK materials →
+            </Link>
+            <span style={{ color: "rgba(255,255,255,0.25)" }}>·</span>
+            <Link href="/momentum" style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", fontWeight: 600, textDecoration: "none" }}>
+              Momentum services →
+            </Link>
+            <span style={{ color: "rgba(255,255,255,0.25)" }}>·</span>
+            <a
+              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("CMK — question after readiness")}`}
+              style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", fontWeight: 600, textDecoration: "none" }}
+            >
+              Email {CONTACT_EMAIL}
+            </a>
+          </div>
+
+          {otherRuns.length > 0 ? (
+            <section style={{ marginTop: "0.25rem", marginBottom: "1.75rem", maxWidth: 720 }}>
+              <div
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.5)",
+                  fontWeight: 800,
+                  marginBottom: 8,
+                }}
+              >
+                Readiness history
+              </div>
+              <p style={{ margin: "0 0 16px", color: "rgba(255,255,255,0.72)", fontSize: 15, lineHeight: 1.55, maxWidth: 640 }}>
+                Earlier checks for this account. Expand for a quick summary, or open one as the main result at the top.
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {otherRuns.map((r, idx) => {
+                  const p = verdictToPill(r.score, r.verdict);
+                  const conf = (r.payload as ReadinessPayload).confidence || "—";
+                  const testFmt = formatTestDateTime(r.created_at);
+                  const expanded = expandedOtherId === r.id;
+                  const showHistoryRequestCta =
+                    (otherRuns.length >= 2 && idx === 1) || (otherRuns.length === 1 && idx === 0);
+
+                  return (
+                    <Fragment key={r.id}>
+                      <div
+                        style={{
+                          background: "rgba(0,0,0,0.22)",
+                          border: "1px solid rgba(255,255,255,0.12)",
+                          borderRadius: 12,
+                          overflow: "hidden",
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setExpandedOtherId((id) => (id === r.id ? null : r.id))}
+                          style={{
+                            width: "100%",
+                            textAlign: "left",
+                            cursor: "pointer",
+                            background: expanded ? "rgba(0,255,204,0.06)" : "transparent",
+                            border: "none",
+                            padding: "14px 16px",
+                            color: "#fff",
+                            font: "inherit",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            gap: 12,
+                          }}
+                        >
+                          <span style={{ fontSize: 15, fontWeight: 800 }}>
+                            Readiness check · {testFmt.datePart} · {r.score}/100 · {p.key}
+                          </span>
+                          <span style={{ fontSize: 13, color: "rgba(0,255,204,0.85)", fontWeight: 800, flexShrink: 0 }}>
+                            {expanded ? "▲ Hide" : "▼ Expand"}
+                          </span>
+                        </button>
+                        {expanded ? (
+                          <div
+                            style={{
+                              padding: "0 16px 16px",
+                              borderTop: "1px solid rgba(255,255,255,0.08)",
+                            }}
+                          >
+                            <pre
+                              style={{
+                                margin: "12px 0 14px",
+                                padding: "14px 16px",
+                                borderRadius: 10,
+                                background: "rgba(0,0,0,0.35)",
+                                border: "1px solid rgba(255,255,255,0.08)",
+                                color: "rgba(255,255,255,0.9)",
+                                fontSize: 15,
+                                lineHeight: 1.65,
+                                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                                whiteSpace: "pre-wrap",
+                                wordBreak: "break-word",
+                              }}
+                            >
+                              {`---\nScore: ${r.score} / 100\nVerdict: ${p.key} · Confidence: ${conf}\nTest: ${testFmt.combined}\n---`}
+                            </pre>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setFocusedId(r.id);
+                                setExpandedOtherId(null);
+                                requestAnimationFrame(() => {
+                                  mainRunAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                                });
+                              }}
+                              style={{
+                                cursor: "pointer",
+                                padding: "10px 16px",
+                                borderRadius: 10,
+                                border: "1px solid rgba(0,255,204,0.35)",
+                                background: "rgba(0,255,204,0.12)",
+                                color: "rgba(0,255,204,0.95)",
+                                fontWeight: 800,
+                                fontSize: 14,
+                              }}
+                            >
+                              Open full view at top ↑
+                            </button>
+                          </div>
+                        ) : null}
+                      </div>
+                      {showHistoryRequestCta ? (
+                        <p style={{ margin: "4px 0 0", fontSize: 15, lineHeight: 1.6, color: "rgba(255,255,255,0.72)", maxWidth: 640 }}>
+                          Want more checks kept in your dashboard history? We&apos;re lining up plans for that —{" "}
+                          <a
+                            href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(EXTENDED_HISTORY_MAIL_SUBJECT)}`}
+                            style={{ color: "var(--cmk-accent)", fontWeight: 800, textDecoration: "none" }}
+                          >
+                            email us
+                          </a>{" "}
+                          and we&apos;ll note your request (subject is preset so we can track it).
+                        </p>
+                      ) : null}
+                    </Fragment>
+                  );
+                })}
+              </div>
+            </section>
+          ) : null}
+
+          <section
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.12)",
+              borderRadius: 12,
+              padding: "clamp(22px, 2.5vw, 32px)",
+              marginBottom: "1.25rem",
+              maxWidth: 800,
+            }}
+          >
+            <div
+              style={{
+                fontSize: 11,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.65)",
+                fontWeight: 800,
+                marginBottom: 12,
+              }}
+            >
+              Last readiness check
+            </div>
+            {otherRuns.length > 0 ? (
+              <p style={{ margin: "0 0 16px", fontSize: 16, color: "rgba(255,255,255,0.58)", lineHeight: 1.55, maxWidth: 640 }}>
+                For the run shown <strong style={{ color: "rgba(255,255,255,0.82)" }}>at the top</strong>. Switch checks in{" "}
+                <strong style={{ color: "rgba(255,255,255,0.82)" }}>Readiness history</strong> above to load a different one.
+              </p>
+            ) : (
+              <p style={{ margin: "0 0 16px", fontSize: 16, color: "rgba(255,255,255,0.58)", lineHeight: 1.55 }}>
+                Narrative and gaps for the score at the top.
+              </p>
+            )}
+            <div
+              style={{
+                color: "rgba(255,255,255,0.9)",
+                lineHeight: 1.75,
+                fontSize: "clamp(17px, 1.35vw, 20px)",
+                marginBottom: 16,
+              }}
+            >
+              {payload.cta_reason || payload.one_win || "—"}
+            </div>
+            {gaps.length > 0 ? (
+              <div style={{ color: "rgba(255,255,255,0.78)", lineHeight: 1.75, fontSize: "clamp(16px, 1.15vw, 18px)" }}>
+                <div style={{ fontWeight: 800, marginBottom: 10, fontSize: "clamp(15px, 1vw, 17px)", color: "rgba(255,255,255,0.88)" }}>
+                  Top critical gaps
+                </div>
+                {gaps.slice(0, 3).map((g, i) => (
+                  <div key={i} style={{ marginBottom: 14 }}>
+                    <div style={{ fontWeight: 800, color: "rgba(255,255,255,0.94)" }}>
+                      {g.priority}: {g.title}
+                    </div>
+                    <div>{g.fix}</div>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </section>
+
           <section
             style={{
               marginBottom: "1.25rem",
@@ -211,7 +428,7 @@ export function ReadinessDashboardView({
                 marginBottom: 10,
               }}
             >
-              Suggested for this run
+              Suggested based on Readiness check
             </div>
             <div style={{ fontWeight: 900, fontSize: 18, marginBottom: 10, lineHeight: 1.35 }}>{primaryOffer.headline}</div>
             <p style={{ margin: "0 0 16px", color: "rgba(255,255,255,0.82)", lineHeight: 1.65, fontSize: 14 }}>{primaryBlurb}</p>
@@ -252,7 +469,7 @@ export function ReadinessDashboardView({
                 marginBottom: 10,
               }}
             >
-              Always available — Campaign Intelligence Report (CIR)
+              Campaign Intelligence Report (CIR)
             </div>
             <p style={{ margin: "0 0 14px", color: "rgba(255,255,255,0.88)", lineHeight: 1.65, fontSize: 14 }}>
               GO/NO-GO verdict, gaps quantified, fix sequence — $499, 72h delivery. Independent of your score; most teams
@@ -274,232 +491,49 @@ export function ReadinessDashboardView({
               Order CIR — $499 →
             </Link>
           </section>
-
-          <div style={{ marginBottom: "1.25rem", display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", justifyContent: "flex-start" }}>
-            <Link href="/tools/readiness" style={{ fontSize: 13, color: "var(--cmk-accent)", fontWeight: 700, textDecoration: "none" }}>
-              Run readiness again →
-            </Link>
-            <span style={{ color: "rgba(255,255,255,0.25)" }}>·</span>
-            <Link href="/materials" style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", fontWeight: 600, textDecoration: "none" }}>
-              All CMK materials →
-            </Link>
-            <span style={{ color: "rgba(255,255,255,0.25)" }}>·</span>
-            <Link href="/momentum" style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", fontWeight: 600, textDecoration: "none" }}>
-              Momentum services →
-            </Link>
-            <span style={{ color: "rgba(255,255,255,0.25)" }}>·</span>
-            <a
-              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("CMK — question after readiness")}`}
-              style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", fontWeight: 600, textDecoration: "none" }}
-            >
-              Email {CONTACT_EMAIL}
-            </a>
-          </div>
-
-          {otherRuns.length > 0 ? (
-            <section style={{ marginTop: "0.25rem", marginBottom: "1.5rem", maxWidth: 900 }}>
-              <div
-                style={{
-                  fontSize: 10,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.5)",
-                  fontWeight: 800,
-                  marginBottom: 6,
-                }}
-              >
-                Readiness history
-              </div>
-              <p style={{ margin: "0 0 14px", color: "rgba(255,255,255,0.72)", fontSize: 14, lineHeight: 1.55, maxWidth: 640 }}>
-                <strong style={{ color: "rgba(255,255,255,0.92)" }}>{otherRuns.length} more run{otherRuns.length === 1 ? "" : "s"}</strong> — tap a card to load it at the top. Use{" "}
-                <span style={{ color: "rgba(0,255,204,0.85)" }}>Expand snippet</span> for a quick peek without scrolling up.
-              </p>
-              <div
-                style={{
-                  maxHeight: otherRuns.length > 6 ? 420 : undefined,
-                  overflowY: otherRuns.length > 6 ? "auto" : undefined,
-                  paddingRight: otherRuns.length > 6 ? 6 : undefined,
-                }}
-              >
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                    gap: 12,
-                  }}
-                >
-                  {otherRuns.map((r) => {
-                    const p = verdictToPill(r.score, r.verdict);
-                    const pr = r.payload as ReadinessPayload;
-                    const ogaps = pr.critical_gaps || [];
-                    const gapHint = ogaps.length > 0 ? ogaps[0]?.title : "—";
-                    const expanded = expandedOtherId === r.id;
-                    return (
-                      <div
-                        key={r.id}
-                        style={{
-                          background: "rgba(0,0,0,0.2)",
-                          border: "1px solid rgba(255,255,255,0.1)",
-                          borderRadius: 12,
-                          padding: 14,
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 8,
-                          minWidth: 0,
-                        }}
-                      >
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setFocusedId(r.id);
-                            setExpandedOtherId(null);
-                            requestAnimationFrame(() => {
-                              mainRunAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                            });
-                          }}
-                          style={{
-                            textAlign: "left",
-                            cursor: "pointer",
-                            background: "transparent",
-                            border: "none",
-                            padding: 0,
-                            color: "inherit",
-                            font: "inherit",
-                          }}
-                        >
-                          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.55)", fontWeight: 700, lineHeight: 1.4 }}>
-                            {new Date(r.created_at).toLocaleDateString(undefined, {
-                              weekday: "short",
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            })}
-                          </div>
-                          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", fontWeight: 600, marginTop: 2 }}>
-                            {new Date(r.created_at).toLocaleTimeString(undefined, {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              second: "2-digit",
-                            })}
-                          </div>
-                          <div style={{ fontWeight: 900, fontSize: "1.05rem", marginTop: 8 }}>
-                            {r.score}/100 · {p.key}
-                          </div>
-                          <div
-                            style={{
-                              fontSize: 12,
-                              color: "rgba(255,255,255,0.72)",
-                              lineHeight: 1.45,
-                              marginTop: 4,
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              display: "-webkit-box",
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: "vertical",
-                            }}
-                          >
-                            Top gap: {gapHint}
-                          </div>
-                        </button>
-                        <div style={{ marginTop: "auto", paddingTop: 4, display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setExpandedOtherId((id) => (id === r.id ? null : r.id));
-                            }}
-                            style={{
-                              cursor: "pointer",
-                              background: "rgba(255,255,255,0.06)",
-                              border: "1px solid rgba(255,255,255,0.14)",
-                              borderRadius: 8,
-                              padding: "6px 10px",
-                              color: "rgba(0,255,204,0.9)",
-                              fontWeight: 800,
-                              fontSize: 11,
-                            }}
-                          >
-                            {expanded ? "Hide snippet" : "Expand snippet"}
-                          </button>
-                          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>Card → full view ↑</span>
-                        </div>
-                        {expanded ? (
-                          <div
-                            style={{
-                              fontSize: 12,
-                              color: "rgba(255,255,255,0.78)",
-                              lineHeight: 1.5,
-                              borderTop: "1px solid rgba(255,255,255,0.08)",
-                              paddingTop: 10,
-                            }}
-                          >
-                            {(pr.cta_reason || pr.one_win || "—").slice(0, 280)}
-                            {(pr.cta_reason || pr.one_win || "").length > 280 ? "…" : ""}
-                            {ogaps.length > 1 ? (
-                              <div style={{ marginTop: 8, color: "rgba(255,255,255,0.65)" }}>
-                                <strong style={{ color: "rgba(255,255,255,0.88)" }}>{ogaps[1].priority}</strong> {ogaps[1].title}
-                              </div>
-                            ) : null}
-                          </div>
-                        ) : null}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </section>
-          ) : null}
         </>
       ) : null}
 
-      <section
-        style={{
-          background: "rgba(255,255,255,0.06)",
-          border: "1px solid rgba(255,255,255,0.12)",
-          borderRadius: 12,
-          padding: "20px 22px",
-          marginBottom: 14,
-        }}
-      >
-        <div
+      {variant === "admin" ? (
+        <section
           style={{
-            fontSize: 10,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.62)",
-            fontWeight: 800,
-            marginBottom: 10,
+            background: "rgba(255,255,255,0.06)",
+            border: "1px solid rgba(255,255,255,0.12)",
+            borderRadius: 12,
+            padding: "20px 22px",
+            marginBottom: 14,
           }}
         >
-          {variant === "user" ? "AI notes for this run" : "AI summary (this run)"}
-        </div>
-        {variant === "user" && otherRuns.length > 0 ? (
-          <p style={{ margin: "0 0 12px", fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>
-            Matches the run loaded at the top — pick another run in <strong style={{ color: "rgba(255,255,255,0.75)" }}>Readiness history</strong> above to refresh this section.
-          </p>
-        ) : variant === "user" ? (
-          <p style={{ margin: "0 0 12px", fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>
-            Long-form notes for this score and verdict.
-          </p>
-        ) : null}
-        <div style={{ color: "rgba(255,255,255,0.86)", lineHeight: 1.8, fontSize: 14, marginBottom: 10 }}>
-          {payload.cta_reason || payload.one_win || "—"}
-        </div>
-        {gaps.length > 0 ? (
-          <div style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.7, fontSize: 13 }}>
-            <div style={{ fontWeight: 800, marginBottom: 6 }}>Top critical gaps</div>
-            {gaps.slice(0, 3).map((g, i) => (
-              <div key={i} style={{ marginBottom: 10 }}>
-                <div style={{ fontWeight: 800, color: "rgba(255,255,255,0.92)" }}>
-                  {g.priority}: {g.title}
-                </div>
-                <div>{g.fix}</div>
-              </div>
-            ))}
+          <div
+            style={{
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.62)",
+              fontWeight: 800,
+              marginBottom: 10,
+            }}
+          >
+            AI summary (this run)
           </div>
-        ) : null}
-      </section>
+          <div style={{ color: "rgba(255,255,255,0.86)", lineHeight: 1.8, fontSize: 14, marginBottom: 10 }}>
+            {payload.cta_reason || payload.one_win || "—"}
+          </div>
+          {gaps.length > 0 ? (
+            <div style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.7, fontSize: 13 }}>
+              <div style={{ fontWeight: 800, marginBottom: 6 }}>Top critical gaps</div>
+              {gaps.slice(0, 3).map((g, i) => (
+                <div key={i} style={{ marginBottom: 10 }}>
+                  <div style={{ fontWeight: 800, color: "rgba(255,255,255,0.92)" }}>
+                    {g.priority}: {g.title}
+                  </div>
+                  <div>{g.fix}</div>
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </section>
+      ) : null}
 
       {variant === "admin" ? (
         <section style={{ marginTop: 10 }}>
