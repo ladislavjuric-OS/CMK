@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getSupabaseBrowser } from "@/lib/supabaseBrowser";
@@ -9,14 +9,35 @@ const BASE_URL = typeof window !== "undefined" ? window.location.origin : proces
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    const supabase = getSupabaseBrowser();
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session?.access_token) {
-        router.replace("/admin");
+    const run = async () => {
+      try {
+        const supabase = getSupabaseBrowser();
+        const sessRes = await supabase.auth.getSession();
+        const session = sessRes.data.session;
+
+        const headers: Record<string, string> = { "Content-Type": "application/json" };
+        if (session?.access_token) headers.Authorization = `Bearer ${session.access_token}`;
+
+        const res = await fetch("/api/admin/summary", {
+          method: "POST",
+          credentials: "include",
+          headers,
+          body: JSON.stringify({}),
+        });
+
+        if (res.ok) {
+          router.replace("/admin");
+          return;
+        }
+      } finally {
+        setChecking(false);
       }
-    });
+    };
+
+    run();
   }, [router]);
 
   const signInWithGoogle = async () => {
@@ -27,6 +48,18 @@ export default function AdminLoginPage() {
       options: { redirectTo },
     });
   };
+
+  if (checking) {
+    return (
+      <main className="cmk-container">
+        <div style={{ marginTop: "4rem", textAlign: "center", maxWidth: 420, margin: "4rem auto" }}>
+          <div className="cmk-tag">Admin</div>
+          <h1 style={{ marginTop: "1.25rem", marginBottom: "0.75rem" }}>Checking access…</h1>
+          <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 14 }}>If you already have admin rights, we&apos;ll redirect you.</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="cmk-container">

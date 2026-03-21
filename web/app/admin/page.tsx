@@ -126,10 +126,49 @@ export default function AdminPage() {
           <p style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.7, maxWidth: 620, margin: "0 auto" }}>
             {err}
           </p>
-          <p style={{ marginTop: "1.25rem" }}>
+          <p
+            style={{
+              color: "rgba(255,255,255,0.55)",
+              fontSize: 14,
+              maxWidth: 520,
+              margin: "1rem auto 0",
+              lineHeight: 1.6,
+            }}
+          >
+            If you’re signed in with a Google account that isn’t in{" "}
+            <code style={{ color: "rgba(255,255,255,0.75)" }}>ADMIN_EMAILS</code> or doesn’t have{" "}
+            <code style={{ color: "rgba(255,255,255,0.75)" }}>is_admin</code> in Supabase, sign out first and use the correct account.
+          </p>
+          <p style={{ marginTop: "1.25rem", display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            <button
+              type="button"
+              onClick={async () => {
+                const supabase = getSupabaseBrowser();
+                await supabase.auth.signOut();
+                window.location.href = "/admin/login";
+              }}
+              style={{
+                cursor: "pointer",
+                padding: "12px 18px",
+                borderRadius: 10,
+                border: "1px solid rgba(255,255,255,0.2)",
+                background: "rgba(255,255,255,0.08)",
+                color: "#fff",
+                fontWeight: 700,
+              }}
+            >
+              Sign out (Google) → login
+            </button>
             <Link
               href="/admin/login"
-              style={{ color: "var(--cmk-accent)", fontWeight: 700, textDecoration: "none" }}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                color: "var(--cmk-accent)",
+                fontWeight: 700,
+                textDecoration: "none",
+                padding: "12px 18px",
+              }}
             >
               Sign in with Google →
             </Link>
