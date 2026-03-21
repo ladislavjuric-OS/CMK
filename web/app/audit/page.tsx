@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import AuditStickyCta from "@/components/AuditStickyCta";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -299,6 +300,8 @@ export default function AuditPage() {
       </div>
 
       <SiteFooter />
+
+      <AuditStickyCta />
     </div>
   );
 }
