@@ -13,6 +13,8 @@ export default function SiteNav() {
           <Link href="/audit">Audit</Link>
           <Link href="/momentum">Consulting</Link>
           <Link href="/tools">Tools</Link>
+          <Link href="/about">About</Link>
+          <Link href="/contact">Contact</Link>
         </nav>
       </div>
     </header>

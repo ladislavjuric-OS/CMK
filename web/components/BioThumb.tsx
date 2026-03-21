@@ -9,7 +9,7 @@ export default function BioThumb() {
     <div className="bio-thumb">
       {!failed ? (
         <img
-          src="/assets/placeholder-ladislav.jpg"
+          src="/74266592_10157066813674888_1141337702931628032_n.jpg"
           alt="Ladislav Jurić — The Architect"
           onError={() => setFailed(true)}
         />

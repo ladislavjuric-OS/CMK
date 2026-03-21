@@ -854,6 +854,89 @@ a {
 .pg-momentum .bio-text { font-size: 0.88rem; color: var(--cmk-muted); line-height: 1.75; max-width: 580px; }
 .pg-momentum .bio-text strong { color: rgba(255,255,255,0.88); }
 .pg-momentum .bio-text-mt { margin-top: 0.75rem; }
+.pg-momentum .bio-linkedin-wrap { margin-top: 1rem; margin-bottom: 0; }
+.pg-momentum .bio-linkedin {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--cmk-accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 255, 204, 0.35);
+  transition: color 0.15s, border-color 0.15s;
+}
+.pg-momentum .bio-linkedin:hover {
+  color: var(--cmk-text);
+  border-color: var(--cmk-accent);
+}
+
+.pg-about .about-h2 {
+  font-size: 1.05rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 1.75rem 0 0.5rem;
+  color: var(--cmk-text);
+}
+.pg-about .about-h2:first-of-type {
+  margin-top: 1.25rem;
+}
+.pg-about .reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.pg-about .reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pg-contact .contact-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 28px 0;
+  max-width: 720px;
+}
+.pg-contact .contact-card {
+  display: block;
+  padding: 20px 22px;
+  border-radius: 16px;
+  border: 1px solid var(--cmk-border);
+  background: rgba(255, 255, 255, 0.04);
+  transition: border-color 0.15s, background 0.15s;
+}
+.pg-contact .contact-card:hover {
+  border-color: rgba(0, 255, 204, 0.45);
+  background: rgba(255, 255, 255, 0.06);
+}
+.pg-contact .contact-card-ey {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cmk-accent);
+  margin-bottom: 8px;
+}
+.pg-contact .contact-card-val {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cmk-text);
+  word-break: break-word;
+}
+.pg-contact .contact-card-hint {
+  font-size: 12px;
+  color: var(--cmk-muted);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+.pg-contact .contact-legal {
+  margin-top: 8px;
+  font-size: 14px;
+}
+@media (max-width: 640px) {
+  .pg-contact .contact-cards {
+    grid-template-columns: 1fr;
+  }
+}
 
 .pg-momentum .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.12); margin-top: 3rem; border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; overflow: hidden; }
 @media (max-width: 768px) { .pg-momentum .faq-grid { grid-template-columns: 1fr; } }
@@ -885,7 +968,8 @@ a {
 
 @media (prefers-reduced-motion: reduce) {
   .pg-momentum .reveal,
-  .pg-materials .reveal {
+  .pg-materials .reveal,
+  .pg-about .reveal {
     opacity: 1;
     transform: none;
     transition: none;

@@ -14,6 +14,8 @@ export default function Home() {
             <a href="/audit">Audit</a>
             <a href="/momentum">Consulting</a>
             <a href="/tools">Tools</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
           </nav>
         </div>
       </header>

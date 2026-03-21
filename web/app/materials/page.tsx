@@ -651,6 +651,8 @@ export default function MaterialsPage() {
       <footer>
         <span>© 2026 The Architect™ · Elitegrowth d.o.o.</span>
         <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
+          <Link href="/about">About</Link>
+          <Link href="/contact">Contact</Link>
           <Link href="/data/privacy">Privacy Policy</Link>
           <Link href="/data/terms">Terms</Link>
           <Link href="/data/refund">Refund Policy</Link>
