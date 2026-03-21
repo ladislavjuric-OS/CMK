@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { getSupabaseBrowser } from "@/lib/supabaseBrowser";
+import { READINESS_FULL_HISTORY_PRODUCT_KEY } from "@/lib/readinessLimits";
 
 type CriticalGap = { priority: string; title: string; finding: string; fix: string };
 type ReadinessRow = {
@@ -22,8 +23,11 @@ type EntitlementRow = {
   status: string;
 };
 
-function isUnlocked(status: string) {
-  return status === "unlocked" || status === "manual_unlocked";
+function isHistoryUnlocked(e: EntitlementRow) {
+  return (
+    e.product_key === READINESS_FULL_HISTORY_PRODUCT_KEY &&
+    (e.status === "unlocked" || e.status === "manual_unlocked")
+  );
 }
 
 export default function AdminPage() {
@@ -65,20 +69,21 @@ export default function AdminPage() {
     run();
   }, []);
 
-  const entMap = useMemo(() => {
-    const map = new Map<string, EntitlementRow[]>();
-    for (const e of entitlements) {
-      const key = e.user_id ?? `email:${e.email}`;
-      const list = map.get(key) || [];
-      list.push(e);
-      map.set(key, list);
+  const groups = useMemo(() => {
+    const m = new Map<string, ReadinessRow[]>();
+    for (const r of readiness) {
+      const k = r.email.trim().toLowerCase();
+      const list = m.get(k) || [];
+      list.push(r);
+      m.set(k, list);
     }
-    return map;
-  }, [entitlements]);
+    for (const [, list] of m) {
+      list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    }
+    return Array.from(m.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+  }, [readiness]);
 
-  const productKeys = ["blueprint", "audit", "ladislav"];
-
-  const unlock = async (userId: string | null, email: string, productKey: string) => {
+  const unlockFullHistory = async (userId: string | null, email: string) => {
     try {
       const supabase = getSupabaseBrowser();
       const sessRes = await supabase.auth.getSession();
@@ -92,16 +97,23 @@ export default function AdminPage() {
         headers,
         body: JSON.stringify({
           ...(userId ? { userId, email } : { email }),
-          productKey,
+          productKey: READINESS_FULL_HISTORY_PRODUCT_KEY,
           status: "manual_unlocked",
         }),
       });
-
       window.location.reload();
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
     }
   };
+
+  const groupHasFullHistory = (emailKey: string, userId: string | null) =>
+    entitlements.some((e) => {
+      if (!isHistoryUnlocked(e)) return false;
+      if (userId && e.user_id && e.user_id === userId) return true;
+      if (e.email && e.email.trim().toLowerCase() === emailKey) return true;
+      return false;
+    });
 
   if (loading) {
     return (
@@ -182,88 +194,155 @@ export default function AdminPage() {
     <main className="cmk-container">
       <div style={{ marginTop: "3.5rem", marginBottom: "1.25rem" }}>
         <div className="cmk-tag">Admin Console</div>
-        <h1 style={{ marginTop: "1.25rem", marginBottom: "0.75rem" }}>
-          Readiness + Entitlements
-        </h1>
+        <h1 style={{ marginTop: "1.25rem", marginBottom: "0.75rem" }}>Readiness by user</h1>
         <p style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.7 }}>
-          Manual unlock of modules until Payhip webhook / fulfillment pipeline is fully automated.
+          Latest readiness runs grouped by email (up to three most recent per person in this list). Open a run to see the full user dashboard. After three free checker emails, users get a CMK signup message — you can unlock <strong>full history</strong> (last 50 runs on their dashboard) per email.
         </p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 12 }}>
-        {readiness.map((r) => {
-          const entKey = r.user_id ?? `email:${r.email}`;
-          const ent = entMap.get(entKey) || [];
-          const unlocked = new Set(ent.filter((x) => isUnlocked(x.status)).map((x) => x.product_key));
-
-          const gaps = r.payload?.critical_gaps || [];
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 20 }}>
+        {groups.map(([emailKey, allRows]) => {
+          const total = allRows.length;
+          const display = allRows.slice(0, 3);
+          const userId = allRows.find((r) => r.user_id)?.user_id ?? null;
+          const primaryEmail = allRows[0]?.email ?? emailKey;
+          const unlocked = groupHasFullHistory(emailKey, userId);
 
           return (
             <div
-              key={r.id}
+              key={emailKey}
               style={{
                 background: "rgba(255,255,255,0.05)",
                 border: "1px solid rgba(255,255,255,0.12)",
                 borderRadius: 14,
-                padding: 16,
+                padding: 18,
               }}
             >
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: 12,
+                  flexWrap: "wrap",
+                  alignItems: "baseline",
+                  marginBottom: 14,
+                  borderBottom: "1px solid rgba(255,255,255,0.08)",
+                  paddingBottom: 12,
+                }}
+              >
                 <div>
-                  <div style={{ fontWeight: 900 }}>
-                    {r.email} · Score {r.score}/100 · {r.verdict}
+                  <div style={{ fontWeight: 900, fontSize: "1.05rem" }}>{allRows[0]?.email || emailKey}</div>
+                  <div style={{ color: "rgba(255,255,255,0.62)", fontSize: 12, marginTop: 6 }}>
+                    {total} run{total === 1 ? "" : "s"}
+                    {userId ? (
+                      <>
+                        {" "}
+                        · user id: <code style={{ color: "rgba(255,255,255,0.75)" }}>{userId}</code>
+                      </>
+                    ) : null}
                   </div>
-                  <div style={{ color: "rgba(255,255,255,0.65)", fontSize: 12, marginTop: 4 }}>
-                    {new Date(r.created_at).toLocaleString()}
-                  </div>
-                  <div style={{ marginTop: 10 }}>
-                    <Link
-                      href={`/admin/readiness/${r.id}`}
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", justifyContent: "flex-end" }}>
+                  {total > 3 ? (
+                    <div
                       style={{
-                        color: "var(--cmk-accent)",
-                        fontWeight: 800,
-                        fontSize: 13,
-                        textDecoration: "none",
+                        fontSize: 12,
+                        color: "rgba(255,255,255,0.55)",
+                        fontWeight: 600,
                       }}
                     >
-                      View as user (full dashboard) →
-                    </Link>
-                  </div>
-                  <div style={{ color: "rgba(255,255,255,0.72)", fontSize: 13, marginTop: 10 }}>
-                    Critical gaps: {gaps.length > 0 ? gaps.slice(0, 2).map((g) => g.title).join(" · ") : "None"}
+                      Showing latest 3 of {total} runs
+                    </div>
+                  ) : null}
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+                    <div style={{ fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontWeight: 800 }}>
+                      Dashboard history
+                    </div>
+                    {unlocked ? (
+                      <span style={{ fontSize: 12, color: "rgba(0,255,204,0.85)", fontWeight: 800 }}>Full history unlocked (50)</span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => unlockFullHistory(userId, primaryEmail)}
+                        style={{
+                          cursor: "pointer",
+                          padding: "8px 14px",
+                          borderRadius: 10,
+                          border: "1px solid rgba(0,255,204,0.35)",
+                          background: "rgba(0,255,204,0.1)",
+                          color: "rgba(0,255,204,0.95)",
+                          fontWeight: 800,
+                          fontSize: 12,
+                        }}
+                      >
+                        Unlock 50-run history →
+                      </button>
+                    )}
                   </div>
                 </div>
-                <div>
-                  <div style={{ fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.62)", fontWeight: 800, marginBottom: 8 }}>
-                    Unlock
-                  </div>
-                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                    {productKeys.map((pk) => {
-                      const on = unlocked.has(pk);
-                      return (
-                        <button
-                          key={pk}
-                          type="button"
-                          onClick={() => unlock(r.user_id, r.email, pk)}
-                          disabled={on}
+              </div>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                  gap: 12,
+                }}
+              >
+                {display.map((r) => {
+                  const gaps = r.payload?.critical_gaps || [];
+                  const gapHint = gaps.length > 0 ? gaps[0]?.title : "—";
+
+                  return (
+                    <div
+                      key={r.id}
+                      style={{
+                        background: "rgba(0,0,0,0.2)",
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        borderRadius: 12,
+                        padding: 14,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 8,
+                        minWidth: 0,
+                      }}
+                    >
+                      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.55)", fontWeight: 700 }}>
+                        {new Date(r.created_at).toLocaleString()}
+                      </div>
+                      <div style={{ fontWeight: 900, fontSize: "1.1rem" }}>
+                        {r.score}/100 · {r.verdict}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 12,
+                          color: "rgba(255,255,255,0.72)",
+                          lineHeight: 1.45,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                        }}
+                      >
+                        Top gap: {gapHint}
+                      </div>
+                      <div style={{ marginTop: "auto", paddingTop: 4 }}>
+                        <Link
+                          href={`/admin/readiness/${r.id}`}
                           style={{
-                            cursor: on ? "not-allowed" : "pointer",
-                            opacity: on ? 0.65 : 1,
-                            padding: "10px 14px",
-                            borderRadius: 10,
-                            border: "1px solid rgba(255,255,255,0.14)",
-                            background: on ? "rgba(255,255,255,0.04)" : "rgba(0,255,204,0.12)",
-                            color: on ? "rgba(255,255,255,0.62)" : "rgba(0,255,204,0.9)",
+                            color: "var(--cmk-accent)",
                             fontWeight: 800,
-                            fontSize: 12,
+                            fontSize: 13,
+                            textDecoration: "none",
                           }}
                         >
-                          {pk} {on ? "✓" : "→"}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+                          View as user →
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
@@ -272,4 +351,3 @@ export default function AdminPage() {
     </main>
   );
 }
-

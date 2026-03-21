@@ -39,6 +39,11 @@ const VERDICT_MAP: Record<string, string> = {
   "NO-GO": "Not Ready. Here's Why.",
 };
 
+type ReadinessMeta = {
+  emailVariant: "standard" | "saas_signup";
+  runNumber: number;
+};
+
 type Result = {
   score: number;
   verdict: string;
@@ -50,6 +55,7 @@ type Result = {
   one_win?: string;
   cta?: string;
   cta_reason?: string;
+  readinessMeta?: ReadinessMeta;
 };
 
 export default function ReadinessChecker() {
@@ -346,11 +352,28 @@ export default function ReadinessChecker() {
         </div>
 
         <div className="save-card">
-          <div className="save-ey">Link results to your account</div>
-          <div className="save-h">Use the email we just sent you</div>
-          <div className="save-r">
-            We&apos;ve emailed your results to <strong>{String(payload?.email ?? form.email ?? "")}</strong>. Open that email and click <strong>View your history</strong> to save to your account and open your dashboard. No second email — one link only.
-          </div>
+          {result.readinessMeta?.emailVariant === "saas_signup" ? (
+            <>
+              <div className="save-ey">After three free checks — CMK account</div>
+              <div className="save-h">Check your inbox for the next step</div>
+              <div className="save-r">
+                We sent <strong>{String(payload?.email ?? form.email ?? "")}</strong> a message about creating your CMK account (Google sign-in) so your readiness history, dashboard, and materials live in one place. This run is still saved — you can also use the magic link in that email to open your dashboard without signing in yet.
+              </div>
+              <div style={{ marginTop: 12 }}>
+                <Link href="/login" className="btn-cp" style={{ display: "inline-block" }}>
+                  Sign in with Google — CMK →
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="save-ey">Link results to your account</div>
+              <div className="save-h">Use the email we just sent you</div>
+              <div className="save-r">
+                We&apos;ve emailed your results to <strong>{String(payload?.email ?? form.email ?? "")}</strong>. Open that email and click <strong>View your history</strong> to save to your account and open your dashboard. No second email — one link only.
+              </div>
+            </>
+          )}
           {saveError ? <div className="save-err">{saveError}</div> : null}
         </div>
 

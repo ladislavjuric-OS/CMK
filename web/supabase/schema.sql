@@ -58,7 +58,7 @@ create table if not exists public.entitlements (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
   email text not null,
-  product_key text not null, -- e.g. 'blueprint', 'audit', 'ladislav'
+  product_key text not null, -- e.g. 'blueprint', 'audit', 'ladislav', 'readiness_full_history' (50-run dashboard history)
   status text not null default 'locked' check (status in ('locked', 'unlocked', 'manual_unlocked')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()

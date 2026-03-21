@@ -4,11 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getSupabaseBrowser } from "@/lib/supabaseBrowser";
-import {
-  ReadinessDashboardView,
-  type EntitlementRow,
-  type ReadinessRow,
-} from "@/components/ReadinessDashboardView";
+import { ReadinessDashboardView, type ReadinessRow } from "@/components/ReadinessDashboardView";
 
 export default function AdminReadinessDetailPage() {
   const params = useParams();
@@ -17,7 +13,6 @@ export default function AdminReadinessDetailPage() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
   const [readiness, setReadiness] = useState<ReadinessRow | null>(null);
-  const [entitlements, setEntitlements] = useState<EntitlementRow[]>([]);
   const [adminEmail, setAdminEmail] = useState("");
 
   useEffect(() => {
@@ -48,7 +43,6 @@ export default function AdminReadinessDetailPage() {
         if (!res.ok) throw new Error(data?.error || "Failed to load result");
 
         setReadiness(data.readiness as ReadinessRow);
-        setEntitlements(data.entitlements || []);
         setAdminEmail(String(data.admin?.email || ""));
       } catch (e) {
         setErr(e instanceof Error ? e.message : String(e));
@@ -90,12 +84,7 @@ export default function AdminReadinessDetailPage() {
 
   return (
     <main className="cmk-container">
-      <ReadinessDashboardView
-        readiness={readiness}
-        entitlements={entitlements}
-        variant="admin"
-        adminEmail={adminEmail}
-      />
+      <ReadinessDashboardView readiness={readiness} variant="admin" adminEmail={adminEmail} />
     </main>
   );
 }

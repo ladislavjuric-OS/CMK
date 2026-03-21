@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo, useRef, useState } from "react";
+import { getPrimaryOfferFromPayload } from "@/lib/readinessPrimaryOffer";
 
 export type CriticalGap = { priority: string; title: string; finding: string; fix: string };
 export type ReadinessPayload = {
@@ -23,7 +25,10 @@ export type ReadinessRow = {
   created_at: string;
 };
 
+/** Kept for API compatibility; dashboard UI no longer gates CTAs on entitlements. */
 export type EntitlementRow = { product_key: string; status: string };
+
+const CONTACT_EMAIL = "hello@elitegrowth.pro";
 
 export function verdictToPill(score: number, verdict: string) {
   const s = score >= 75 ? "GO" : score >= 50 ? "CONDITIONAL GO" : "NO-GO";
@@ -31,55 +36,55 @@ export function verdictToPill(score: number, verdict: string) {
   return { key: s, label, verdict };
 }
 
-function isUnlocked(status: string) {
-  return status === "unlocked" || status === "manual_unlocked";
-}
-
 type Props = {
   readiness: ReadinessRow;
-  entitlements: EntitlementRow[];
-  /** Admin preview: same UI, extra banner + no fake "no access" state */
+  readinessRuns?: ReadinessRow[];
+  entitlements?: EntitlementRow[];
   variant?: "user" | "admin";
   adminEmail?: string;
+  /** From /api/readiness/me — 3 default, 50 when admin unlocks full history. */
+  readinessHistoryLimit?: number;
+  fullReadinessHistoryUnlocked?: boolean;
 };
 
-export function ReadinessDashboardView({ readiness, entitlements, variant = "user", adminEmail }: Props) {
-  const unlockedKeys = new Set<string>();
-  for (const e of entitlements) {
-    if (isUnlocked(e.status)) unlockedKeys.add(e.product_key);
-  }
+export function ReadinessDashboardView({
+  readiness,
+  readinessRuns,
+  variant = "user",
+  adminEmail,
+  readinessHistoryLimit = 3,
+  fullReadinessHistoryUnlocked = false,
+}: Props) {
+  const runs = useMemo(() => {
+    if (readinessRuns?.length) return readinessRuns;
+    return [readiness];
+  }, [readiness, readinessRuns]);
 
-  const pill = verdictToPill(readiness.score, readiness.verdict);
-  const payload = readiness.payload as ReadinessPayload;
+  const [focusedId, setFocusedId] = useState<string | null>(null);
+  /** Mini-card accordion: which other run shows extra snippet. */
+  const [expandedOtherId, setExpandedOtherId] = useState<string | null>(null);
+  const mainRunAnchorRef = useRef<HTMLDivElement | null>(null);
+
+  const active = useMemo(() => {
+    if (focusedId) {
+      const hit = runs.find((r) => r.id === focusedId);
+      if (hit) return hit;
+    }
+    return readiness;
+  }, [runs, readiness, focusedId]);
+
+  const otherRuns = useMemo(() => runs.filter((r) => r.id !== active.id), [runs, active.id]);
+
+  const pill = verdictToPill(active.score, active.verdict);
+  const payload = active.payload as ReadinessPayload;
   const gaps = payload.critical_gaps || [];
-  const recommendedKey = readiness.score >= 75 ? "ladislav" : "audit";
 
-  const modules = [
-    {
-      key: "blueprint",
-      title: "Blueprint (recommended base package)",
-      desc: "Start with the structured campaign blueprint and the execution path.",
-      unlocked: unlockedKeys.has("blueprint"),
-      url: "/materials",
-      highlight: true,
-    },
-    {
-      key: "audit",
-      title: "Campaign Intelligence Report",
-      desc: "Detailed audit with critical gaps quantified and exact fix sequence.",
-      unlocked: unlockedKeys.has("audit"),
-      url: "/audit",
-      highlight: recommendedKey === "audit",
-    },
-    {
-      key: "ladislav",
-      title: "Ladislav session (operator deep dive)",
-      desc: "If you want the highest-touch upgrade: deeper operator guidance.",
-      unlocked: unlockedKeys.has("ladislav"),
-      url: "/audit",
-      highlight: recommendedKey === "ladislav",
-    },
-  ];
+  const primaryOffer = useMemo(
+    () => getPrimaryOfferFromPayload(active.payload, active.score),
+    [active.payload, active.score]
+  );
+
+  const primaryBlurb = payload.cta_reason?.trim() || payload.one_win?.trim() || `Based on this run, the next move is: ${primaryOffer.headline}`;
 
   return (
     <>
@@ -107,12 +112,55 @@ export function ReadinessDashboardView({ readiness, entitlements, variant = "use
             </Link>
           </div>
         </div>
+      ) : (
+        <section
+          style={{
+            marginTop: "2.5rem",
+            marginBottom: "1.5rem",
+            padding: "18px 20px",
+            borderRadius: 14,
+            border: "1px solid rgba(0, 255, 204, 0.22)",
+            background: "rgba(0, 255, 204, 0.06)",
+            maxWidth: 720,
+          }}
+        >
+          <div
+            style={{
+              fontSize: 10,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--cmk-accent)",
+              fontWeight: 800,
+              marginBottom: 8,
+            }}
+          >
+            Your CMK room
+          </div>
+          <p style={{ margin: 0, color: "rgba(255,255,255,0.88)", lineHeight: 1.65, fontSize: 15 }}>
+            {fullReadinessHistoryUnlocked
+              ? `Your readiness history (up to ${readinessHistoryLimit} recent runs on this screen), plus clear next steps. Bookmark this page — share the link in your team or come back before launch.`
+              : `Your free readiness scores (last ${readinessHistoryLimit} runs from the checker), plus clear next steps. Bookmark this page — share the link in your team or come back before launch.`}
+          </p>
+        </section>
+      )}
+
+      {variant === "user" && runs[0] && active.id !== runs[0].id ? (
+        <p style={{ color: "rgba(255,200,120,0.95)", fontSize: 13, marginBottom: 10, maxWidth: 640 }}>
+          Viewing a <strong>previous</strong> run — your latest is {runs[0].score}/100 from{" "}
+          {new Date(runs[0].created_at).toLocaleString()}.
+        </p>
       ) : null}
 
-      <div style={{ marginTop: variant === "admin" ? 0 : "3.5rem", marginBottom: "1.25rem" }}>
-        <div className="cmk-tag">{variant === "admin" ? "User dashboard (preview)" : "Your Readiness"}</div>
+      <div ref={variant === "user" ? mainRunAnchorRef : undefined} style={{ marginBottom: "1.25rem" }}>
+        <div className="cmk-tag">
+          {variant === "admin"
+            ? "User dashboard (preview)"
+            : runs[0] && active.id !== runs[0].id
+              ? "Past run"
+              : "Latest score"}
+        </div>
         <h1 style={{ marginTop: "1.25rem", marginBottom: "0.75rem" }}>
-          Score: <span style={{ color: "var(--cmk-accent)" }}>{readiness.score}</span> / 100
+          Score: <span style={{ color: "var(--cmk-accent)" }}>{active.score}</span> / 100
         </h1>
         <p style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.7 }}>
           Verdict: <strong style={{ color: "var(--cmk-text)" }}>{pill.key}</strong> · Confidence:{" "}
@@ -120,10 +168,135 @@ export function ReadinessDashboardView({ readiness, entitlements, variant = "use
         </p>
         {variant === "admin" ? (
           <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 12, marginTop: 8 }}>
-            Submitted {new Date(readiness.created_at).toLocaleString()} · ID {readiness.id}
+            Submitted {new Date(active.created_at).toLocaleString()} · ID {active.id}
           </p>
-        ) : null}
+        ) : (
+          <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 12, marginTop: 8 }}>
+            Test:{" "}
+            {new Date(active.created_at).toLocaleDateString(undefined, {
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}{" "}
+            ·{" "}
+            {new Date(active.created_at).toLocaleTimeString(undefined, {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            })}
+          </p>
+        )}
       </div>
+
+      {variant === "user" ? (
+        <>
+          <section
+            style={{
+              marginBottom: "1.25rem",
+              padding: "20px 22px",
+              borderRadius: 14,
+              border: "1px solid rgba(0, 255, 204, 0.35)",
+              background: "linear-gradient(145deg, rgba(0,255,204,0.12), rgba(0,0,0,0.2))",
+              maxWidth: 720,
+            }}
+          >
+            <div
+              style={{
+                fontSize: 10,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--cmk-accent)",
+                fontWeight: 900,
+                marginBottom: 10,
+              }}
+            >
+              Suggested for this run
+            </div>
+            <div style={{ fontWeight: 900, fontSize: 18, marginBottom: 10, lineHeight: 1.35 }}>{primaryOffer.headline}</div>
+            <p style={{ margin: "0 0 16px", color: "rgba(255,255,255,0.82)", lineHeight: 1.65, fontSize: 14 }}>{primaryBlurb}</p>
+            <Link
+              href={primaryOffer.href}
+              style={{
+                padding: "12px 20px",
+                display: "inline-block",
+                background: "linear-gradient(135deg, rgba(0,255,204,0.98), rgba(98,166,255,0.92))",
+                color: "#041013",
+                borderRadius: 10,
+                fontWeight: 900,
+                textDecoration: "none",
+                fontSize: 14,
+              }}
+            >
+              {primaryOffer.buttonLabel} →
+            </Link>
+          </section>
+
+          <section
+            style={{
+              marginBottom: "1.25rem",
+              padding: "20px 22px",
+              borderRadius: 14,
+              border: "1px solid rgba(98, 166, 255, 0.4)",
+              background: "rgba(98, 166, 255, 0.1)",
+              maxWidth: 720,
+            }}
+          >
+            <div
+              style={{
+                fontSize: 10,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "rgba(180,200,255,0.95)",
+                fontWeight: 900,
+                marginBottom: 10,
+              }}
+            >
+              Always available — Campaign Intelligence Report (CIR)
+            </div>
+            <p style={{ margin: "0 0 14px", color: "rgba(255,255,255,0.88)", lineHeight: 1.65, fontSize: 14 }}>
+              GO/NO-GO verdict, gaps quantified, fix sequence — $499, 72h delivery. Independent of your score; most teams
+              order this before scaling spend.
+            </p>
+            <Link
+              href="/audit"
+              style={{
+                padding: "12px 20px",
+                display: "inline-block",
+                background: "linear-gradient(135deg, rgba(0,255,204,0.98), rgba(98,166,255,0.92))",
+                color: "#041013",
+                borderRadius: 10,
+                fontWeight: 900,
+                textDecoration: "none",
+                fontSize: 14,
+              }}
+            >
+              Order CIR — $499 →
+            </Link>
+          </section>
+
+          <div style={{ marginBottom: "1.25rem", display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", justifyContent: "flex-start" }}>
+            <Link href="/tools/readiness" style={{ fontSize: 13, color: "var(--cmk-accent)", fontWeight: 700, textDecoration: "none" }}>
+              Run readiness again →
+            </Link>
+            <span style={{ color: "rgba(255,255,255,0.25)" }}>·</span>
+            <Link href="/materials" style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", fontWeight: 600, textDecoration: "none" }}>
+              All CMK materials →
+            </Link>
+            <span style={{ color: "rgba(255,255,255,0.25)" }}>·</span>
+            <Link href="/momentum" style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", fontWeight: 600, textDecoration: "none" }}>
+              Momentum services →
+            </Link>
+            <span style={{ color: "rgba(255,255,255,0.25)" }}>·</span>
+            <a
+              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("CMK — question after readiness")}`}
+              style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", fontWeight: 600, textDecoration: "none" }}
+            >
+              Email {CONTACT_EMAIL}
+            </a>
+          </div>
+        </>
+      ) : null}
 
       <section
         style={{
@@ -144,7 +317,7 @@ export function ReadinessDashboardView({ readiness, entitlements, variant = "use
             marginBottom: 10,
           }}
         >
-          Your base suggestions (draft)
+          AI summary (this run)
         </div>
         <div style={{ color: "rgba(255,255,255,0.86)", lineHeight: 1.8, fontSize: 14, marginBottom: 10 }}>
           {payload.cta_reason || payload.one_win || "—"}
@@ -164,23 +337,173 @@ export function ReadinessDashboardView({ readiness, entitlements, variant = "use
         ) : null}
       </section>
 
-      <section style={{ marginTop: 10 }}>
-        <div
-          style={{
-            fontSize: 10,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.62)",
-            fontWeight: 800,
-            marginBottom: 12,
-          }}
-        >
-          Upsell modules
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-          {modules.map((m) => (
+      {variant === "user" && otherRuns.length > 0 ? (
+        <section style={{ marginTop: "0.5rem", marginBottom: "2rem", maxWidth: 900 }}>
+          <div
+            style={{
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.55)",
+              fontWeight: 800,
+              marginBottom: 12,
+            }}
+          >
+            Other runs ({otherRuns.length}) — tap a card to show it full above · expand for a short snippet
+          </div>
+          <div
+            style={{
+              maxHeight: otherRuns.length > 6 ? 420 : undefined,
+              overflowY: otherRuns.length > 6 ? "auto" : undefined,
+              paddingRight: otherRuns.length > 6 ? 6 : undefined,
+            }}
+          >
             <div
-              key={m.key}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                gap: 12,
+              }}
+            >
+              {otherRuns.map((r) => {
+                const p = verdictToPill(r.score, r.verdict);
+                const pr = r.payload as ReadinessPayload;
+                const ogaps = pr.critical_gaps || [];
+                const gapHint = ogaps.length > 0 ? ogaps[0]?.title : "—";
+                const expanded = expandedOtherId === r.id;
+                return (
+                  <div
+                    key={r.id}
+                    style={{
+                      background: "rgba(0,0,0,0.2)",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 12,
+                      padding: 14,
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 8,
+                      minWidth: 0,
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFocusedId(r.id);
+                        setExpandedOtherId(null);
+                        requestAnimationFrame(() => {
+                          mainRunAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                        });
+                      }}
+                      style={{
+                        textAlign: "left",
+                        cursor: "pointer",
+                        background: "transparent",
+                        border: "none",
+                        padding: 0,
+                        color: "inherit",
+                        font: "inherit",
+                      }}
+                    >
+                      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.55)", fontWeight: 700, lineHeight: 1.4 }}>
+                        {new Date(r.created_at).toLocaleDateString(undefined, {
+                          weekday: "short",
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </div>
+                      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", fontWeight: 600, marginTop: 2 }}>
+                        {new Date(r.created_at).toLocaleTimeString(undefined, {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        })}
+                      </div>
+                      <div style={{ fontWeight: 900, fontSize: "1.05rem", marginTop: 8 }}>
+                        {r.score}/100 · {p.key}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 12,
+                          color: "rgba(255,255,255,0.72)",
+                          lineHeight: 1.45,
+                          marginTop: 4,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                        }}
+                      >
+                        Top gap: {gapHint}
+                      </div>
+                    </button>
+                    <div style={{ marginTop: "auto", paddingTop: 4, display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setExpandedOtherId((id) => (id === r.id ? null : r.id));
+                        }}
+                        style={{
+                          cursor: "pointer",
+                          background: "rgba(255,255,255,0.06)",
+                          border: "1px solid rgba(255,255,255,0.14)",
+                          borderRadius: 8,
+                          padding: "6px 10px",
+                          color: "rgba(0,255,204,0.9)",
+                          fontWeight: 800,
+                          fontSize: 11,
+                        }}
+                      >
+                        {expanded ? "▲ Snippet" : "▼ Expand snippet"}
+                      </button>
+                      <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>→ full above</span>
+                    </div>
+                    {expanded ? (
+                      <div
+                        style={{
+                          fontSize: 12,
+                          color: "rgba(255,255,255,0.78)",
+                          lineHeight: 1.5,
+                          borderTop: "1px solid rgba(255,255,255,0.08)",
+                          paddingTop: 10,
+                        }}
+                      >
+                        {(pr.cta_reason || pr.one_win || "—").slice(0, 280)}
+                        {(pr.cta_reason || pr.one_win || "").length > 280 ? "…" : ""}
+                        {ogaps.length > 1 ? (
+                          <div style={{ marginTop: 8, color: "rgba(255,255,255,0.65)" }}>
+                            <strong style={{ color: "rgba(255,255,255,0.88)" }}>{ogaps[1].priority}</strong> {ogaps[1].title}
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {variant === "admin" ? (
+        <section style={{ marginTop: 10 }}>
+          <div
+            style={{
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.62)",
+              fontWeight: 800,
+              marginBottom: 12,
+            }}
+          >
+            Offer preview (same as user)
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 12 }}>
+            <div
               style={{
                 background: "rgba(255,255,255,0.04)",
                 border: "1px solid rgba(255,255,255,0.12)",
@@ -188,71 +511,28 @@ export function ReadinessDashboardView({ readiness, entitlements, variant = "use
                 padding: 16,
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: 10,
-                  marginBottom: 6,
-                  flexWrap: "wrap",
-                }}
-              >
-                <div style={{ fontWeight: 900 }}>{m.title}</div>
-                {m.highlight ? (
-                  <div
-                    style={{
-                      fontSize: 10,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: "var(--cmk-accent)",
-                      fontWeight: 900,
-                    }}
-                  >
-                    Recommended
-                  </div>
-                ) : null}
-              </div>
-              <div style={{ color: "rgba(255,255,255,0.72)", fontSize: 13, lineHeight: 1.6, marginBottom: 12 }}>
-                {m.desc}
-              </div>
-              {m.unlocked ? (
-                <Link
-                  href={m.url}
-                  style={{
-                    padding: "10px 16px",
-                    display: "inline-block",
-                    background: "linear-gradient(135deg, rgba(0,255,204,0.98), rgba(98,166,255,0.92))",
-                    color: "#041013",
-                    border: "1px solid rgba(0,0,0,0.25)",
-                    borderRadius: 10,
-                    fontWeight: 900,
-                    textDecoration: "none",
-                  }}
-                >
-                  Open module →
-                </Link>
-              ) : (
-                <button
-                  type="button"
-                  style={{
-                    cursor: "not-allowed",
-                    opacity: 0.75,
-                    padding: "10px 16px",
-                    borderRadius: 10,
-                    fontWeight: 700,
-                    background: "rgba(255,255,255,0.06)",
-                    border: "1px solid rgba(255,255,255,0.14)",
-                    color: "rgba(255,255,255,0.62)",
-                  }}
-                >
-                  Locked (unlock after purchase)
-                </button>
-              )}
+              <div style={{ fontWeight: 800, marginBottom: 8 }}>Suggested</div>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", marginBottom: 0 }}>{primaryOffer.headline}</p>
+              <Link href={primaryOffer.href} style={{ color: "var(--cmk-accent)", fontSize: 13, fontWeight: 700, marginTop: 8, display: "inline-block" }}>
+                {primaryOffer.buttonLabel} →
+              </Link>
             </div>
-          ))}
-        </div>
-      </section>
+            <div
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                borderRadius: 12,
+                padding: 16,
+              }}
+            >
+              <div style={{ fontWeight: 800, marginBottom: 8 }}>CIR (always)</div>
+              <Link href="/audit" style={{ color: "var(--cmk-accent)", fontSize: 13, fontWeight: 700 }}>
+                Order CIR — $499 →
+              </Link>
+            </div>
+          </div>
+        </section>
+      ) : null}
     </>
   );
 }

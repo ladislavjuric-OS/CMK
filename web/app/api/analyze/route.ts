@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase";
+import { FREE_READINESS_RUNS_PER_EMAIL } from "@/lib/readinessLimits";
 
 const SYSTEM_PROMPT = `You are The Architect — a crowdfunding strategist who has raised $890K across 5 real campaigns (Baggizmo, Wiseward, and others). You speak with brutal honesty, no fluff, no empty encouragement.
 
@@ -150,6 +151,64 @@ async function sendResultsEmail({
         from: "The Architect <architect@elitegrowth.pro>",
         to: email,
         subject: `Your Campaign Score: ${score}/100 — ${verdict}`,
+        html,
+      }),
+    });
+    if (!rr.ok) await rr.text().catch(() => "");
+  } catch {
+    // ignore
+  }
+}
+
+async function sendSaasSignupEmail({
+  email,
+  historyLink,
+}: {
+  email: string;
+  historyLink?: string | null;
+}) {
+  if (!email || !process.env.RESEND_API_KEY) return;
+  const loginUrl = `${EMAIL_BASE_URL}/login`;
+  const historyButton = historyLink
+    ? `<a href="${historyLink}" style="display:inline-block;margin-left:10px;background:rgba(0,255,204,0.15);color:#00ffcc;font-weight:700;text-decoration:none;padding:12px 16px;border-radius:12px;border:1px solid rgba(0,255,204,0.4);">Open this run (magic link)</a>`
+    : "";
+  const html = `<!doctype html>
+  <html>
+    <body style="margin:0;background:#0b0f14;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;">
+      <div style="max-width:720px;margin:0 auto;padding:28px 18px;">
+        <div style="border:1px solid rgba(255,255,255,0.12);border-radius:16px;overflow:hidden;background:rgba(255,255,255,0.06);">
+          <div style="padding:18px 18px;border-bottom:1px solid rgba(255,255,255,0.10);background:rgba(11,15,20,0.75);">
+            <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#00ffcc;font-weight:800;">The Architect</div>
+            <div style="margin-top:4px;color:#9ca3af;font-size:13px;">Campaign Readiness — CMK</div>
+          </div>
+          <div style="padding:18px 18px;color:#e5e7eb;line-height:1.65;">
+            <div style="font-size:18px;font-weight:900;margin-bottom:10px;">You&apos;ve used your three free readiness checks</div>
+            <p style="margin:0 0 14px;color:#9ca3af;font-size:14px;">
+              We still saved this run for you. The next step is to <strong style="color:#e5e7eb;">create your CMK account</strong> (Google sign-in) so you can track full history, materials, and services in one place — the CMK &quot;room&quot; on the web app.
+            </p>
+            <div style="margin-top:18px;">
+              <a href="${loginUrl}" style="display:inline-block;background:linear-gradient(135deg,#00ffcc,#62a6ff);color:#041013;font-weight:900;text-decoration:none;padding:12px 16px;border-radius:12px;">Sign in with Google — CMK</a>
+              ${historyButton}
+            </div>
+            <p style="margin:16px 0 0;font-size:12px;color:#6b7280;">
+              Questions? <a href="mailto:hello@elitegrowth.pro" style="color:#00ffcc;text-decoration:none;">hello@elitegrowth.pro</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </body>
+  </html>`;
+  try {
+    const rr = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: "The Architect <architect@elitegrowth.pro>",
+        to: email,
+        subject: "Next step: your CMK account (after 3 free readiness checks)",
         html,
       }),
     });
@@ -345,11 +404,18 @@ Return JSON only.`;
     const clean = text.replace(/```json|```/g, "").trim();
     const result = JSON.parse(clean) as Record<string, unknown>;
 
-    const emailStr = String(email ?? "");
+    const emailStr = String(email ?? "").trim();
     let historyLink: string | null = null;
 
+    const supabase = getSupabaseServer();
+    const { count: priorCountRaw } = await supabase
+      .from("readiness_results")
+      .select("*", { count: "exact", head: true })
+      .ilike("email", emailStr);
+    const priorCount = typeof priorCountRaw === "number" ? priorCountRaw : 0;
+    const isSaasSignupEmail = priorCount >= FREE_READINESS_RUNS_PER_EMAIL;
+
     try {
-      const supabase = getSupabaseServer();
       const score = Number(result?.score ?? 0);
       const verdict = String(result?.verdict ?? "");
       await supabase.from("readiness_results").insert({
@@ -376,17 +442,30 @@ Return JSON only.`;
       `https://api.counterapi.dev/v1/${COUNTER_NS}/${COUNTER_KEY}/up`
     ).catch(() => {});
 
-    await sendResultsEmail({
-      email: emailStr,
-      result,
-      historyLink,
-    });
+    if (isSaasSignupEmail) {
+      await sendSaasSignupEmail({ email: emailStr, historyLink });
+    } else {
+      await sendResultsEmail({
+        email: emailStr,
+        result,
+        historyLink,
+      });
+    }
     // Ensure Systeme.io tagging completes in serverless environments.
     await Promise.allSettled([
       upsertSystemeAndTag({ email: String(email ?? "") }),
     ]);
 
-    return NextResponse.json(result, { headers });
+    return NextResponse.json(
+      {
+        ...result,
+        readinessMeta: {
+          emailVariant: isSaasSignupEmail ? "saas_signup" : "standard",
+          runNumber: priorCount + 1,
+        },
+      },
+      { headers }
+    );
   } catch (err) {
     return NextResponse.json(
       {

@@ -4,18 +4,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getSupabaseBrowser } from "@/lib/supabaseBrowser";
-import {
-  ReadinessDashboardView,
-  type EntitlementRow,
-  type ReadinessRow,
-} from "@/components/ReadinessDashboardView";
+import { ReadinessDashboardView, type ReadinessRow } from "@/components/ReadinessDashboardView";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
-  const [readiness, setReadiness] = useState<ReadinessRow | null>(null);
-  const [entitlements, setEntitlements] = useState<EntitlementRow[]>([]);
+  const [readinessRuns, setReadinessRuns] = useState<ReadinessRow[]>([]);
+  const [readinessHistoryLimit, setReadinessHistoryLimit] = useState(3);
+  const [fullReadinessHistoryUnlocked, setFullReadinessHistoryUnlocked] = useState(false);
 
   useEffect(() => {
     const run = async () => {
@@ -47,8 +44,9 @@ export default function DashboardPage() {
         const data = await res.json();
         if (!res.ok) throw new Error(data?.error || "Failed to load");
 
-        setReadiness(data.readiness);
-        setEntitlements(data.entitlements || []);
+        setReadinessRuns(Array.isArray(data.readinessRuns) ? data.readinessRuns : data.readiness ? [data.readiness] : []);
+        if (typeof data.readinessHistoryLimit === "number") setReadinessHistoryLimit(data.readinessHistoryLimit);
+        if (typeof data.fullReadinessHistoryUnlocked === "boolean") setFullReadinessHistoryUnlocked(data.fullReadinessHistoryUnlocked);
       } catch (e) {
         setErr(e instanceof Error ? e.message : String(e));
       } finally {
@@ -72,6 +70,8 @@ export default function DashboardPage() {
       </main>
     );
   }
+
+  const readiness = readinessRuns[0] ?? null;
 
   if (err || !readiness) {
     return (
@@ -113,7 +113,13 @@ export default function DashboardPage() {
 
   return (
     <main className="cmk-container">
-      <ReadinessDashboardView readiness={readiness} entitlements={entitlements} variant="user" />
+      <ReadinessDashboardView
+        readiness={readiness}
+        readinessRuns={readinessRuns}
+        variant="user"
+        readinessHistoryLimit={readinessHistoryLimit}
+        fullReadinessHistoryUnlocked={fullReadinessHistoryUnlocked}
+      />
     </main>
   );
 }
