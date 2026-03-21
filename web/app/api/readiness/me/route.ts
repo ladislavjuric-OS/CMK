@@ -1,24 +1,12 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase";
 import { getMagicCookieFromRequest, verifyMagicCookie } from "@/lib/magicSession";
+import { verifySupabaseUserAccessToken } from "@/lib/verifySupabaseUser";
 
 async function verifySupabaseToken(accessToken: string) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  if (!supabaseUrl) throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL");
-  const verifyRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
-    method: "GET",
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
-  const verifyData = await verifyRes.json().catch(() => ({}));
-  if (!verifyRes.ok) {
-    const msg = (verifyData as { msg?: string }).msg ?? (verifyData as { error_description?: string }).error_description ?? "Invalid token";
-    throw new Error(msg);
-  }
-  const data = verifyData as { id?: string; email?: string; user?: { id?: string; email?: string } };
-  const userId = data.id ?? data.user?.id;
-  const email = String(data.email ?? data.user?.email ?? "");
-  if (!userId || !email.includes("@")) throw new Error("User verification failed");
-  return { userId, email };
+  const v = await verifySupabaseUserAccessToken(accessToken);
+  if (!v) throw new Error("Invalid token");
+  return { userId: v.userId, email: v.email };
 }
 
 export async function POST(request: Request) {

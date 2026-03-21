@@ -1,5 +1,6 @@
 import { getSupabaseServer } from "@/lib/supabase";
 import { getMagicCookieFromRequest, verifyMagicCookie } from "@/lib/magicSession";
+import { verifySupabaseUserAccessToken } from "@/lib/verifySupabaseUser";
 
 const ADMIN_EMAILS_KEY = "ADMIN_EMAILS";
 
@@ -14,21 +15,19 @@ export function getAdminEmails(): Set<string> {
 }
 
 async function verifySupabaseAdmin(accessToken: string): Promise<{ userId: string; email: string } | null> {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  if (!supabaseUrl) return null;
-  const verifyRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
-    method: "GET",
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
-  if (!verifyRes.ok) return null;
-  const verifyData = (await verifyRes.json().catch(() => ({}))) as { id?: string; email?: string; user?: { id?: string; email?: string } };
-  const userId = verifyData.id ?? verifyData.user?.id;
-  const email = String(verifyData.email ?? verifyData.user?.email ?? "").toLowerCase();
-  if (!userId || !email) return null;
+  const verified = await verifySupabaseUserAccessToken(accessToken);
+  if (!verified) return null;
+  const emailLower = verified.email.toLowerCase();
+  const adminEmails = getAdminEmails();
+
+  if (adminEmails.has(emailLower)) {
+    return { userId: verified.userId, email: emailLower };
+  }
+
   const supabase = getSupabaseServer();
-  const { data } = await supabase.from("profiles").select("is_admin").eq("user_id", userId).limit(1).maybeSingle();
+  const { data } = await supabase.from("profiles").select("is_admin").eq("user_id", verified.userId).limit(1).maybeSingle();
   if (!(data as { is_admin?: boolean } | null)?.is_admin) return null;
-  return { userId, email };
+  return { userId: verified.userId, email: emailLower };
 }
 
 /**

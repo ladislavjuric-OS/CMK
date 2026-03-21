@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase";
 import { getAdminEmails } from "@/lib/adminAuth";
+import { verifySupabaseUserAccessToken } from "@/lib/verifySupabaseUser";
 
 export async function POST(request: Request) {
   try {
@@ -10,31 +11,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing access token" }, { status: 401 });
     }
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    if (!supabaseUrl) {
-      return NextResponse.json({ error: "Missing NEXT_PUBLIC_SUPABASE_URL" }, { status: 500 });
-    }
-
-    // Verify token (no service role needed): Supabase exposes /auth/v1/user.
-    const verifyRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const verifyData = await verifyRes.json().catch(() => ({}));
-    if (!verifyRes.ok) {
+    const verified = await verifySupabaseUserAccessToken(token);
+    if (!verified) {
       return NextResponse.json(
-        { error: "Invalid token", detail: verifyData },
+        { error: "Invalid token", detail: "Ensure NEXT_PUBLIC_SUPABASE_ANON_KEY is set on the server (GoTrue requires apikey header)." },
         { status: 401 }
       );
     }
 
-    const userId =
-      (verifyData as { id?: string; user?: { id?: string } }).id ??
-      (verifyData as { user?: { id?: string } }).user?.id;
-    const email = String((verifyData as { email?: string }).email ?? "");
-    if (!userId || !email.includes("@")) {
-      return NextResponse.json({ error: "User verification failed" }, { status: 400 });
-    }
+    const { userId, email } = verified;
 
     const supabase = getSupabaseServer();
     const adminEmails = getAdminEmails();

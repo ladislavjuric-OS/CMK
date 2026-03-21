@@ -7,13 +7,14 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 3. **Env (in `web/.env.local`):**
    ```
    NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...   # Settings → API → anon public; required server-side for /auth/v1/user (apikey header)
    SUPABASE_SERVICE_ROLE_KEY=eyJ...
    MAGIC_SESSION_SECRET=your-secret-at-least-16-chars  # for "View your history" link (signed cookie)
    ADMIN_EMAILS=your@email.com  # comma-separated; these emails can access /admin (via magic cookie or Supabase)
    ```
 4. **Install deps:** `npm install` (adds `@supabase/supabase-js`).
 
-**Admin login with Google:** Supabase → Authentication → Providers → Google: enable and add Client ID + Secret from [Google Cloud Console](https://console.cloud.google.com/) (OAuth 2.0 credentials, redirect URI `https://<project-ref>.supabase.co/auth/v1/callback`). Redirect URLs in Supabase must include your app callback, e.g. `https://cmk-preview.vercel.app/auth/callback`. Only emails in `ADMIN_EMAILS` get `is_admin` after sign-in.
+**Admin login with Google:** Supabase → Authentication → Providers → Google: enable and add Client ID + Secret from [Google Cloud Console](https://console.cloud.google.com/) (OAuth 2.0 credentials, redirect URI `https://<project-ref>.supabase.co/auth/v1/callback`). Redirect URLs in Supabase must include your app callback, e.g. `https://cmk-preview.vercel.app/auth/callback`. Emails in `ADMIN_EMAILS` get admin access (JWT verified with anon key + optional `profiles.is_admin`).
 
 **When switching to production (cmk.elitegrowth.pro):** Supabase → Authentication → URL Configuration: set Site URL and Redirect URLs to `https://cmk.elitegrowth.pro` and `https://cmk.elitegrowth.pro/auth/callback`. In Vercel Production env set `NEXT_PUBLIC_APP_URL=https://cmk.elitegrowth.pro`.
 
