@@ -538,20 +538,55 @@ a {
 
 .cmk-footer {
   margin-top: 64px;
-  padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
-  flex-direction: column;
-  gap: 14px;
-  font-size: 12px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.7rem;
   color: rgba(255, 255, 255, 0.55);
   width: 100%;
   box-sizing: border-box;
 }
 
 .cmk-footer-copy {
-  width: 100%;
+  flex: 1 1 auto;
+  min-width: min(100%, 200px);
   line-height: 1.4;
+}
+
+.cmk-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.5rem;
+}
+
+.cmk-footer a {
+  color: rgba(255, 255, 255, 0.62);
+  text-decoration: none;
+}
+
+.cmk-footer a:hover {
+  color: var(--cmk-accent);
+}
+
+.cmk-footer button.cookie-settings-minimal {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.62);
+  text-decoration: none;
+}
+
+.cmk-footer button.cookie-settings-minimal:hover {
+  color: var(--cmk-accent);
 }
 
 .cmk-footer-newsletter {
@@ -636,51 +671,6 @@ a {
   margin: 0;
   font-size: 11px;
   color: rgba(255, 140, 140, 0.95);
-}
-
-.cmk-footer-nav {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px 40px;
-  width: 100%;
-  padding-top: 4px;
-}
-
-.cmk-footer-col {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  min-width: min(100%, 160px);
-}
-
-.cmk-footer-col--legal {
-  align-items: flex-end;
-  text-align: right;
-}
-
-@media (max-width: 520px) {
-  .cmk-footer-nav {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 16px;
-  }
-
-  .cmk-footer-col--legal {
-    align-items: flex-start;
-    text-align: left;
-  }
-}
-
-.cmk-footer a {
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.cmk-footer a:hover {
-  color: var(--cmk-accent);
 }
 
 /* Legal pages (privacy, terms, refund) */
@@ -1423,6 +1413,15 @@ a {
   transform: translateY(0);
 }
 
+.pg-about .about-pre-footer {
+  margin-top: 3rem;
+  padding-bottom: 0.25rem;
+}
+
+.pg-about .cmk-footer {
+  margin-top: 1.75rem;
+}
+
 .pg-contact .contact-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1820,14 +1819,8 @@ a {
     flex-direction: column;
     align-items: flex-start;
   }
-  .pg-readiness-page .cmk-footer-nav {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .pg-readiness-page .cmk-footer-col--legal {
-    align-items: flex-start;
-    text-align: left;
+  .pg-readiness-page .cmk-footer-links {
+    justify-content: flex-start;
   }
 }
 

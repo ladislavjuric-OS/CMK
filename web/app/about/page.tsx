@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import OperatorBioSection from "@/components/OperatorBioSection";
 import ScrollRevealEffect from "@/components/ScrollRevealEffect";
 
@@ -53,6 +54,10 @@ export default function AboutPage() {
       <div className="pg-momentum">
         <OperatorBioSection />
       </div>
+
+      <section className="about-pre-footer" aria-labelledby="about-footer-nl-label">
+        <NewsletterSignup variant="compact" idPrefix="about" />
+      </section>
 
       <SiteFooter />
       <ScrollRevealEffect scopeClass="pg-about" />
