@@ -469,12 +469,26 @@ export function ReadinessDashboardView({
                 marginBottom: 10,
               }}
             >
-              Campaign Intelligence Report (CIR)
+              Campaign Intelligence Report
             </div>
-            <p style={{ margin: "0 0 14px", color: "rgba(255,255,255,0.88)", lineHeight: 1.65, fontSize: 14 }}>
-              GO/NO-GO verdict, gaps quantified, fix sequence — $499, 72h delivery. Independent of your score; most teams
-              order this before scaling spend.
+            <p style={{ margin: "0 0 12px", color: "rgba(255,255,255,0.88)", lineHeight: 1.65, fontSize: 14 }}>
+              Operator-grade assessment independent of this score — $499, delivered within 72 hours. Most teams order
+              before scaling ad spend.
             </p>
+            <ul
+              style={{
+                margin: "0 0 16px",
+                paddingLeft: 18,
+                color: "rgba(255,255,255,0.78)",
+                lineHeight: 1.55,
+                fontSize: 13,
+              }}
+            >
+              <li style={{ marginBottom: 6 }}>Clear GO/NO-GO verdict for your stage (pre-launch, live, or post-campaign).</li>
+              <li style={{ marginBottom: 6 }}>Critical gaps called out and quantified where it changes decisions.</li>
+              <li style={{ marginBottom: 6 }}>Prioritized fix sequence — what to tackle first, second, and third.</li>
+              <li>Full written report in your inbox within 72h after checkout.</li>
+            </ul>
             <Link
               href="/audit"
               style={{
@@ -488,7 +502,7 @@ export function ReadinessDashboardView({
                 fontSize: 14,
               }}
             >
-              Order CIR — $499 →
+              Order Campaign Intelligence Report — $499 →
             </Link>
           </section>
         </>
@@ -572,9 +586,9 @@ export function ReadinessDashboardView({
                 padding: 16,
               }}
             >
-              <div style={{ fontWeight: 800, marginBottom: 8 }}>CIR (always)</div>
+              <div style={{ fontWeight: 800, marginBottom: 8 }}>Campaign Intelligence Report</div>
               <Link href="/audit" style={{ color: "var(--cmk-accent)", fontSize: 13, fontWeight: 700 }}>
-                Order CIR — $499 →
+                Order Campaign Intelligence Report — $499 →
               </Link>
             </div>
           </div>
