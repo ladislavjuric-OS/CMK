@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CookieSettingsLink from "@/components/CookieSettingsLink";
 
 export default function SiteFooter() {
   return (
@@ -18,6 +19,10 @@ export default function SiteFooter() {
           ·
         </span>
         <a href="/data/cookies">Cookies</a>
+        <span className="cmk-footer-sep" aria-hidden>
+          ·
+        </span>
+        <CookieSettingsLink className="cmk-footer-cookie-settings" />
         <span className="cmk-footer-sep" aria-hidden>
           ·
         </span>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import JsonLd from "@/components/JsonLd";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -44,8 +45,15 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  themeColor: "#0b0f14",
   icons: {
-    icon: "/favicon.ico",
+    icon: [{ url: "/icon", type: "image/png", sizes: "32x32" }],
+    apple: "/apple-icon",
+  },
+  appleWebApp: {
+    capable: true,
+    title: "CMK — The Architect",
+    statusBarStyle: "black-translucent",
   },
 };
 
@@ -57,6 +65,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+        <JsonLd />
         <GoogleAnalytics />
         {children}
       </body>

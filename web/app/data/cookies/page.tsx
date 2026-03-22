@@ -96,9 +96,9 @@ export default function CookiePolicyPage() {
             <strong>Decline</strong>.
           </li>
           <li>
-            <strong>Change later:</strong> clear site data for this domain in your browser (cookies and local storage)
-            and reload the site — the banner will show again. We do not currently expose a separate &quot;cookie
-            settings&quot; panel; if we add one, this policy will be updated.
+            <strong>Change later:</strong> use <strong>Cookie settings</strong> in the site footer (it clears your
+            saved choice and reloads the page so the banner appears again), or clear site data for this domain in your
+            browser and revisit.
           </li>
         </ul>
 

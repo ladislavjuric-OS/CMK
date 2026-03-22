@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-const STORAGE_KEY = "cmk_cookie_consent_v1";
+import { COOKIE_CONSENT_STORAGE_KEY } from "@/lib/cookieConsent";
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 declare global {
@@ -23,7 +22,7 @@ export default function GoogleAnalytics() {
   useEffect(() => {
     if (!GA_ID || typeof window === "undefined") return;
 
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
     const analyticsDefault = stored === "granted" ? "granted" : "denied";
 
     window.dataLayer = window.dataLayer || [];
@@ -58,7 +57,7 @@ export default function GoogleAnalytics() {
   }, []);
 
   const accept = () => {
-    localStorage.setItem(STORAGE_KEY, "granted");
+    localStorage.setItem(COOKIE_CONSENT_STORAGE_KEY, "granted");
     setShowBanner(false);
     window.gtag?.("consent", "update", {
       analytics_storage: "granted",
@@ -66,7 +65,7 @@ export default function GoogleAnalytics() {
   };
 
   const decline = () => {
-    localStorage.setItem(STORAGE_KEY, "denied");
+    localStorage.setItem(COOKIE_CONSENT_STORAGE_KEY, "denied");
     setShowBanner(false);
     window.gtag?.("consent", "update", {
       analytics_storage: "denied",
