@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import JsonLd from "@/components/JsonLd";
@@ -45,7 +45,6 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  themeColor: "#0b0f14",
   icons: {
     icon: [{ url: "/icon", type: "image/png", sizes: "32x32" }],
     apple: "/apple-icon",
@@ -55,6 +54,10 @@ export const metadata: Metadata = {
     title: "CMK — The Architect",
     statusBarStyle: "black-translucent",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0b0f14",
 };
 
 export default function RootLayout({
