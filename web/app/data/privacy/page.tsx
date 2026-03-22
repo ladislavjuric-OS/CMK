@@ -61,6 +61,15 @@ export default function PrivacyPage() {
           <li>
             <strong>Email service providers</strong> — for transactional and product emails
           </li>
+          <li>
+            <strong>Google Ireland Limited</strong> —{" "}
+            <a href="https://analytics.google.com/" rel="noopener noreferrer" target="_blank">
+              Google Analytics 4
+            </a>{" "}
+            (website usage statistics), only if you accept analytics cookies via our on-site banner.
+            Google may process data in accordance with its terms and the EU/US data transfer frameworks
+            as applicable.
+          </li>
         </ul>
 
         <h2>05 — Data Retention</h2>
@@ -83,10 +92,15 @@ export default function PrivacyPage() {
           <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
         </p>
 
-        <h2>07 — Cookies</h2>
+        <h2>07 — Cookies &amp; analytics consent</h2>
         <p>
-          This site uses minimal cookies necessary for functionality. We do not use tracking or
-          advertising cookies. Analytics, if used, are anonymized.
+          We use strictly necessary mechanisms for the site to function. For <strong>optional</strong>{" "}
+          audience measurement we use <strong>Google Analytics 4</strong>. On your first visit, a
+          banner lets you <strong>accept</strong> or <strong>decline</strong> analytics cookies. If you
+          decline, GA runs in a limited mode without analytics storage cookies (as supported by
+          Google&apos;s Consent Mode). You can change your mind by clearing site data for this domain
+          and revisiting — the banner will appear again. We do not use advertising or social pixels on
+          this basis.
         </p>
 
         <h2>08 — Contact</h2>
