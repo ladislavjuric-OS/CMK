@@ -90,7 +90,7 @@ export default function RefundPage() {
 
       <footer className="legal-footer">
         © 2026 The Architect™ · Elitegrowth d.o.o. · <Link href="/data/terms">Terms of Service</Link> ·{" "}
-        <Link href="/data/privacy">Privacy Policy</Link>
+        <Link href="/data/privacy">Privacy Policy</Link> · <Link href="/data/cookies">Cookie Policy</Link>
       </footer>
     </div>
   );

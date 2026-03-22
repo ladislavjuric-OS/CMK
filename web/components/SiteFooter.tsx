@@ -17,6 +17,10 @@ export default function SiteFooter() {
         <span className="cmk-footer-sep" aria-hidden>
           ·
         </span>
+        <a href="/data/cookies">Cookies</a>
+        <span className="cmk-footer-sep" aria-hidden>
+          ·
+        </span>
         <a href="/data/terms">Terms</a>
         <span className="cmk-footer-sep" aria-hidden>
           ·

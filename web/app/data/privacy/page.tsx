@@ -100,7 +100,8 @@ export default function PrivacyPage() {
           decline, GA runs in a limited mode without analytics storage cookies (as supported by
           Google&apos;s Consent Mode). You can change your mind by clearing site data for this domain
           and revisiting — the banner will appear again. We do not use advertising or social pixels on
-          this basis.
+          this basis. Full detail:{" "}
+          <Link href="/data/cookies">Cookie Policy</Link>.
         </p>
 
         <h2>08 — Contact</h2>
@@ -114,8 +115,8 @@ export default function PrivacyPage() {
       </div>
 
       <footer className="legal-footer">
-        © 2026 The Architect™ · Elitegrowth d.o.o. · <Link href="/data/terms">Terms of Service</Link> ·{" "}
-        <Link href="/data/refund">Refund Policy</Link>
+        © 2026 The Architect™ · Elitegrowth d.o.o. · <Link href="/data/cookies">Cookie Policy</Link> ·{" "}
+        <Link href="/data/terms">Terms of Service</Link> · <Link href="/data/refund">Refund Policy</Link>
       </footer>
     </div>
   );

@@ -82,7 +82,11 @@ export default function GoogleAnalytics() {
       <div className="cookie-consent-inner">
         <p className="cookie-consent-text">
           We use analytics cookies (Google Analytics) to understand how the site is used. No ads tracking. You can
-          accept or decline non-essential analytics. See our{" "}
+          accept or decline non-essential analytics. Read our{" "}
+          <Link href="/data/cookies" className="cookie-consent-link">
+            Cookie Policy
+          </Link>{" "}
+          and{" "}
           <Link href="/data/privacy" className="cookie-consent-link">
             Privacy Policy
           </Link>

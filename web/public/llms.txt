@@ -20,6 +20,7 @@
 ## Legal & policies
 
 - Privacy: `/data/privacy`
+- Cookies: `/data/cookies`
 - Terms: `/data/terms`
 - Refund: `/data/refund`
 

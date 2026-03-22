@@ -17,6 +17,7 @@ const PATHS: {
   { path: "/tools/intake", priority: 0.75, changeFrequency: "monthly" },
   { path: "/tools/campaignintelligence", priority: 0.75, changeFrequency: "monthly" },
   { path: "/data/privacy", priority: 0.4, changeFrequency: "yearly" },
+  { path: "/data/cookies", priority: 0.4, changeFrequency: "yearly" },
   { path: "/data/terms", priority: 0.4, changeFrequency: "yearly" },
   { path: "/data/refund", priority: 0.4, changeFrequency: "yearly" },
   { path: "/login", priority: 0.35, changeFrequency: "yearly" },

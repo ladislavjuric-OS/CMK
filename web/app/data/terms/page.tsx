@@ -112,7 +112,7 @@ export default function TermsPage() {
 
       <footer className="legal-footer">
         © 2026 The Architect™ · Elitegrowth d.o.o. · <Link href="/data/privacy">Privacy Policy</Link> ·{" "}
-        <Link href="/data/refund">Refund Policy</Link>
+        <Link href="/data/cookies">Cookie Policy</Link> · <Link href="/data/refund">Refund Policy</Link>
       </footer>
     </div>
   );

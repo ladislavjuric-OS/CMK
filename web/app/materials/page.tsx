@@ -654,6 +654,7 @@ export default function MaterialsPage() {
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
           <Link href="/data/privacy">Privacy Policy</Link>
+          <Link href="/data/cookies">Cookie Policy</Link>
           <Link href="/data/terms">Terms</Link>
           <Link href="/data/refund">Refund Policy</Link>
           <a href="mailto:hello@elitegrowth.pro">hello@elitegrowth.pro</a>
