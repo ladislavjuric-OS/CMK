@@ -1,10 +1,14 @@
 import Link from "next/link";
 import CookieSettingsLink from "@/components/CookieSettingsLink";
+import FooterNewsletterSignup from "@/components/FooterNewsletterSignup";
 
 export default function SiteFooter() {
   return (
     <footer className="cmk-footer" role="contentinfo">
-      <div className="cmk-footer-copy">© 2026 The Architect™ · Elitegrowth d.o.o.</div>
+      <div className="cmk-footer-top">
+        <div className="cmk-footer-copy">© 2026 The Architect™ · Elitegrowth d.o.o.</div>
+        <FooterNewsletterSignup />
+      </div>
       <nav className="cmk-footer-links" aria-label="Site, legal and contact">
         <Link href="/about">About</Link>
         <span className="cmk-footer-sep" aria-hidden>

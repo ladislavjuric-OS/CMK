@@ -35,8 +35,17 @@ export default function MediaListView() {
       try {
         setLoading(true);
         const res = await fetch("/api/tools/media-list", { method: "GET" });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data?.error || "Could not load media list");
+        const data = (await res.json()) as { error?: unknown; rows?: PublicPressContactRow[] };
+        if (!res.ok) {
+          const raw = data?.error;
+          const msg =
+            typeof raw === "string"
+              ? raw
+              : raw != null && typeof raw === "object"
+                ? JSON.stringify(raw)
+                : "Could not load media list";
+          throw new Error(msg);
+        }
         setRows(data.rows || []);
         setErr("");
       } catch (e) {
@@ -84,12 +93,8 @@ export default function MediaListView() {
   if (err) {
     return (
       <article className="cmk-card" style={{ marginTop: "1.5rem" }}>
-        <h2>Could not load list</h2>
+        <h2>Something went wrong</h2>
         <p className="cmk-small">{err}</p>
-        <p className="cmk-small" style={{ marginTop: "0.75rem" }}>
-          If you just added the <code>category</code> column, run the latest <code>ALTER</code> from{" "}
-          <code>web/supabase/schema.sql</code> in the Supabase SQL editor, then refresh.
-        </p>
       </article>
     );
   }

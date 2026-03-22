@@ -257,11 +257,9 @@ export default function AdminPressPage() {
         <div className="cmk-tag">Admin · Master Press Lista</div>
         <h1 style={{ marginTop: "1.25rem", marginBottom: "0.75rem" }}>Searchable press table</h1>
         <p style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.7, maxWidth: 720 }}>
-          Quick find across all columns (including <strong>category</strong>). Public view:{" "}
-          <Link href="/tools/media-list" style={{ color: "var(--cmk-accent)", fontWeight: 800 }}>
-            /tools/media-list
-          </Link>{" "}
-          (no internal notes). Ensure <code style={{ color: "rgba(255,255,255,0.78)" }}>category</code> column exists — see{" "}
+          Quick find across all columns (including <strong>category</strong>). The public media directory is{" "}
+          <strong>paused</strong> until data is ready; admin editing here still applies. Ensure{" "}
+          <code style={{ color: "rgba(255,255,255,0.78)" }}>category</code> exists — see{" "}
           <code style={{ color: "rgba(255,255,255,0.78)" }}>web/supabase/schema.sql</code>.
         </p>
         <p style={{ marginTop: "0.75rem" }}>

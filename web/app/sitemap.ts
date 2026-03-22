@@ -9,6 +9,7 @@ const PATHS: {
   { path: "/", priority: 1, changeFrequency: "weekly" },
   { path: "/about", priority: 0.85, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.85, changeFrequency: "monthly" },
+  { path: "/newsletter", priority: 0.7, changeFrequency: "monthly" },
   { path: "/materials", priority: 0.9, changeFrequency: "weekly" },
   { path: "/audit", priority: 0.9, changeFrequency: "weekly" },
   { path: "/momentum", priority: 0.9, changeFrequency: "weekly" },

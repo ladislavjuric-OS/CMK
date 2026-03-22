@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
+import ToolsNewsletterSignup from "@/components/ToolsNewsletterSignup";
 
 export const metadata: Metadata = {
   title: "Tools — The Architect",
@@ -44,19 +45,6 @@ export default function ToolsPage() {
           </article>
 
           <article className="cmk-card">
-            <div className="cmk-tag">Directory</div>
-            <h2>Media list</h2>
-            <p className="cmk-small">
-              Searchable outlets and contacts by category, region, and tags — for ethical, targeted outreach.
-            </p>
-            <div className="cmk-actions">
-              <Link className="cmk-cta" href="/tools/media-list">
-                Open media list →
-              </Link>
-            </div>
-          </article>
-
-          <article className="cmk-card">
             <div className="cmk-tag">Tool page</div>
             <h2>Campaign Intelligence (preview)</h2>
             <p className="cmk-small">
@@ -69,6 +57,20 @@ export default function ToolsPage() {
             </div>
           </article>
         </section>
+
+        <section className="cmk-tools-roadmap" aria-label="Roadmap">
+          <h2>More tools in development</h2>
+          <p>
+            We’re building additional utilities on this page — including a public media directory and other launch helpers.
+            What’s live today is what we’re comfortable shipping; the rest ships when the data and UX are ready.
+          </p>
+          <ul>
+            <li>Media / press outlet directory (in progress)</li>
+            <li>More campaign prep helpers (planned)</li>
+          </ul>
+        </section>
+
+        <ToolsNewsletterSignup />
       </section>
       <SiteFooter />
     </main>

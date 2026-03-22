@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase";
 import { FREE_READINESS_RUNS_PER_EMAIL } from "@/lib/readinessLimits";
+import { systemeAddContactWithTag } from "@/lib/systemeTag";
 
 const SYSTEM_PROMPT = `You are The Architect — a crowdfunding strategist who has raised $890K across 5 real campaigns (Baggizmo, Wiseward, and others). You speak with brutal honesty, no fluff, no empty encouragement.
 
@@ -218,80 +219,11 @@ async function sendSaasSignupEmail({
   }
 }
 
-function getContactIdFromResponse(sd: unknown): number | undefined {
-  if (!sd || typeof sd !== "object") return undefined;
-  const o = sd as Record<string, unknown>;
-  const from = (v: unknown): number | undefined => {
-    if (typeof v === "number" && !Number.isNaN(v)) return v;
-    if (typeof v === "string" && /^\d+$/.test(v)) return parseInt(v, 10);
-    return undefined;
-  };
-  return (
-    from(o.id) ??
-    from((o.contact as Record<string, unknown>)?.id) ??
-    from((o.data as Record<string, unknown>)?.id) ??
-    from(o.contactId) ??
-    from(o.contact_id) ??
-    (Array.isArray(o.items) && o.items[0] != null
-      ? from((o.items[0] as Record<string, unknown>).id)
-      : undefined)
-  );
-}
-
 async function upsertSystemeAndTag({ email }: { email: string }) {
-  if (!email || !process.env.SYSTEME_API_KEY) return;
   const tagIdRaw = process.env.SYSTEME_TAG_ID ?? "1914659";
   const tagId = Number(tagIdRaw);
   if (!tagId || Number.isNaN(tagId)) return;
-  const debug = String(process.env.SYSTEME_DEBUG ?? "").toLowerCase() === "true";
-  const headers = {
-    "Content-Type": "application/json",
-    "X-API-Key": process.env.SYSTEME_API_KEY,
-  };
-
-  try {
-    const sr = await fetch("https://api.systeme.io/api/contacts", {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ email }),
-    });
-    const sd = await sr.json().catch(() => ({}));
-    if (debug && !sr.ok && sr.status !== 409) {
-      console.error("[systeme] create contact failed", { status: sr.status, body: sd });
-    }
-
-    // Mirror the legacy HTML behavior (`api/analyze.js`) to remove differences.
-    const contactIdRaw =
-      (sd as { id?: unknown } | null)?.id ??
-      (sd as { contact?: { id?: unknown } } | null)?.contact?.id ??
-      (sd as { data?: { id?: unknown } } | null)?.data?.id ??
-      (sd as { contactId?: unknown } | null)?.contactId ??
-      (sd as { contact_id?: unknown } | null)?.contact_id;
-
-    const contactId =
-      typeof contactIdRaw === "number"
-        ? contactIdRaw
-        : typeof contactIdRaw === "string" && /^\d+$/.test(contactIdRaw)
-          ? parseInt(contactIdRaw, 10)
-          : undefined;
-
-    if (!contactId) {
-      if (debug) console.error("[systeme] contactId missing from response", { response: sd });
-      return;
-    }
-
-    const tr = await fetch(`https://api.systeme.io/api/contacts/${contactId}/tags`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ tagId }),
-    });
-    if (debug && !(tr.ok || tr.status === 204)) {
-      const tb = await tr.text().catch(() => "");
-      console.error("[systeme] tag contact failed", { status: tr.status, body: tb, contactId, tagId });
-    }
-  } catch {
-    // best-effort
-  }
+  await systemeAddContactWithTag(email, tagId);
 }
 
 export async function OPTIONS() {

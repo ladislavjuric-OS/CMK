@@ -15,6 +15,9 @@ export default function SiteNav() {
           <Link href="/tools">Tools</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
+          <Link href="/newsletter" className="cmk-nav-updates">
+            Updates
+          </Link>
         </nav>
       </div>
     </header>

@@ -22,7 +22,9 @@ API route `POST /api/audit-requests` expects `{ email, payload? }` and inserts i
 
 **Master Press Lista (admin):** after applying the latest `supabase/schema.sql` (table `press_contacts` + column **`category`**), open **`/admin/press`**. Search filters all columns; add / edit / delete rows; **Bulk import JSON** (up to 2000 rows per request) for migrations. Example payload: `supabase/press_bulk_import.example.json`.
 
-**Public media list:** **`/tools/media-list`** — read-only, searchable, filter by **category**, sortable; **does not** expose internal `notes`.
+**Public media list:** **`/tools/media-list`** currently shows a “coming soon” placeholder (no live table). The **`MediaListView`** + **`GET /api/tools/media-list`** remain for when you re-enable it.
+
+**Tools newsletter:** **`POST /api/tools/newsletter`** `{ "email", "consent": true }` — if **`SYSTEME_API_KEY`** and **`SYSTEME_NEWSLETTER_TAG_ID`** are set, creates/tags the contact in Systeme.io. Suggested tag name in Systeme: **`CMK — Tools newsletter`** (create the tag there, copy its numeric ID into env).
 
 **Test (PowerShell, one line, single quotes around JSON):**
 ```powershell
