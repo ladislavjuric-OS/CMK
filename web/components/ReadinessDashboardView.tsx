@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Fragment, useMemo, useRef, useState } from "react";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import { getPrimaryOfferFromPayload } from "@/lib/readinessPrimaryOffer";
 
 export type CriticalGap = { priority: string; title: string; finding: string; fix: string };
@@ -220,135 +221,6 @@ export function ReadinessDashboardView({
             </a>
           </div>
 
-          {otherRuns.length > 0 ? (
-            <section style={{ marginTop: "0.25rem", marginBottom: "1.75rem", maxWidth: 720 }}>
-              <div
-                style={{
-                  fontSize: 11,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.5)",
-                  fontWeight: 800,
-                  marginBottom: 8,
-                }}
-              >
-                Readiness history
-              </div>
-              <p style={{ margin: "0 0 16px", color: "rgba(255,255,255,0.72)", fontSize: 15, lineHeight: 1.55, maxWidth: 640 }}>
-                Earlier checks for this account. Expand for a quick summary, or open one as the main result at the top.
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {otherRuns.map((r, idx) => {
-                  const p = verdictToPill(r.score, r.verdict);
-                  const conf = (r.payload as ReadinessPayload).confidence || "—";
-                  const testFmt = formatTestDateTime(r.created_at);
-                  const expanded = expandedOtherId === r.id;
-                  const showHistoryRequestCta =
-                    (otherRuns.length >= 2 && idx === 1) || (otherRuns.length === 1 && idx === 0);
-
-                  return (
-                    <Fragment key={r.id}>
-                      <div
-                        style={{
-                          background: "rgba(0,0,0,0.22)",
-                          border: "1px solid rgba(255,255,255,0.12)",
-                          borderRadius: 12,
-                          overflow: "hidden",
-                        }}
-                      >
-                        <button
-                          type="button"
-                          onClick={() => setExpandedOtherId((id) => (id === r.id ? null : r.id))}
-                          style={{
-                            width: "100%",
-                            textAlign: "left",
-                            cursor: "pointer",
-                            background: expanded ? "rgba(0,255,204,0.06)" : "transparent",
-                            border: "none",
-                            padding: "14px 16px",
-                            color: "#fff",
-                            font: "inherit",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            gap: 12,
-                          }}
-                        >
-                          <span style={{ fontSize: 15, fontWeight: 800 }}>
-                            Readiness check · {testFmt.datePart} · {r.score}/100 · {p.key}
-                          </span>
-                          <span style={{ fontSize: 13, color: "rgba(0,255,204,0.85)", fontWeight: 800, flexShrink: 0 }}>
-                            {expanded ? "▲ Hide" : "▼ Expand"}
-                          </span>
-                        </button>
-                        {expanded ? (
-                          <div
-                            style={{
-                              padding: "0 16px 16px",
-                              borderTop: "1px solid rgba(255,255,255,0.08)",
-                            }}
-                          >
-                            <pre
-                              style={{
-                                margin: "12px 0 14px",
-                                padding: "14px 16px",
-                                borderRadius: 10,
-                                background: "rgba(0,0,0,0.35)",
-                                border: "1px solid rgba(255,255,255,0.08)",
-                                color: "rgba(255,255,255,0.9)",
-                                fontSize: 15,
-                                lineHeight: 1.65,
-                                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-                                whiteSpace: "pre-wrap",
-                                wordBreak: "break-word",
-                              }}
-                            >
-                              {`---\nScore: ${r.score} / 100\nVerdict: ${p.key} · Confidence: ${conf}\nTest: ${testFmt.combined}\n---`}
-                            </pre>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setFocusedId(r.id);
-                                setExpandedOtherId(null);
-                                requestAnimationFrame(() => {
-                                  mainRunAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                                });
-                              }}
-                              style={{
-                                cursor: "pointer",
-                                padding: "10px 16px",
-                                borderRadius: 10,
-                                border: "1px solid rgba(0,255,204,0.35)",
-                                background: "rgba(0,255,204,0.12)",
-                                color: "rgba(0,255,204,0.95)",
-                                fontWeight: 800,
-                                fontSize: 14,
-                              }}
-                            >
-                              Open full view at top ↑
-                            </button>
-                          </div>
-                        ) : null}
-                      </div>
-                      {showHistoryRequestCta ? (
-                        <p style={{ margin: "4px 0 0", fontSize: 15, lineHeight: 1.6, color: "rgba(255,255,255,0.72)", maxWidth: 640 }}>
-                          Want more checks kept in your dashboard history? We&apos;re lining up plans for that —{" "}
-                          <a
-                            href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(EXTENDED_HISTORY_MAIL_SUBJECT)}`}
-                            style={{ color: "var(--cmk-accent)", fontWeight: 800, textDecoration: "none" }}
-                          >
-                            email us
-                          </a>{" "}
-                          and we&apos;ll note your request (subject is preset so we can track it).
-                        </p>
-                      ) : null}
-                    </Fragment>
-                  );
-                })}
-              </div>
-            </section>
-          ) : null}
-
           <section
             style={{
               background: "rgba(255,255,255,0.06)",
@@ -374,7 +246,7 @@ export function ReadinessDashboardView({
             {otherRuns.length > 0 ? (
               <p style={{ margin: "0 0 16px", fontSize: 16, color: "rgba(255,255,255,0.58)", lineHeight: 1.55, maxWidth: 640 }}>
                 For the run shown <strong style={{ color: "rgba(255,255,255,0.82)" }}>at the top</strong>. Switch checks in{" "}
-                <strong style={{ color: "rgba(255,255,255,0.82)" }}>Readiness history</strong> above to load a different one.
+                <strong style={{ color: "rgba(255,255,255,0.82)" }}>Readiness history</strong> below to load a different one.
               </p>
             ) : (
               <p style={{ margin: "0 0 16px", fontSize: 16, color: "rgba(255,255,255,0.58)", lineHeight: 1.55 }}>
@@ -505,6 +377,150 @@ export function ReadinessDashboardView({
               Order Campaign Intelligence Report — $499 →
             </Link>
           </section>
+
+          <section
+            style={{
+              marginBottom: "1.5rem",
+              padding: "20px 22px",
+              borderRadius: 14,
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              background: "rgba(0, 0, 0, 0.18)",
+              maxWidth: 720,
+            }}
+            aria-labelledby="dashboard-footer-nl-label"
+            id="dashboard-email-updates"
+          >
+            <NewsletterSignup variant="compact" idPrefix="dashboard" />
+          </section>
+
+          {otherRuns.length > 0 ? (
+            <section style={{ marginTop: "0.25rem", marginBottom: "1.75rem", maxWidth: 720 }}>
+              <div
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.5)",
+                  fontWeight: 800,
+                  marginBottom: 8,
+                }}
+              >
+                Readiness history
+              </div>
+              <p style={{ margin: "0 0 16px", color: "rgba(255,255,255,0.72)", fontSize: 15, lineHeight: 1.55, maxWidth: 640 }}>
+                Earlier checks for this account. Expand for a quick summary, or open one as the main result at the top.
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {otherRuns.map((r, idx) => {
+                  const p = verdictToPill(r.score, r.verdict);
+                  const conf = (r.payload as ReadinessPayload).confidence || "—";
+                  const testFmt = formatTestDateTime(r.created_at);
+                  const expanded = expandedOtherId === r.id;
+                  const showHistoryRequestCta =
+                    (otherRuns.length >= 2 && idx === 1) || (otherRuns.length === 1 && idx === 0);
+
+                  return (
+                    <Fragment key={r.id}>
+                      <div
+                        style={{
+                          background: "rgba(0,0,0,0.22)",
+                          border: "1px solid rgba(255,255,255,0.12)",
+                          borderRadius: 12,
+                          overflow: "hidden",
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setExpandedOtherId((id) => (id === r.id ? null : r.id))}
+                          style={{
+                            width: "100%",
+                            textAlign: "left",
+                            cursor: "pointer",
+                            background: expanded ? "rgba(0,255,204,0.06)" : "transparent",
+                            border: "none",
+                            padding: "14px 16px",
+                            color: "#fff",
+                            font: "inherit",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            gap: 12,
+                          }}
+                        >
+                          <span style={{ fontSize: 15, fontWeight: 800 }}>
+                            Readiness check · {testFmt.datePart} · {r.score}/100 · {p.key}
+                          </span>
+                          <span style={{ fontSize: 13, color: "rgba(0,255,204,0.85)", fontWeight: 800, flexShrink: 0 }}>
+                            {expanded ? "▲ Hide" : "▼ Expand"}
+                          </span>
+                        </button>
+                        {expanded ? (
+                          <div
+                            style={{
+                              padding: "0 16px 16px",
+                              borderTop: "1px solid rgba(255,255,255,0.08)",
+                            }}
+                          >
+                            <pre
+                              style={{
+                                margin: "12px 0 14px",
+                                padding: "14px 16px",
+                                borderRadius: 10,
+                                background: "rgba(0,0,0,0.35)",
+                                border: "1px solid rgba(255,255,255,0.08)",
+                                color: "rgba(255,255,255,0.9)",
+                                fontSize: 15,
+                                lineHeight: 1.65,
+                                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                                whiteSpace: "pre-wrap",
+                                wordBreak: "break-word",
+                              }}
+                            >
+                              {`---\nScore: ${r.score} / 100\nVerdict: ${p.key} · Confidence: ${conf}\nTest: ${testFmt.combined}\n---`}
+                            </pre>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setFocusedId(r.id);
+                                setExpandedOtherId(null);
+                                requestAnimationFrame(() => {
+                                  mainRunAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                                });
+                              }}
+                              style={{
+                                cursor: "pointer",
+                                padding: "10px 16px",
+                                borderRadius: 10,
+                                border: "1px solid rgba(0,255,204,0.35)",
+                                background: "rgba(0,255,204,0.12)",
+                                color: "rgba(0,255,204,0.95)",
+                                fontWeight: 800,
+                                fontSize: 14,
+                              }}
+                            >
+                              Open full view at top ↑
+                            </button>
+                          </div>
+                        ) : null}
+                      </div>
+                      {showHistoryRequestCta ? (
+                        <p style={{ margin: "4px 0 0", fontSize: 15, lineHeight: 1.6, color: "rgba(255,255,255,0.72)", maxWidth: 640 }}>
+                          Want more checks kept in your dashboard history? We&apos;re lining up plans for that —{" "}
+                          <a
+                            href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(EXTENDED_HISTORY_MAIL_SUBJECT)}`}
+                            style={{ color: "var(--cmk-accent)", fontWeight: 800, textDecoration: "none" }}
+                          >
+                            email us
+                          </a>{" "}
+                          and we&apos;ll note your request (subject is preset so we can track it).
+                        </p>
+                      ) : null}
+                    </Fragment>
+                  );
+                })}
+              </div>
+            </section>
+          ) : null}
         </>
       ) : null}
 

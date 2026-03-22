@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import SiteFooter from "@/components/SiteFooter";
 import { getSupabaseBrowser } from "@/lib/supabaseBrowser";
 import { ReadinessDashboardView, type ReadinessRow } from "@/components/ReadinessDashboardView";
 
@@ -59,7 +60,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <main className="cmk-container">
+      <main className="cmk-container dashboard-page">
         <div style={{ marginTop: "4rem", textAlign: "center" }}>
           <div className="cmk-tag">Dashboard</div>
           <h1 style={{ marginTop: "1.25rem", marginBottom: "0.75rem" }}>Loading…</h1>
@@ -67,6 +68,7 @@ export default function DashboardPage() {
             Fetching your readiness results.
           </p>
         </div>
+        <SiteFooter />
       </main>
     );
   }
@@ -75,7 +77,7 @@ export default function DashboardPage() {
 
   if (err || !readiness) {
     return (
-      <main className="cmk-container">
+      <main className="cmk-container dashboard-page">
         <div style={{ marginTop: "4rem", textAlign: "center" }}>
           <div className="cmk-tag">Dashboard</div>
           <h1 style={{ marginTop: "1.25rem", marginBottom: "0.75rem" }}>No access yet</h1>
@@ -107,12 +109,13 @@ export default function DashboardPage() {
             Run readiness again →
           </Link>
         </div>
+        <SiteFooter />
       </main>
     );
   }
 
   return (
-    <main className="cmk-container">
+    <main className="cmk-container dashboard-page">
       <ReadinessDashboardView
         readiness={readiness}
         readinessRuns={readinessRuns}
@@ -120,6 +123,7 @@ export default function DashboardPage() {
         readinessHistoryLimit={readinessHistoryLimit}
         fullReadinessHistoryUnlocked={fullReadinessHistoryUnlocked}
       />
+      <SiteFooter />
     </main>
   );
 }
