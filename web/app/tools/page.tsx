@@ -44,6 +44,19 @@ export default function ToolsPage() {
           </article>
 
           <article className="cmk-card">
+            <div className="cmk-tag">Directory</div>
+            <h2>Media list</h2>
+            <p className="cmk-small">
+              Searchable outlets and contacts by category, region, and tags — for ethical, targeted outreach.
+            </p>
+            <div className="cmk-actions">
+              <Link className="cmk-cta" href="/tools/media-list">
+                Open media list →
+              </Link>
+            </div>
+          </article>
+
+          <article className="cmk-card">
             <div className="cmk-tag">Tool page</div>
             <h2>Campaign Intelligence (preview)</h2>
             <p className="cmk-small">

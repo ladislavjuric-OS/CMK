@@ -124,3 +124,31 @@ create policy "read_own_entitlements"
   on public.entitlements
   for select
   using (user_id = auth.uid());
+
+-- Master press / media list (admin-only via service role in Route Handlers; not exposed to anon JWT)
+create table if not exists public.press_contacts (
+  id uuid primary key default gen_random_uuid(),
+  outlet text not null,
+  contact_name text,
+  role_or_beat text,
+  email text,
+  url text,
+  region text,
+  tags text,
+  category text,
+  notes text,
+  status text not null default 'todo',
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists press_contacts_outlet_lower on public.press_contacts (lower(outlet));
+create index if not exists press_contacts_updated_at on public.press_contacts (updated_at desc);
+
+alter table public.press_contacts enable row level security;
+-- No policies: only service role (server) reads/writes; browser never uses this table directly.
+
+-- Optional: grouping for public /tools/media-list filters (run once if table already existed without this column)
+alter table public.press_contacts add column if not exists category text;
+create index if not exists press_contacts_category_lower on public.press_contacts (lower(category));

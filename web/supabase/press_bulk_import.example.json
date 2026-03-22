@@ -1,0 +1,23 @@
+[
+  {
+    "outlet": "Example Tech Podcast",
+    "category": "Podcast",
+    "contact_name": "Jane Host",
+    "role_or_beat": "Host / booking",
+    "email": "bookings@example.com",
+    "url": "https://example.com/show",
+    "region": "US",
+    "tags": "SaaS, B2B, founders",
+    "status": "todo",
+    "sort_order": 10
+  },
+  {
+    "outlet": "Regional Business Daily",
+    "category": "Trade",
+    "role_or_beat": "Startups desk",
+    "region": "EU",
+    "tags": "crowdfunding, launch",
+    "status": "idea",
+    "sort_order": 20
+  }
+]

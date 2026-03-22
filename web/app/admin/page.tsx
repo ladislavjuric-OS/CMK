@@ -198,6 +198,24 @@ export default function AdminPage() {
         <p style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.7 }}>
           Latest readiness runs grouped by email (up to three most recent per person in this list). Open a run to see the full user dashboard. After three free checker emails, users get a CMK signup message — you can unlock <strong>full history</strong> (last 50 runs on their dashboard) per email.
         </p>
+        <p style={{ marginTop: "1rem" }}>
+          <Link
+            href="/admin/press"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              color: "var(--cmk-accent)",
+              fontWeight: 800,
+              textDecoration: "none",
+              padding: "10px 16px",
+              borderRadius: 10,
+              border: "1px solid rgba(0,255,204,0.35)",
+              background: "rgba(0,255,204,0.08)",
+            }}
+          >
+            Master Press Lista (searchable table) →
+          </Link>
+        </p>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 20 }}>

@@ -20,6 +20,10 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 API route `POST /api/audit-requests` expects `{ email, payload? }` and inserts into `audit_requests`.
 
+**Master Press Lista (admin):** after applying the latest `supabase/schema.sql` (table `press_contacts` + column **`category`**), open **`/admin/press`**. Search filters all columns; add / edit / delete rows; **Bulk import JSON** (up to 2000 rows per request) for migrations. Example payload: `supabase/press_bulk_import.example.json`.
+
+**Public media list:** **`/tools/media-list`** — read-only, searchable, filter by **category**, sortable; **does not** expose internal `notes`.
+
 **Test (PowerShell, one line, single quotes around JSON):**
 ```powershell
 Invoke-RestMethod -Uri "http://localhost:3000/api/audit-requests" -Method POST -ContentType "application/json" -Body '{"email":"test@example.com","payload":{"note":"test"}}'
